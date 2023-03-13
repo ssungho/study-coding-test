@@ -2,11 +2,13 @@
 {
     static void Main(string[] args)
     {
-        피자_나눠먹기1.Solution s = new 피자_나눠먹기1.Solution();
+        양꼬치 test = new 양꼬치();
         while (true)
         {
-            int answer = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine(s.solution(answer));
+            int a = Convert.ToInt32(Console.ReadLine());
+            int b = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine(test.solution(a,b));
+            
         }
     }
 }
