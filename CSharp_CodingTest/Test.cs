@@ -2,13 +2,14 @@
 {
     static void Main(string[] args)
     {
-        컨트롤_제트 test = new();
+        제곱수_판별하기 test = new();
 
         while (true)
         {
-            // int[] arr = { 13, 2, 3 };
-            string a = Console.ReadLine();
-            // int a = Convert.ToInt32(Console.ReadLine());
+            // int[] arr = { 3, 10, 28 };
+            // string a = Console.ReadLine();
+            // string b = Console.ReadLine();
+            int a = Convert.ToInt32(Console.ReadLine());
             // int b = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine(test.solution(a));
             // int[] answer = test.solution(a);
