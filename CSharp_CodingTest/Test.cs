@@ -2,7 +2,7 @@
 {
     static void Main(string[] args)
     {
-        저주의_숫자_3 test = new();
+        유한소수_판별하기 test = new();
 
         while (true)
         {
@@ -11,8 +11,8 @@
             // string a = Console.ReadLine();
             // string b = Console.ReadLine();
             int a = Convert.ToInt32(Console.ReadLine());
-            // int b = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine(test.solution(a));
+            int b = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine(test.solution(a, b));
             // int[] answer = test.solution(a);
             //foreach ( var c in answer)
             //{
