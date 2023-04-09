@@ -1,4 +1,4 @@
-﻿public class Solution
+﻿public class Two_Sum
 {
     // 동일 인덱스를 안쓰게 하려면 어떻게 해야 할까? 
     public int[] TwoSum(int[] nums, int target)
