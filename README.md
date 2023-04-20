@@ -6,6 +6,8 @@
 
 + ### CSharp_CodingTest
 
-    * lv_0 - 프로그래머스 lv0 문제 풀이 폴더입니다. 
-    * lv_1 - 프로그래머스 lv1 문제 풀이 폴더입니다.  
+    * Programmers - 프로그래머스 문제풀이 폴더입니다.
+         * lv_0 (100/100)
+         * lv_1
+         * lv_3
     * LeetCode - LeetCode 문제 풀이 폴더입니다.
