@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace 문자열을_정수로_바꾸기
+namespace CSharp_CodingTest.Programmers.lv_1
 {
     public class Solution
     {
