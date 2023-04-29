@@ -2,22 +2,8 @@
 {
     static void Main(string[] args)
     {
-        옹알이 test = new();
+        핸드폰_번호_가리기.Solution test = new();
 
-        while (true)
-        {
-            string[] ans = new string[5] { "aya", "yee", "u", "maa", "wyeoo" };
-            // int[,] arr = { { -1, -1 }, { 1, 1 }, { 1, -1 },{ -1, 1 } };
-            // string a = Console.ReadLine();
-            // string b = Console.ReadLine();
-            // int a = Convert.ToInt32(Console.ReadLine());
-            // int b = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine(test.solution(ans));
-            // int[] answer = test.solution(a);
-            //foreach ( var c in answer)
-            //{
-            //    Console.WriteLine(c);
-            //}
-        }
+        Console.WriteLine(test.solution("01033334444"));
     }
 }
