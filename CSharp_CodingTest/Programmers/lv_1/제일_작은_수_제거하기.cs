@@ -8,10 +8,11 @@ namespace 제일_작은_수_제거하기
     {
         public int[] solution(int[] arr)
         {
+            int min = arr.Min();
             List<int> list = new List<int>();
             for (int i = 0; i < arr.Length; i++)
             {
-                if (arr[i] != arr.Min())
+                if (arr[i] != min)
                     list.Add(arr[i]);
             }
             if (list.Count == 0)
