@@ -2,8 +2,9 @@
 {
     static void Main(string[] args)
     {
-        핸드폰_번호_가리기.Solution test = new();
-
-        Console.WriteLine(test.solution("01033334444"));
+        기능개발.Solution test = new();
+        int[] pro = { 93, 30, 55 };
+        int[] speed = { 1, 30, 5 };
+        Console.WriteLine(test.solution(pro, speed));
     }
 }
