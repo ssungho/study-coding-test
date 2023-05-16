@@ -28,6 +28,7 @@ namespace 다리를_지나는_트럭
                     queue.Enqueue(move);
 
                 time++;
+
             }
 
             return time + bridge_length;
