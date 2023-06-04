@@ -6,7 +6,6 @@ using namespace std;
 
 string solution(string s) 
 {
-    char nums[]{'0','1','2','3','4','5','6','7','8','9'};
     string answer = "";
     for(int i = 0; i < s.length(); i++)
     {
