@@ -8,7 +8,11 @@ using namespace std;
 
 int main(void)
 {
-	map<string, int> names;
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+
+	map<string, int> list;
 	vector<string> v;
 
 	int N, M;
@@ -21,7 +25,7 @@ int main(void)
 		string temp;
 		cin >> temp;
 
-		names.insert(make_pair(temp, 0));
+		list.insert(make_pair(temp, 0));
 		v.push_back(temp);
 	}
 	for (int i = 0; i < M; i++)
@@ -29,14 +33,14 @@ int main(void)
 		string temp;
 		cin >> temp;
 
-		if (names.find(temp) != names.end())
+		if (list.find(temp) != list.end())
 		{
-			names[temp]++;
+			list[temp]++;
 			cnt++;
 		}
 		else
 		{
-			names.insert(make_pair(temp, 0));
+			list.insert(make_pair(temp, 0));
 			v.push_back(temp);
 		}
 
@@ -48,7 +52,7 @@ int main(void)
 	for (int i = 0; i < v.size(); i++)
 	{
 		string temp = v[i];
-		if (names[temp] > 0)
+		if (list[temp] > 0)
 			cout << temp << '\n';
 	}
 
