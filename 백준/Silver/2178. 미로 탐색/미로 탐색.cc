@@ -14,6 +14,10 @@ void Search(pair<int, int> node)
     queue<pair<int, int>> q;
     q.push(node);
 
+    // 상 하 좌 우
+    const int dy[4]{-1, 1, 0, 0};
+    const int dx[4]{0, 0, -1, 1};
+
     while (!q.empty())
     {
         pair<int, int> cur_node = q.front();
@@ -21,33 +25,20 @@ void Search(pair<int, int> node)
         int x = cur_node.second;
         q.pop();
 
-        // 상
-        if (y - 1 >= 0 && !visited[y - 1][x] && maze[y - 1][x] == 1)
+        for (int i = 0; i < 4; i++)
         {
-            dis[y - 1][x] = dis[y][x] + 1;
-            visited[y - 1][x] = true;
-            q.push(make_pair(y - 1, x));
-        }
-        // 하
-        if (y + 1 < 101 && !visited[y + 1][x] && maze[y + 1][x] == 1)
-        {
-            dis[y + 1][x] = dis[y][x] + 1;
-            visited[y + 1][x] = true;
-            q.push(make_pair(y + 1, x));
-        }
-        // 좌
-        if (x - 1 >= 0 && !visited[y][x - 1] && maze[y][x - 1] == 1)
-        {
-            dis[y][x - 1] = dis[y][x] + 1;
-            visited[y][x - 1] = true;
-            q.push(make_pair(y, x - 1));
-        }
-        // 우
-        if (x + 1 < 101 && !visited[y][x + 1] && maze[y][x + 1] == 1)
-        {
-            dis[y][x + 1] = dis[y][x] + 1;
-            visited[y][x + 1] = true;
-            q.push(make_pair(y, x + 1));
+            int ny = y + dy[i];
+            int nx = x + dx[i];
+
+            if(ny >= 0 && nx >= 0 && ny < 101 && nx < 101)
+            {
+                if (!visited[ny][nx] && maze[ny][nx] == 1)
+                {
+                    dis[ny][nx] = dis[y][x] + 1;
+                    visited[ny][nx] = true;
+                    q.push(make_pair(ny, nx));
+                }
+            }
         }
     }
 }
@@ -56,7 +47,6 @@ int main(void)
 {
     int N, M;
     cin >> N >> M;
-
     for (int i = 0; i < N; i++)
     {
         string temp;
@@ -69,6 +59,5 @@ int main(void)
     pair<int, int> start = make_pair(0, 0);
     Search(start);
     cout << dis[N - 1][M - 1];
-
     return 0;
 }
