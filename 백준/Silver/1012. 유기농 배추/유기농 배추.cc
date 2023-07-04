@@ -1,7 +1,6 @@
 #include<iostream>
 #include<vector>
 #include<queue>
-#include<algorithm>
 using namespace std;
 
 bool field[51][51]{ false };
@@ -49,6 +48,10 @@ void Reset()
 
 int main(void)
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
 	int T, M, N, K;
 	cin >> T;
 
