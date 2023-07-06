@@ -6,6 +6,10 @@
 using namespace std;
 int main(void)
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
 	int T, N;
 	cin >> T;
 
@@ -28,8 +32,7 @@ int main(void)
 			continue;
 		}
 
-		int cnt = 0;
-		vector<int> dis;
+		int cnt = INT32_MAX;
 		for (int i = 0; i < v.size() - 2; i++)
 		{
 			string temp1 = v[i];
@@ -54,15 +57,12 @@ int main(void)
 							if (temp2[k] != temp3[k])
 								dis3++;
 						}
-						dis.push_back(dis1 + dis2 + dis3);
+						cnt = min(cnt, dis1 + dis2 + dis3);
 					}
 				}
 			}
-			sort(dis.begin(), dis.end());
-			cnt = dis[0];
 		}
 		cout << cnt << '\n';
-		
 	}
 	return 0;
 }
