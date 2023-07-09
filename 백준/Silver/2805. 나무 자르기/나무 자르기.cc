@@ -19,6 +19,9 @@ bool FindMaxHeight(long mid, long M, vector<long> v)
 
 int main(void)
 {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+
 	int N;
 	long M;
 	cin >> N >> M;
