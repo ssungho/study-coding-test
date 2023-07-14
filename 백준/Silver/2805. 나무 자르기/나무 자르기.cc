@@ -3,15 +3,15 @@
 #include<vector>
 using namespace std;
 
-bool FindMaxHeight(long mid, long M, vector<long> v)
+bool FindMaxHeight(long middle_value, long target, vector<long> vec)
 {
 	long long cnt = 0;
 
-	for (int i = 0; i < v.size(); i++)
-		if (v[i] - mid > 0)
-			cnt += (v[i] - mid);
+	for (int i = 0; i < vec.size(); i++)
+		if (vec[i] - middle_value > 0)
+			cnt += (vec[i] - middle_value);
 
-	if (cnt >= M)
+	if (cnt >= target)
 		return true;
 	else
 		return false;
@@ -26,29 +26,29 @@ int main(void)
 	long M;
 	cin >> N >> M;
 
-	vector<long> v;
-	long temp;
+	vector<long> trees;
+	long tree;
 	for (int i = 0; i < N; i++)
 	{
-		cin >> temp;
-		v.push_back(temp);
+		cin >> tree;
+		trees.push_back(tree);
 	}
-	sort(v.begin(), v.end());
+	sort(trees.begin(), trees.end());
 
-	long start = 1;
-	long end = v[N - 1];
+	long start_h = 0;
+	long end_h = trees[N - 1];
 	long max_h = 0;
 
-	while (start <= end)
+	while (start_h <= end_h)
 	{
-		long mid = (start + end) / 2;
-		if (FindMaxHeight(mid, M, v))
+		long mid = (start_h + end_h) / 2;
+		if (FindMaxHeight(mid, M, trees))
 		{
 			max_h = max(max_h, mid);
-			start = mid + 1;
+			start_h = mid + 1;
 		}
 		else
-			end = mid - 1;
+			end_h = mid - 1;
 	}
 
 	cout << max_h;
