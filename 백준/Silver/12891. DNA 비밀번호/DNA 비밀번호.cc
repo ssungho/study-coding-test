@@ -2,9 +2,13 @@
 #include<vector>
 #include<string>
 using namespace std;
+// boj 12891번
 
 int main(void)
 {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+
 	int s_length, p_length;
 	string dna;
 	int need[4]{0,0,0,0};
