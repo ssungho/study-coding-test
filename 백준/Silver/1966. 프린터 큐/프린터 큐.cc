@@ -1,10 +1,9 @@
 #include <iostream>
 #include <queue>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
-int main()
+// boj 1966 프린터 큐
+int main(void)
 {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
@@ -15,27 +14,27 @@ int main()
 	while (T > 0)
 	{
 		queue<pair<int, int>> q;
-		vector<int> v;
+		priority_queue<int> pq;
 		int N, M;
 		cin >> N >> M; // N은 개수, M은 찾을 문서의 인덱스
 		for (int i = 0; i < N; i++)
 		{
-			int temp;
-			cin >> temp;
-			q.push({ i,temp }); // 인덱스와 중요도 저장
-			v.push_back(temp); // 중요도 저장
+			int importance;
+			cin >> importance;
+			q.push({i, importance }); // 인덱스와 중요도 저장
+			pq.push(importance);
 		}
-		sort(v.begin(), v.end());
+
 		int cnt = 1;
 		while (true)
 		{
-			if (q.front().first == M && q.front().second == v.back())
+			if (q.front().first == M && q.front().second == pq.top())
 				break;
 			else 
 			{
-				if (q.front().second == v.back())
+				if (q.front().second == pq.top())
 				{
-					v.pop_back();
+					pq.pop();
 					q.pop();
 					cnt++;
 				}
