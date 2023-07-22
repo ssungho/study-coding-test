@@ -6,8 +6,9 @@ using namespace std;
 
 int main()
 {
-	// 큐의 가장 앞에 있는 문서의 중요도를 확인한다.
-	// 현재 문서보다 중요도가 높은 문서가 하나라도 있으면 큐의 가장 뒤로 배치, 아니면 바로 인쇄
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
 
 	int T;
 	cin >> T;
