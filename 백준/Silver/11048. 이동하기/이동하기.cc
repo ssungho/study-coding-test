@@ -22,6 +22,9 @@ int func(int x, int y)
 
 int main(void)
 {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+
 	int candy;
 	cin >> n >> m;
 	for (int i = 1; i < n + 1; i++)
