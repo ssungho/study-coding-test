@@ -7,7 +7,7 @@ int miro[1001][1001];
 int memo_table[1001][1001];
 int n, m; // 행, 열
 
-int func(int x, int y)
+int CountCandy(int x, int y)
 {
 	if (x == 1 && y == 1)
 		return memo_table[1][1] = miro[1][1];
@@ -39,7 +39,7 @@ int main(void)
 	{
 		for (int j = 1; j < m + 1; j++)
 		{
-			func(i, j);
+			CountCandy(i, j);
 		}
 	}
 	cout << memo_table[n][m];
