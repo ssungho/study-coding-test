@@ -18,6 +18,10 @@ long long FindP(int x)
 
 int main(void)
 {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
 	int T, N;
 	cin >> T;
 	while (T--)
