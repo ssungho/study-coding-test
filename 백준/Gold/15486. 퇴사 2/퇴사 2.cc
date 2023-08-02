@@ -3,15 +3,16 @@
 #include <algorithm>
 using namespace std;
 
-// https://www.acmicpc.net/problem/15486
-// boj 15486 퇴사 2 [다이나믹 프로그래밍]
-
 vector<pair<int, int>> TiPi_array; // 상담 기간과 얻는 돈을 pair로 저장한 배열
 
 int main(void)
 {
     int n;
     cin >> n;
+
+    ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
 
     int *memo = new int[n + 1]; // memo[n]은 n일 이후부터 얻는 최대 수익
     for(int i = 0; i < n + 1; i++)
