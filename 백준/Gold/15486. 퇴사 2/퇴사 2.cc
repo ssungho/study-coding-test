@@ -4,21 +4,17 @@
 using namespace std;
 
 vector<pair<int, int>> TiPi_array; // 상담 기간과 얻는 돈을 pair로 저장한 배열
-
+int memo[1500001];
 int main(void)
 {
     int n;
     cin >> n;
 
+    // 빠른 입출력
     ios::sync_with_stdio(false);
 	cin.tie(0);
 	cout.tie(0);
 
-    int *memo = new int[n + 1]; // memo[n]은 n일 이후부터 얻는 최대 수익
-    for(int i = 0; i < n + 1; i++)
-    {
-        memo[i] = 0;
-    }
     // Ti, Pi 배열을 초기화
     TiPi_array.push_back({0,0});
     for(int i = 0; i < n; i++)
