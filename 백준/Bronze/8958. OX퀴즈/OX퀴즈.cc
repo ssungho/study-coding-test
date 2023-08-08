@@ -5,6 +5,10 @@ using namespace std;
 
 int main (void)
 {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
     int t;
     cin >> t;
     for(int i = 0; i < t; i++)
@@ -14,7 +18,7 @@ int main (void)
 
         int cnt = 0; 
         int answer = 0;
-        
+
         for(int j = 0; j < s.size(); j++)
         {
             if(s[j] == 'O')
