@@ -1,49 +1,64 @@
-#include<iostream>
-#include<stack>
-#include<queue>
+#include <iostream>
+#include <vector>
+#include <stack>
+#include <queue>
 
 using namespace std;
 
 int main(void)
 {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+
+	vector<int> v;
+	stack<int> s;
+	queue<char> q;
+
 	int n;
 	cin >> n;
-
-	stack<int> s;
-	queue<char> oper;
-
-	// 마지막 숫자
-	int num = 1;
-
-	for(int i = 0; i < n; i++)
+	for (int i = 0; i < n; i++)
 	{
-		int temp;
-		cin >> temp;
+		int number;
+		cin >> number;
+		v.push_back(number);
+	}
 
-		while (num <= temp)
+	int current = 1;
+	for (int i = 0; i < n; i++)
+	{
+		if (current <= v[i])
 		{
-			s.push(num);
-			num++;
-			oper.push('+');
-		}
+			while (current <= v[i])
+			{
+				s.push(current);
+				q.push('+');
+				current++;
+			}
 
-		if (s.top() == temp)
-		{
 			s.pop();
-			oper.push('-');
+			q.push('-');
 		}
 		else
 		{
-			cout << "NO";
-			return 0;
+			if (s.top() == v[i])
+			{
+				s.pop();
+				q.push('-');
+			}
+			else
+			{
+				cout << "NO";
+				return 0;
+			}
 		}
 	}
 
-	while (!oper.empty())
+	while (!q.empty())
 	{
-		cout << oper.front() << '\n';
-		oper.pop();
+		cout << q.front() << '\n';
+		q.pop();
 	}
-	
+
 	return 0;
 }
