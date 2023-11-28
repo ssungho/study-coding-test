@@ -6,10 +6,13 @@ using namespace std;
 
 int main(void)
 {
-	double n;
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+
+	int n;
 	cin >> n;
 
-	if ((int)n == 0)
+	if (n == 0)
 	{
 		cout << 0;
 		return 0;
