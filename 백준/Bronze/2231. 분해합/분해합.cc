@@ -8,18 +8,18 @@ int main(void)
 
 	for (int i = 1; i < n; i++)
 	{
-		int ctor = 0;
-		int copy = i;
+		int sum = 0;
+		int ctor = i;
 
-		while (copy > 0)
+		while (ctor > 0)
 		{
-			ctor += (copy % 10);
-			copy /= 10;
+			sum += (ctor % 10);
+			ctor /= 10;
 		}
 
-		ctor += i;
+		sum += i;
 
-		if (ctor == n)
+		if (sum == n)
 		{
 			cout << i;
 			return 0;
