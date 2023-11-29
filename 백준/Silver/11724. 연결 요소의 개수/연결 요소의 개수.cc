@@ -21,6 +21,9 @@ void DFS(int node)
 
 int main(void)
 {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+
 	int node, edge;
 	cin >> node >> edge;
 
