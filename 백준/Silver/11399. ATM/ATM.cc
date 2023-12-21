@@ -1,31 +1,48 @@
-#include<iostream>
-#include<vector>
-#include<algorithm>
+#include <iostream>
+#include <vector>
 using namespace std;
+// 삽입정렬 연습용
 
 int main(void)
 {
-	int N;
-	cin >> N;
-	 
-	vector<int> line;
-	for (int i = 0; i < N; i++)
-	{
-		int temp;
-		cin >> temp;
-		line.push_back(temp);
-	}
-	sort(line.begin(), line.end());
+    int n;
+    cin >> n;
 
-	vector<int> total_time;
-	total_time.push_back(0);
-	int answer = 0;
-	for (int i = 1; i < N + 1; i++)
-	{
-		int temp = total_time[i-1] + line[i - 1];
-		total_time.push_back(temp);
-		answer += total_time[i];
-	}
-	cout << answer;
-	return 0;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++)
+        cin >> v[i];
+
+    for (int i = 1; i < n; i++)
+    {
+        int index = i;
+        int select = v[i];
+        for (int j = i - 1; j >= 0; j--)
+        {
+            if (v[j] < v[i])
+            {
+                index = j + 1;
+                break;
+            }
+
+            if (j == 0)
+                index = 0;
+        }
+        for (int j = i; j > index; j--)
+            v[j] = v[j - 1];
+
+        v[index] = select;
+    }
+
+    vector<int> s(n);
+    s[0] = v[0];
+    for (int i = 1; i < n; i++)
+        s[i] = v[i] + s[i - 1];
+
+    int sum = 0;
+    for (int i = 0; i < n; i++)
+        sum += s[i];
+
+    cout << sum;
+
+    return 0;
 }
