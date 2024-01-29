@@ -13,33 +13,22 @@ int BFS(int start, int end)
     q.push(start);
 
     int cnt = 0;
-    while(!q.empty())
+    while (!q.empty())
     {
         int cur = q.front();
         q.pop();
         ++cnt;
-        
-        int next;
-        if(cur - 1  >= 0 && !visited[cur - 1])
+
+        int next[3] = {cur - 1, cur + 1, cur * 2};
+
+        for(int i = 0; i < size(next); ++i)
         {
-            next = cur - 1;
-            visited[next] = true;
-            dist[next] = min(dist[cur] + 1, cnt); 
-            q.push(next);
-        }
-        if(cur + 1  <= 100000 && !visited[cur + 1])
-        {
-            next = cur + 1;
-            visited[next] = true;
-            dist[next] = min(dist[cur] + 1, cnt); 
-            q.push(next);
-        }
-        if(cur * 2 <= 100000 && !visited[cur * 2])
-        {
-            next = cur * 2;
-            visited[next] = true;
-            dist[next] = min(dist[cur] + 1, cnt); 
-            q.push(next);
+            if(next[i] <= 100000 && next[i] >=0 && !visited[next[i]])
+            {
+                visited[next[i]] = true;
+                dist[next[i]] = min(dist[cur] + 1, cnt);
+                q.push(next[i]);
+            }
         }
     }
 
