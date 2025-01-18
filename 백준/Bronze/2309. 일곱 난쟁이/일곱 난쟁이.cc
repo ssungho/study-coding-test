@@ -6,7 +6,7 @@ using namespace std;
 int main()
 {
     int n = 9;
-    vector<int> heights(9, 0);
+    vector<int> heights(n);
 
     for (int i = 0; i < n; ++i)
     {
@@ -14,25 +14,19 @@ int main()
     }
 
     int total_height = 0;
-    for (int i = 0; i < n; i++)
+    for (int height : heights)
     {
-        for (int j = 0; j < n; j++)
+        total_height += height;
+    }
+
+    for (int i = 0; i < n - 1; ++i)
+    {
+        for (int j = i + 1; j < n; ++j)
         {
-            if (i == j)
-                continue;
-
-            for (int k = 0; k < n; k++)
-            {
-                if (k != i && k != j)
-                {
-                    total_height += heights[k];
-                }
-            }
-
-            if (total_height == 100)
+            if (total_height - (heights[i] + heights[j]) == 100)
             {
                 vector<int> selected;
-                for (int k = 0; k < n; k++)
+                for (int k = 0; k < n; ++k)
                 {
                     if (k != i && k != j)
                     {
@@ -40,10 +34,7 @@ int main()
                     }
                 }
 
-                sort(selected.begin(), selected.end(), [](int a, int b) -> bool
-                    { 
-                        return a < b; 
-                    });
+                sort(selected.begin(), selected.end());
 
                 for (int height : selected)
                 {
@@ -51,8 +42,6 @@ int main()
                 }
                 return 0;
             }
-            else
-                total_height = 0;
         }
     }
 
