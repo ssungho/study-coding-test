@@ -1,11 +1,11 @@
 #include <iostream>
 using namespace std;
 
-int price[1001];
-int memo[1001];
-
 int main(void)
 {
+    int price[1001];
+    int memo[1001];
+
     int N;
     cin >> N;
 
