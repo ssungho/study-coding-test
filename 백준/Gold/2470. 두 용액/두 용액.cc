@@ -7,9 +7,8 @@ using namespace std;
 
 int main(void)
 {
-    // 1. 입력받은 값을 정렬한다.
-    // 2. 투 포인터를 이용해서 가장 작은 값을 구한다.
-    // 3. 자료형에 주의하자.
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
     int N;
     cin >> N;
