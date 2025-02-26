@@ -39,11 +39,8 @@ int main(void)
         if (target == x)
         {
             count++;
-
-            if (abs(x - v[start + 1].first) <= abs(x - v[end - 1].first))
-                start++;
-            else
-                end--;
+            start++;
+            end--;
         }
         else if (target > x)
             end--;
