@@ -10,26 +10,24 @@ int main(void)
 
     cin >> N >> M >> S;
 
-    string find = "I";
-
-    for (int i = 0; i < N; i++)
-        find += "OI";
-
     int count = 0;
-    int start = 0;
-    int length = find.length();
+    int find = 0;
 
-    while (start + length <= M)
+    for (int i = 1; i < M - 1; i++)
     {
-        size_t pos = S.find(find, start);
-
-        if (pos != string::npos)
+        if (S[i - 1] == 'I' && S[i] == 'O' && S[i + 1] == 'I')
         {
-            count++;
-            start = pos + 1;
+            find++;
+
+            if (find >= N)
+                count++;
+
+            i++;
         }
         else
-            start++;
+        {
+            find = 0;
+        }
     }
 
     cout << count;
