@@ -12,18 +12,16 @@ int main(void)
     int n;
     cin >> n;
 
-    // 값, 자리
-    vector<pair<int, int>> v;
+    vector<int> v;
 
     for (int i = 1; i <= n; i++)
     {
         int value;
         cin >> value;
-        v.push_back({value, i});
+        v.push_back(value);
     }
 
-    sort(v.begin(), v.end(), [](auto &a, auto &b)
-         { return a.first < b.first; });
+    sort(v.begin(), v.end());
 
     int x;
     cin >> x;
@@ -34,7 +32,7 @@ int main(void)
 
     while (start < end)
     {
-        int target = v[start].first + v[end].first;
+        int target = v[start] + v[end];
 
         if (target == x)
         {
