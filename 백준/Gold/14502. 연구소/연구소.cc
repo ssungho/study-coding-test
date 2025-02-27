@@ -46,12 +46,6 @@ void BFS(int y, int x)
     }
 }
 
-void Reset()
-{
-    memset(visited, 0, sizeof(bool) * 64);
-    memset(test_map, 0, sizeof(int) * 64);
-}
-
 int CheckSafeArea()
 {
     int count = 0;
@@ -97,7 +91,9 @@ int main(void)
                 if (i == j || i == k || j == k)
                     continue;
 
-                Reset();
+                memset(visited, 0, sizeof(bool) * 64);
+                memset(test_map, 0, sizeof(int) * 64);
+
                 memcpy(test_map, map, sizeof(int) * 64);
 
                 pair<int, int> wall_pos = safe_area[i];
@@ -117,7 +113,6 @@ int main(void)
                 }
 
                 max_area = max(CheckSafeArea(), max_area);
-                Reset();
             }
         }
     }
