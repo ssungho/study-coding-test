@@ -32,8 +32,7 @@ int main(void)
         }
     }
 
-    sort(memo.begin(), memo.end());
-    cout << memo.back();
+    cout << *max_element(memo.begin(), memo.end());
 
     return 0;
 }
