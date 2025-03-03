@@ -5,7 +5,7 @@ using namespace std;
 
 int N, M;
 
-void Backtracking(vector<int> &vec, vector<bool> &visited)
+void Backtracking(vector<int> &vec, int start)
 {
     if (vec.size() == M)
     {
@@ -13,24 +13,18 @@ void Backtracking(vector<int> &vec, vector<bool> &visited)
         {
             cout << num << " ";
         }
-
+        
         cout << '\n';
-
         return;
     }
 
-    for (int i = 1; i <= N; i++)
+    for (int i = start; i <= N; i++)
     {
-        if (visited[i] || (vec.size() > 0 && vec.back() > i))
-            continue;
-
         vec.push_back(i);
-        visited[i] = true;
-
-        Backtracking(vec, visited);
-
+        
+        Backtracking(vec, i + 1);
+        
         vec.pop_back();
-        visited[i] = false;
     }
 }
 
@@ -39,9 +33,8 @@ int main(void)
     cin >> N >> M;
 
     vector<int> v;
-    vector<bool> visited(N + 1, false);
 
-    Backtracking(v, visited);
+    Backtracking(v, 1);
 
     return 0;
 }
