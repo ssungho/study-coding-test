@@ -50,6 +50,9 @@ void Backtracking(int index, int pick)
 
 int main(void)
 {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
     cin >> N >> M;
 
     vector<vector<int>> map(N, vector<int>(N));
