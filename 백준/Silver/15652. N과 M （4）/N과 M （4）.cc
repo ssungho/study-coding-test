@@ -36,7 +36,6 @@ int main(void)
     cin >> N >> M;
 
     vector<int> v;
-    vector<bool> visited;
 
     Backtracking(v, 1, 1);
 
