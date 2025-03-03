@@ -7,7 +7,7 @@ int N, M;
 
 void Backtracking(vector<int> &vec, int start)
 {
-    if (vec.size() == M)
+    if (vec.size() == (size_t)M)
     {
         for (auto num : vec)
         {
@@ -29,6 +29,9 @@ void Backtracking(vector<int> &vec, int start)
 
 int main(void)
 {
+    ios::sync_with_stdio(false);
+    cout.tie(0);
+
     cin >> N >> M;
 
     vector<int> v;
