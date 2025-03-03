@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <set>
 #include <algorithm>
 
 using namespace std;
@@ -9,7 +8,7 @@ int N, M;
 
 void Backtracking(vector<int> &vec, vector<int> &nums)
 {
-    if (vec.size() == M)
+    if (vec.size() == (size_t)M)
     {
         for (auto num : vec)
         {
@@ -22,7 +21,7 @@ void Backtracking(vector<int> &vec, vector<int> &nums)
     }
 
     int prev = 0;
-    for (int i = 0; i < nums.size(); i++)
+    for (int i = 0; i < N; i++)
     {
         int num = nums[i];
 
@@ -45,22 +44,15 @@ int main(void)
     cout.tie(0);
 
     cin >> N >> M;
-    set<int> s;
+
+    vector<int> nums(N);
 
     for (int i = 0; i < N; i++)
     {
-        int num;
-        cin >> num;
-        s.insert(num);
+        cin >> nums[i];
     }
 
-    vector<int> nums(s.size());
-
-    int cnt = 0;
-    for (auto num : s)
-    {
-        nums[cnt++] = num;
-    }
+    sort(nums.begin(), nums.end());
 
     vector<int> v;
     v.reserve(nums.size());
