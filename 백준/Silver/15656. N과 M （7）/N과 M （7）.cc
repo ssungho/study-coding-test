@@ -34,6 +34,9 @@ void Backtracking(vector<int> &vec, vector<int> &nums, int start)
 
 int main(void)
 {
+    ios::sync_with_stdio(false);
+    cout.tie(0);
+
     cin >> N >> M;
 
     vector<int> v;
