@@ -3,7 +3,7 @@
 
 using namespace std;
 
-long long Find(long long number, long long target, int count)
+int Find(long long number, long long target, int count)
 {
     if (number > target)
     {
@@ -23,7 +23,7 @@ int main(void)
     int A, B;
     cin >> A >> B;
 
-    long long count = Find(A, B, 1);
+    int count = Find(A, B, 1);
 
     if (count == INT_MAX) count = -1;
 
