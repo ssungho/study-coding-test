@@ -5,14 +5,18 @@
 
 using namespace std;
 
-int n, max_length;
+int n, max_length, far_node;
 bool visited[10001]{};
 vector<vector<pair<int, int>>> graph(10001);
 
-void DFS(int node, int cost)
+void DFS(int node, int distance)
 {
-    max_length = max(max_length, cost);
-    
+    if (max_length < distance)
+    {
+        far_node = node;
+        max_length = distance;
+    }
+
     visited[node] = true;
 
     vector<pair<int, int>> &current = graph[node];
@@ -20,7 +24,7 @@ void DFS(int node, int cost)
     {
         if (!visited[current[i].first])
         {
-            DFS(current[i].first, current[i].second + cost);
+            DFS(current[i].first, current[i].second + distance);
         }
     }
 }
@@ -41,12 +45,13 @@ int main(void)
         graph[node2].push_back({node1, value});
     }
 
-    for (int i = 1; i <= n; i++)
-    {
-        DFS(i, 0);
+    int root_node = 1;
 
-        memset(visited, 0, sizeof(visited));
-    }
+    DFS(root_node, 0);
+
+    memset(visited, 0, sizeof(visited));
+
+    DFS(far_node, 0);
 
     cout << max_length;
 
