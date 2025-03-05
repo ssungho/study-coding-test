@@ -44,9 +44,9 @@ int main(void)
     for (int i = 0; i <= 100; i++)
     {
         int count = 0;
-        for (int j = 1; j <= 100; j++)
+        for (int j = 1; j <= N; j++)
         {
-            for (int k = 1; k <= 100; k++)
+            for (int k = 1; k <= N; k++)
             {
                 if (!visited[j][k] && map[j][k] > i)
                 {
