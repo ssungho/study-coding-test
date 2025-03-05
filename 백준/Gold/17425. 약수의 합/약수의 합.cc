@@ -3,8 +3,7 @@
 
 using namespace std;
 
-long long A[1000001]{};
-long long S[1000001]{};
+long long memo[1000001]{};
 
 int main(void)
 {
@@ -12,21 +11,14 @@ int main(void)
     cin.tie(0);
     cout.tie(0);
 
-    for (int i = 1; i <= 1000000; i++)
+    for (int i = 1; i < 1000001; i++)
     {
-        for (int j = i; j <= 1000000; j += i)
+        for (int j = i; j < 1000001; j += i)
         {
-            A[j] += i;
+            memo[j] += i;
         }
 
-        if (i > 1)
-        {
-            S[i] = S[i - 1] + A[i];
-        }
-        else
-        {
-            S[i] = A[i];
-        }
+        memo[i] = memo[i - 1] + memo[i];
     }
 
     int T;
@@ -36,7 +28,7 @@ int main(void)
     {
         int N;
         cin >> N;
-        cout << S[N] << '\n';
+        cout << memo[N] << '\n';
     }
 
     return 0;
