@@ -27,7 +27,8 @@ void Count()
     int copy[8][8];
     memcpy(copy, map, sizeof(map));
 
-    for (int i = 0; i < cctv_pos.size(); i++)
+    int pos_count = cctv_pos.size();
+    for (int i = 0; i < pos_count; i++)
     {
         int y = cctv_pos[i].first;
         int x = cctv_pos[i].second;
@@ -69,13 +70,11 @@ void Count()
 
 void Backtracking(int n)
 {
-    if (n == cctv_pos.size())
+    if (n == (int)cctv_pos.size())
     {
         Count();
         return;
     }
-
-    int cctv_type = map[cctv_pos[n].first][cctv_pos[n].second];
 
     for (int j = 0; j < 4; j++)
     {
