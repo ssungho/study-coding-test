@@ -12,6 +12,10 @@ using Lost_YX = pair<int, pair<int, int>>;
 
 int main(void)
 {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
     int test = 0;
     while (true)
     {
