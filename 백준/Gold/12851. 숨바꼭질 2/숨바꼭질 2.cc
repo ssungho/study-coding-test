@@ -10,18 +10,13 @@ int main(void)
     int N, K;
     cin >> N >> K;
 
-    if (N == K) 
-    {
-        cout << 0 << '\n' << 1;
-        return 0;
-    }
-
     vector<int> visited(length + 1, -1);
     vector<int> counts(length + 1, 0);
     queue<int> q;
 
     q.push(N);
     visited[N] = 0;
+    counts[N] = 1;
 
     while (true)
     {
