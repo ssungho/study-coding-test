@@ -26,14 +26,14 @@ int main(void)
 
     cin >> start >> dest;
 
-    vector<pair<int, pair<int, int>>> costs(n + 1, {INT_MAX, {0, 0}});
+    vector<pair<int, int>> costs(n + 1, {INT_MAX,  0});
 
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
 
     pq.push({0, start});
 
     costs[start].first = 0;
-    costs[start].second = { start, 1 };
+    costs[start].second = start;
 
     while (!pq.empty())
     {
@@ -53,7 +53,7 @@ int main(void)
             {
                 costs[next_city].first = cost + next_cost;
                 pq.push({costs[next_city].first, next_city});
-                costs[next_city].second = { city, costs[city].second.second + 1 };
+                costs[next_city].second = city;
             }
         }
     }
@@ -65,13 +65,13 @@ int main(void)
     {
         path.push_back(current);
         if (current == start) break;
-        current = costs[current].second.first;
+        current = costs[current].second;
     }
 
     reverse(path.begin(), path.end());
 
     cout << costs[dest].first << '\n'
-         << costs[dest].second.second << '\n';
+         << path.size() << '\n';
 
     for (auto city : path)
      {
