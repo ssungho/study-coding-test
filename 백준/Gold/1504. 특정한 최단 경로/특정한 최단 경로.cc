@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int Dijkstra(vector<vector<int>> &graph, int start, int dest, bool &fail)
+int Dijkstra(vector<vector<pair<int, int>>>& graph, int start, int dest, bool& fail)
 {
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
     vector<vector<int>> distances(graph.size(), vector<int>(graph.size(), INT_MAX));
@@ -22,17 +22,15 @@ int Dijkstra(vector<vector<int>> &graph, int start, int dest, bool &fail)
         if (dist > distances[start][node])
             continue;
 
-        vector<int> &linked = graph[node];
-        int size = (int)linked.size();
-        for (int i = 1; i < size; i++)
+        for (auto next : graph[node]) 
         {
-            if (linked[i] < 1)
-                continue;
+            int next_node = next.first;
+            int next_dist = next.second;
 
-            if (distances[start][i] > dist + linked[i])
+            if (distances[start][next_node] > dist + next_dist) 
             {
-                distances[start][i] = dist + linked[i];
-                pq.push({distances[start][i], i});
+                distances[start][next_node] = dist + next_dist;
+                pq.push({distances[start][next_node], next_node});
             }
         }
     }
@@ -50,14 +48,14 @@ int main(void)
     int N, E;
     cin >> N >> E;
 
-    vector<vector<int>> graph(N + 1, vector<int>(N + 1, 0));
+    vector<vector<pair<int, int>>> graph(N + 1);
 
     for (int i = 0; i < E; i++)
     {
         int node1, node2, g;
         cin >> node1 >> node2 >> g;
-        graph[node1][node2] = g;
-        graph[node2][node1] = g;
+        graph[node1].push_back({node2, g});
+        graph[node2].push_back({node1, g});
     }
 
     int dest1, dest2;
