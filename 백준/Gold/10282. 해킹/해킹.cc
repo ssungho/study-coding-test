@@ -7,6 +7,10 @@ using namespace std;
 
 int main(void)
 {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
     int T;
     cin >> T;
 
@@ -15,14 +19,14 @@ int main(void)
         int n, d, c;
         cin >> n >> d >> c;
 
-        vector<vector<pair<int, int>>> graph(n + 1);
+        vector<vector<pair<int, int>>> computers(n + 1);
         vector<int> times(n + 1, INT_MAX);
 
         for (int i = 0; i < d; i++)
         {
             int a, b, s;
             cin >> a >> b >> s;
-            graph[b].push_back({a, s});
+            computers[b].push_back({a, s});
         }
 
         times[c] = 0;
@@ -40,7 +44,7 @@ int main(void)
             if (time > times[computer])
                 continue;
             
-            for (auto next : graph[computer])
+            for (auto next : computers[computer])
             {
                 if (times[next.first] > time + next.second)
                 {
