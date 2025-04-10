@@ -8,10 +8,10 @@ using namespace std;
 int Dijkstra(vector<vector<pair<int, int>>>& graph, int start, int dest, bool& fail)
 {
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-    vector<vector<int>> distances(graph.size(), vector<int>(graph.size(), INT_MAX));
+    vector<int> distances(graph.size(), INT_MAX);
 
     pq.push({0, start});
-    distances[start][start] = 0;
+    distances[start] = 0;
 
     while (!pq.empty())
     {
@@ -19,7 +19,7 @@ int Dijkstra(vector<vector<pair<int, int>>>& graph, int start, int dest, bool& f
         int node = pq.top().second;
         pq.pop();
 
-        if (dist > distances[start][node])
+        if (dist > distances[node])
             continue;
 
         for (auto next : graph[node]) 
@@ -27,17 +27,17 @@ int Dijkstra(vector<vector<pair<int, int>>>& graph, int start, int dest, bool& f
             int next_node = next.first;
             int next_dist = next.second;
 
-            if (distances[start][next_node] > dist + next_dist) 
+            if (distances[next_node] > dist + next_dist) 
             {
-                distances[start][next_node] = dist + next_dist;
-                pq.push({distances[start][next_node], next_node});
+                distances[next_node] = dist + next_dist;
+                pq.push({distances[next_node], next_node});
             }
         }
     }
 
-    if (distances[start][dest] == INT_MAX)
+    if (distances[dest] == INT_MAX)
         fail = true;
-    return distances[start][dest];
+    return distances[dest];
 }
 
 int main(void)
