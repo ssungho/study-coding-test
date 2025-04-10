@@ -44,6 +44,9 @@ int Dijkstra(vector<vector<int>> &graph, int start, int dest, bool &fail)
 
 int main(void)
 {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
     int N, E;
     cin >> N >> E;
 
