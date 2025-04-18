@@ -3,7 +3,9 @@
 
 using namespace std;
 
-int C[1001][1001]{};
+constexpr int MOD = 1000000000;
+
+int C[401][401]{};
 
 int main(void)
 {
@@ -11,7 +13,7 @@ int main(void)
     cin >> N >> K;
 
     int n = N + K - 1;
-    int r = K;
+    int r = K - 1;
 
     for (int i = 0; i <= n; i++)
     {
@@ -24,11 +26,11 @@ int main(void)
         for (int j = 1; j <= r; j++)
         {
             C[i][j] = C[i - 1][j] + C[i - 1][j - 1];
-            C[i][j] %= 1000000000;
+            C[i][j] %= MOD;
         }
     }
 
-    cout << C[n][r - 1];
+    cout << C[n][r];
 
     return 0;
 }
