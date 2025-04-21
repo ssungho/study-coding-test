@@ -32,6 +32,9 @@ int DFS(vector<vector<int>>& map, vector<vector<int>>& dp, int y, int x)
 
 int main(void)
 {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
     cin >> N >> M;
 
     vector<vector<int>> map(N, vector<int>(M, 0));
