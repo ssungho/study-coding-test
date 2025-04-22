@@ -31,7 +31,7 @@ int BFS(int y, int x)
         auto [current_y, current_x, current_count, current_crash] = q.front();
         q.pop();
 
-        if (current_y == N && current_x == M)
+        if (current_y == N - 1 && current_x == M - 1)
         {
             short_path = current_count;
             break;
@@ -41,7 +41,7 @@ int BFS(int y, int x)
         {
             int ny = current_y + dy[i];
             int nx = current_x + dx[i];
-            if (0 < ny && ny <= N && 0 < nx && nx <= M)
+            if (0 <= ny && ny < N && 0 <= nx && nx < M)
             {
                 if (map[ny][nx] == '0' && !visited[ny][nx][current_crash])
                 {
@@ -63,25 +63,25 @@ int BFS(int y, int x)
 int main(void)
 {
     ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+
     cin >> N >> M;
 
-    map.resize(N + 1, vector<char>(M + 1, ' '));
-    visited.resize(N + 1, vector<vector<bool>>(M + 1, vector<bool>(2, false)));
+    map.resize(N, vector<char>(M, ' '));
+    visited.resize(N, vector<vector<bool>>(M, vector<bool>(2, false)));
 
-    for (int i = 1; i <= N; i++)
+    for (int i = 0; i < N; i++)
     {
         string temp;
         cin >> temp;
         for (int j = 0; j < M; j++)
         {
-            map[i][j + 1] = temp[j];
+            map[i][j] = temp[j];
         }
     }
 
-    cout << BFS(1, 1);
+    cout << BFS(0, 0);
 
     return 0;
 }
