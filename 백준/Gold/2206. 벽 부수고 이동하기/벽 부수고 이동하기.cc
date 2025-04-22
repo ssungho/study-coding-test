@@ -9,8 +9,8 @@ constexpr int DIR_SIZE{4};
 int dy[DIR_SIZE]{-1, 1, 0, 0};
 int dx[DIR_SIZE]{0, 0, -1, 1};
 int N{}, M{};
-vector<vector<char>> map;
-vector<vector<vector<bool>>> visited;
+char map[1000][1000]{};
+bool visited[1000][1000][2]{};
 
 struct Node
 {
@@ -67,9 +67,6 @@ int main(void)
     cout.tie(nullptr);
 
     cin >> N >> M;
-
-    map.resize(N, vector<char>(M, ' '));
-    visited.resize(N, vector<vector<bool>>(M, vector<bool>(2, false)));
 
     for (int i = 0; i < N; i++)
     {
