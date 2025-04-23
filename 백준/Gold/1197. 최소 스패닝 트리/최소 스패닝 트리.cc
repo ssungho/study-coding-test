@@ -1,66 +1,59 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
+#include <queue>
 
 using namespace std;
-using COST_EDGE = pair<int, pair<int, int>>;
-
-int parent[10001]{};
-
-int Find(int node)
-{
-    if (parent[node] == node)
-    {
-        return node;
-    }
-
-    return parent[node] = Find(parent[node]);
-}
-
-bool Union(int node1, int node2)
-{
-    int root1 = Find(node1);
-    int root2 = Find(node2);
-
-    if (root1 == root2)
-    {
-        return false;
-    }
-
-    parent[root2] = root1;
-
-    return true;
-}
 
 int main(void)
 {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
     int V, E;
     cin >> V >> E;
-    vector<COST_EDGE> edges(E);
+
+    vector<vector<pair<int, int>>> graph(V + 1);
+    vector<bool> visited(V + 1, false);
 
     for (int i = 0; i < E; i++)
     {
-        cin >> edges[i].second.first >> edges[i].second.second >> edges[i].first;
+        int v1, v2, cost;
+        cin >> v1 >> v2 >> cost;
+        graph[v1].push_back({v2, cost});
+        graph[v2].push_back({v1, cost});
     }
 
-    sort(edges.begin(), edges.end());
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
 
-    for (int i = 1; i <= V; i++)
+    int start_node = 0;
+    while (graph[start_node].size() == 0)
     {
-        parent[i] = i;
+        start_node++;
     }
 
     int total = 0;
+    pq.push({0, start_node});
 
-    for (auto &edge_cost : edges)
+    while (!pq.empty())
     {
-        int cost = edge_cost.first;
-        int node1 = edge_cost.second.first;
-        int node2 = edge_cost.second.second;
+        int current_cost = pq.top().first;
+        int current_node = pq.top().second;
+        pq.pop();
 
-        if (Union(node1, node2))
+        if (visited[current_node])
+            continue;
+
+        visited[current_node] = true;
+        total += current_cost;
+
+        for (auto &node : graph[current_node])
         {
-            total += cost;
+            int next_cost = node.second;
+            int next_node = node.first;
+            if (!visited[next_node])
+            {
+                pq.push({next_cost, next_node});
+            }
         }
     }
 
