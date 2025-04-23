@@ -1,5 +1,6 @@
 #include <iostream>
-#include <queue>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 using COST_EDGE = pair<int, pair<int, int>>;
@@ -27,7 +28,7 @@ bool Union(int node1, int node2)
     }
 
     parent[root2] = root1;
-    
+
     return true;
 }
 
@@ -35,14 +36,14 @@ int main(void)
 {
     int V, E;
     cin >> V >> E;
-    priority_queue<COST_EDGE, vector<COST_EDGE>, greater<COST_EDGE>> pq;
+    vector<COST_EDGE> edges(E);
 
     for (int i = 0; i < E; i++)
     {
-        COST_EDGE temp{};
-        cin >> temp.second.first >> temp.second.second >> temp.first;
-        pq.push(temp);
+        cin >> edges[i].second.first >> edges[i].second.second >> edges[i].first;
     }
+
+    sort(edges.begin(), edges.end());
 
     for (int i = 1; i <= V; i++)
     {
@@ -51,14 +52,11 @@ int main(void)
 
     int total = 0;
 
-    while (!pq.empty())
+    for (auto &edge_cost : edges)
     {
-        COST_EDGE top = pq.top();
-        pq.pop();
-
-        int cost = top.first;
-        int node1 = top.second.first;
-        int node2 = top.second.second;
+        int cost = edge_cost.first;
+        int node1 = edge_cost.second.first;
+        int node2 = edge_cost.second.second;
 
         if (Union(node1, node2))
         {
