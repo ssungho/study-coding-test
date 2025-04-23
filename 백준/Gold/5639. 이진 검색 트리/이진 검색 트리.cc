@@ -1,63 +1,36 @@
 #include <iostream>
 #include <vector>
-#include <stack>
 
 using namespace std;
 
-struct Node
+void Postorder(vector<int> &tree, int start, int end)
 {
-    int value{};
-    Node *left{nullptr};
-    Node *right{nullptr};
+    if (start > end)
+        return;
 
-    void Postorder()
-    {
-        if (left) left->Postorder();
-        if (right) right->Postorder();
-        cout << value << '\n';
-    }
+    int root = tree[start];
+    int boundary = start + 1;
 
-    ~Node()
-    {
-        if (left) delete left;
-        if (right) delete right;
-    }
-};
+    while (boundary <= end && tree[boundary] < root)
+        boundary++;
+
+    Postorder(tree, start + 1, boundary - 1);
+    Postorder(tree, boundary, end);
+
+    cout << root << '\n';
+}
 
 int main(void)
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
-
-    Node *root_node = new Node();
-    cin >> root_node->value;
-
+    vector<int> tree;
     int value;
+
     while (cin >> value)
     {
-        Node *current = root_node;
-        Node *prev = nullptr;
-        while (current)
-        {
-            prev = current;
-            if (current->value > value)
-                current = current->left;
-            else
-                current = current->right;
-        }
-
-        current = new Node{value, nullptr, nullptr};
-
-        if (prev->value < value)
-            prev->right = current;
-        else
-            prev->left = current;
+        tree.push_back(value);
     }
 
-    root_node->Postorder();
-
-    delete root_node;
+    Postorder(tree, 0, (int)tree.size() - 1);
 
     return 0;
 }
