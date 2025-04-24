@@ -17,15 +17,13 @@ int main(void)
 
     sort(pos.begin(), pos.end());
 
-    int start = 0;
     int end = 0;
     int count = 0;
     for (int i = 0; i < N; i++)
     {
         if (pos[i] > end)
         {
-            start = pos[i] - 1;
-            end = start + L;
+            end =  pos[i] - 1 + L;
             count++;
         }
     }
