@@ -1,59 +1,67 @@
 #include <iostream>
 #include <vector>
-#include <queue>
+#include <algorithm>
 
 using namespace std;
+
+int Find(vector<int> &parent, int v)
+{
+    if (parent[v] != v)
+        parent[v] = Find(parent, parent[v]);
+    return parent[v];
+}
+
+bool Union(vector<int> &parent, int v1, int v2)
+{
+    int parent_v1 = Find(parent, v1);
+    int parent_v2 = Find(parent, v2);
+
+    if (parent_v1 == parent_v2)
+        return false;
+
+    if (parent_v1 > parent_v2)
+        parent[parent_v2] = parent_v1;
+    else
+        parent[parent_v1] = parent_v2;
+
+    return true;
+}
 
 int main(void)
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-
+    
     int N, M;
     cin >> N >> M;
 
-    vector<vector<pair<int, int>>> network(N + 1);
-    vector<bool> visited(N + 1, false);
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-
-    int start_node;
-
+    vector<pair<int, pair<int, int>>> network;
     for (int i = 0; i < M; i++)
     {
         int a, b, c;
         cin >> a >> b >> c;
-        network[a].push_back({b, c});
-        network[b].push_back({a, c});
-        start_node = a;
+        network.push_back({c, {a, b}});
     }
 
-    pq.push({0, start_node});
+    sort(network.begin(), network.end());
+
+    vector<int> parent(N + 1, 0);
+    for (int i = 1; i <= N; i++)
+    {
+        parent[i] = i;
+    }
 
     int total = 0;
 
-    while (!pq.empty())
+    for (auto &cost_nodes : network)
     {
-        int current_cost = pq.top().first;
-        int current_node = pq.top().second;
-        pq.pop();
-
-        if (visited[current_node])
-            continue;
-
-        total += current_cost;
-        visited[current_node] = true;
-
-        vector<pair<int, int>> &linked = network[current_node];
-
-        for (auto &next : linked)
+        int cost = cost_nodes.first;
+        int v1 = cost_nodes.second.first;
+        int v2 = cost_nodes.second.second;
+        
+        if (Union(parent, v1, v2))
         {
-            int next_node = next.first;
-            int next_cost = next.second;
-
-            if (!visited[next_node])
-            {
-                pq.push({next_cost, next_node});
-            }
+            total += cost;
         }
     }
 
