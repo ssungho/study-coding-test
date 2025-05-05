@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <string>
 
 using namespace std;
 
@@ -29,6 +28,10 @@ bool Union(vector<int> &parent, int a, int b)
 
 int main(void)
 {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+
     int N, M;
     cin >> N >> M;
 
@@ -65,19 +68,22 @@ int main(void)
         }
     }
 
-    string result = "YES";
+    bool result = true;
     int root = Find(parent, path[1]);
 
     for (int i = 2; i <= M; i++)
     {
         if (Find(parent, path[i]) != root)
         {
-            result = "NO";
+            result = false;
             break;
         }
     }
 
-    cout << result;
+    if (result)
+        cout << "YES";
+    else 
+        cout << "NO";
 
     return 0;
 }
