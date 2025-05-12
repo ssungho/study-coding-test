@@ -4,55 +4,35 @@
 
 using namespace std;
 
-int N;
-long long min_diff = LLONG_MAX;
-
-void Backtracking(vector<pair<int, int>> &v, vector<int> &indexes, vector<bool> &visited, int index)
-{
-
-    if (indexes.size() >= 1)
-    {
-        long long mul = 1, sum = 0;
-        for (int i : indexes)
-        {
-            pair<int, int> &p = v[i];
-            mul *= p.first;
-            sum += p.second;
-        }
-
-        min_diff = min(min_diff, abs(mul - sum));
-    }
-
-    for (int i = index; i < N; i++)
-    {
-        if (visited[i])
-            continue;
-
-        visited[i] = true;
-        indexes.push_back(i);
-
-        Backtracking(v, indexes, visited, i + 1);
-
-        visited[i] = false;
-        indexes.pop_back();
-    }
-}
-
 int main(void)
 {
+    int N;
     cin >> N;
 
     vector<pair<int, int>> v(N);
     for (int i = 0; i < N; i++)
     {
-        cin >> v[i].first;
-        cin >> v[i].second;
+        cin >> v[i].first >> v[i].second;
     }
 
-    vector<bool> visited(N, false);
-    vector<int> indexes;
+    long long min_diff = LLONG_MAX;
+    for (int i = 1; i < (1 << N); i++)
+    {
+        long long mul = 1;
+        long long sum = 0;
 
-    Backtracking(v, indexes, visited, 0);
+        for (int j = 0; j < N; j++)
+        {
+            if (i & (1 << j))
+            {
+                mul *= v[j].first;
+                sum += v[j].second;
+            }
+        }
+
+        long long diff = abs(mul - sum);
+        min_diff = min(min_diff, diff);
+    }
 
     cout << min_diff;
 
