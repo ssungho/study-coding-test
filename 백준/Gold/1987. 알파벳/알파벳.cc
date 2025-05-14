@@ -9,8 +9,9 @@ int dy[DIR_SIZE]{-1, 1, 0, 0};
 int dx[DIR_SIZE]{0, 0, -1, 1};
 int R, C;
 int max_count = 0;
+bool visited[26] {};
 
-void DFS(vector<vector<char>> &map, vector<bool> &visited, int y, int x, int count)
+void DFS(vector<vector<char>> &map, int y, int x, int count)
 {
     max_count = max(max_count, count);
 
@@ -26,7 +27,7 @@ void DFS(vector<vector<char>> &map, vector<bool> &visited, int y, int x, int cou
             if (!visited[next])
             {
                 visited[next] = true;
-                DFS(map, visited, ny, nx, count + 1);
+                DFS(map, ny, nx, count + 1);
                 visited[next] = false;
             }
         }
@@ -50,10 +51,10 @@ int main(void)
         }
     }
 
-    vector<bool> visited(26, false);
-
+    
     visited[map[1][1] - 'A'] = true;
-    DFS(map, visited, 1, 1, 1);
+
+    DFS(map, 1, 1, 1);
 
     cout << max_count;
 
