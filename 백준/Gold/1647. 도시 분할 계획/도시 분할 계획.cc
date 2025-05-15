@@ -36,6 +36,10 @@ bool Union(vector<int> &parent, int node1, int node2)
 
 int main(void)
 {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+
     int N, M;
     cin >> N >> M;
 
