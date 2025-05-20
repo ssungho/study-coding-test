@@ -54,24 +54,18 @@ int main(void)
         return 0;
     }
 
-    tree[remove].clear();
-
     for (int i = 0; i < N; i++)
     {
-        auto& current = tree[i];
-
-        for (auto iter = current.begin(); iter != current.end();)
+        for (auto iter = tree[i].begin(); iter != tree[i].end();)
         {
             if (*iter == remove)
-                iter = current.erase(iter);
+                iter = tree[i].erase(iter);
             else 
                 iter++;
         }
     }
 
     int count = 0;
-    int current = root_node;
-
     FindLeafNode(tree, root_node, count);
 
     cout << count;
