@@ -10,12 +10,6 @@ int main(void)
     int N;
     cin >> N;
 
-    if (N == 1)
-    {
-        cout << "0\n1";
-        return 0;
-    }
-
     vector<int> dp(N + 1, INT_MAX);
     vector<int> path(N + 1, 0);
     dp[N] = 0;
@@ -54,14 +48,10 @@ int main(void)
     int current = 1;
     result.push(current);
 
-    while (true)
+    while (current != N)
     {
         result.push(path[current]);
         current = path[current];
-        if (current == N)
-        {
-            break;
-        }
     }
 
     while (!result.empty())
