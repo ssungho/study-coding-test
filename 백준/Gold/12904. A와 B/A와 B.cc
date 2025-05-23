@@ -9,8 +9,8 @@ int main(void)
     string S, T;
     cin >> S >> T;
 
-    bool answer = true;
-    while (true)
+    bool answer = false;
+    while (S.size() < T.size())
     {
         if (T.back() == 'A')
         {
@@ -24,15 +24,8 @@ int main(void)
 
         if (S == T)
         {
+            answer = true;
             break;
-        }
-        else
-        {
-            if (T.empty() || S.size() > T.size())
-            {
-                answer = false;
-                break;
-            }
         }
     }
 
