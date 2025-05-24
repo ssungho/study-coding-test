@@ -1,5 +1,7 @@
 #include <iostream>
+#include <vector>
 #include <queue>
+#include <algorithm>
 
 using namespace std;
 
@@ -15,33 +17,33 @@ int main(void)
     int N;
     cin >> N;
 
-    priority_queue<pair_ll, vector<pair_ll>, greater<pair_ll>> times;
+    vector<pair_ll> times(N);
+    priority_queue<ll, vector<ll>, greater<ll>> end_times;
 
     for (int i = 0; i < N; i++)
     {
-        ll S, T;
-        cin >> S >> T;
-        times.push({S, T});
+        cin >> times[i].first >> times[i].second;
+        end_times.push(times[i].second);
     }
-    
-    priority_queue<ll, vector<ll>, greater<ll>> end;
-    end.push(times.top().second);
-    times.pop();
-    int count = 1;
 
-    while (!times.empty()) 
+    sort(times.begin(), times.end());
+
+    int max_count = 0;
+    for (int i = 0; i < N; i++)
     {
-        pair_ll time = times.top();
-        times.pop();
+        int start_time = times[i].first;
+        int end_time = end_times.top();
 
-        if (end.top() <= time.first)
-            end.pop();
-
-        end.push(time.second);
-        count = max(count, (int)end.size());
+        if (end_time <= start_time)
+        {
+            end_times.pop();
+            max_count--;
+        }
+        
+        max_count++;
     }
 
-    cout << count;
+    cout << max_count;
 
     return 0;
 }
