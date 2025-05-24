@@ -23,27 +23,22 @@ int main(void)
     for (int i = 0; i < N; i++)
     {
         cin >> times[i].first >> times[i].second;
-        end_times.push(times[i].second);
     }
 
     sort(times.begin(), times.end());
+    end_times.push(times[0].second);
 
-    int max_count = 0;
-    for (int i = 0; i < N; i++)
+    for (int i = 1; i < N; i++)
     {
-        int start_time = times[i].first;
-        int end_time = end_times.top();
-
-        if (end_time <= start_time)
+        if (end_times.top() <= times[i].first)
         {
             end_times.pop();
-            max_count--;
         }
-        
-        max_count++;
+
+        end_times.push(times[i].second);
     }
 
-    cout << max_count;
+    cout << end_times.size();
 
     return 0;
 }
