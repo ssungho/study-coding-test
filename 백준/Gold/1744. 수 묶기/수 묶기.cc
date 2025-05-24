@@ -4,6 +4,22 @@
 
 using namespace std;
 
+void Solution(vector<int> &numbers, int size, int &sum)
+{
+    for (int i = 1; i < size; i++)
+    {
+        int mul = numbers[i] * numbers[i - 1];
+        int add = numbers[i] + numbers[i - 1];
+
+        if (add < mul)
+        {
+            sum -= add;
+            sum += mul;
+            i++;
+        }
+    }
+}
+
 int main(void)
 {
     int N;
@@ -36,33 +52,8 @@ int main(void)
     int num_positives = (int)positive_numbers.size();
     int num_negatives = (int)negative_numbers.size();
 
-    int prev = 0;
-
-    for (int i = 1; i < num_positives; i++)
-    {
-        int mul = positive_numbers[i] * positive_numbers[i - 1];
-        int add = positive_numbers[i] + positive_numbers[i - 1];
-
-        if (add < mul)
-        {
-            sum -= add;
-            sum += mul;
-            i++;
-        }
-    }
-
-    for (int i = 1; i < num_negatives; i++)
-    {
-        int mul = negative_numbers[i] * negative_numbers[i - 1];
-        int add = negative_numbers[i] + negative_numbers[i - 1];
-
-        if (add < mul)
-        {
-            sum -= add;
-            sum += mul;
-            i++;
-        }
-    }
+    Solution(positive_numbers, num_positives, sum);
+    Solution(negative_numbers, num_negatives, sum);
 
     cout << sum;
 
