@@ -1,19 +1,20 @@
 #include <string>
 #include <vector>
-#include <iostream>
 
 using namespace std;
 
-void dfs(vector<vector<int>>& nodes, vector<bool>& visited, int node)
+void dfs(vector<vector<int>>& computers, vector<bool>& visited, int current)
 {
-    vector<int>& neighbors = nodes[node];
-    
-    for (int neighbor : neighbors)
+    int size = (int)computers[current].size();
+    for (int i = 0 ; i < size; i++)
     {
-        if (!visited[neighbor])
+        if (i == current)
+            continue;
+        
+        if (!visited[i] && computers[current][i] == 1)
         {
-            visited[neighbor] = true;
-            dfs(nodes, visited, neighbor);
+            visited[i] = true;
+            dfs(computers, visited, i);
         }
     }
 }
@@ -22,19 +23,6 @@ int solution(int n, vector<vector<int>> computers)
 {
     int answer = 0;
     
-    vector<vector<int>> nodes(n);
-    for (int i = 0; i < n; i++) 
-    {
-        for (int j = 0; j < i; j++) 
-        {
-            if (computers[i][j] == 1)
-            {
-                nodes[i].push_back(j);
-                nodes[j].push_back(i);
-            }
-        }
-    }
-    
     vector<bool> visited(n, false);
     
     for (int i = 0; i < n; i++)
@@ -42,7 +30,7 @@ int solution(int n, vector<vector<int>> computers)
         if (!visited[i])
         {
             visited[i] = true;
-            dfs(nodes, visited, i);
+            dfs(computers, visited, i);
             answer++;
         }
     }
