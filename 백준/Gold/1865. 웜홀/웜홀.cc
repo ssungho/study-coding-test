@@ -7,6 +7,10 @@ constexpr int MAX_T{10001};
 
 int main(void)
 {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+
     int TC;
     cin >> TC;
 
@@ -15,64 +19,52 @@ int main(void)
         int N, M, W;
         cin >> N >> M >> W;
 
-        vector<vector<int>> spot(N + 1, vector<int>(N + 1, MAX_T));
-        vector<vector<int>> wormhole(N + 1, vector<int>(N + 1, MAX_T));
-        vector<vector<int>> costs(N + 1, vector<int>(N + 1, MAX_T));
+        vector<vector<pair<int, int>>> spot(N + 1);
+        vector<int> costs(N + 1, 0);
 
         for (int i = 0; i < M; i++)
         {
             int S, E, T;
             cin >> S >> E >> T;
-            spot[S][E] = min(spot[S][E], T);
-            spot[E][S] = min(spot[E][S], T);
+            spot[S].push_back({E, T});
+            spot[E].push_back({S, T});
         }
 
         for (int i = 0; i < W; i++)
         {
             int S, E, T;
             cin >> S >> E >> T;
-            wormhole[S][E] = T;
+            spot[S].push_back({E, -T});
         }
 
-        for (int i = 1; i <= N; i++)
+        for (int i = 1; i < N; i++)
         {
             for (int j = 1; j <= N; j++)
             {
-                if (i == j)
+                vector<pair<int, int>> &ref = spot[j];
+                for (auto &p : ref)
                 {
-                    costs[i][j] = 0;
-                }
-                else if (spot[i][j] != MAX_T)
-                {
-                    costs[i][j] = spot[i][j];
-                }
-
-                if (wormhole[i][j] != MAX_T)
-                {
-                    costs[i][j] = min(costs[i][j], -wormhole[i][j]);
-                }
-            }
-        }
-
-        for (int k = 1; k <= N; k++)
-        {
-            for (int i = 1; i <= N; i++)
-            {
-                for (int j = 1; j <= N; j++)
-                {
-                    costs[i][j] = min(costs[i][j], costs[i][k] + costs[k][j]);
+                    costs[j] = min(costs[j], costs[p.first] + p.second);
                 }
             }
         }
 
         bool is_find = false;
+
         for (int i = 1; i <= N; i++)
         {
-            if (costs[i][i] < 0)
+            vector<pair<int, int>> &ref = spot[i];
+            for (auto &p : ref)
             {
-                is_find = true;
-                break;
+                if (costs[i] > costs[p.first] + p.second)
+                {
+                    is_find = true;
+                    break;
+                }
             }
+
+            if (is_find)
+                break;
         }
 
         if (is_find)
