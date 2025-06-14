@@ -40,15 +40,20 @@ bool CanPlant(vector<vector<int>>& map, vector<vector<bool>>& planted, int y, in
 
 void Backtracking(vector<vector<int>>& map, vector<vector<bool>>& planted, int y, int x, int cost, int count)
 {
+    if (cost > min_cost)
+    {
+        return;
+    }
+
     if (count == target_count)
     {
         min_cost = min(min_cost, cost);
         return;
     }
 
-    for (int i = 0; i < N; i++)
+    for (int i = 1; i < N - 1; i++)
     {
-        for (int j = 0; j < N; j++)
+        for (int j = 1; j < N - 1; j++)
         {
             if (CanPlant(map, planted, i, j))
             {
