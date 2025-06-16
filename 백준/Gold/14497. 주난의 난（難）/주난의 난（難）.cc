@@ -25,7 +25,7 @@ int BFS(vector<vector<char>>& map)
     while (true)
     {
         result++;
-        
+
         while (!q.empty())
         {
             int current_y = q.front().first;
@@ -59,6 +59,10 @@ int BFS(vector<vector<char>>& map)
 
 int main(void)
 {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    
     cin >> N >> M >> start_y >> start_x >> dest_y >> dest_x;
     vector<vector<char>> map(N, vector<char>(M, ' '));
     for (int i = 0; i < N; i++)
