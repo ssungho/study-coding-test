@@ -5,11 +5,13 @@ using namespace std;
 
 int N;
 int min_count{INT_MAX};
+constexpr int max_n{20};
+char coins[max_n][max_n]{};
 
-int CountT(vector<vector<char>> &coins)
+int CountT()
 {
     int count = 0;
-    for (auto &row : coins)
+    for (auto& row : coins)
     {
         for (char coin : row)
         {
@@ -20,19 +22,19 @@ int CountT(vector<vector<char>> &coins)
     return count;
 }
 
-void ReversRow(vector<char> &row)
+void ReversRow(int index)
 {
     for (int i = 0; i < N; i++)
     {
-        row[i] = (row[i] == 'T') ? 'H' : 'T';
+        coins[index][i] = (coins[index][i] == 'T') ? 'H' : 'T';
     }
 }
 
-void Search(vector<vector<char>> &coins, int index)
+void Search(int index)
 {
     if (index == N)
     {
-        int count = CountT(coins);
+        int count = CountT();
         for (int i = 0; i < N; i++)
         {
             int t_count = 0;
@@ -54,10 +56,10 @@ void Search(vector<vector<char>> &coins, int index)
         return;
     }
 
-    Search(coins, index + 1);
-    ReversRow(coins[index]);
-    Search(coins, index + 1);
-    ReversRow(coins[index]);
+    Search(index + 1);
+    ReversRow(index);
+    Search(index + 1);
+    ReversRow(index);
 }
 
 int main(void)
@@ -67,8 +69,6 @@ int main(void)
     cout.tie(nullptr);
 
     cin >> N;
-
-    vector<vector<char>> coins(N, vector<char>(N, ' '));
     for (int i = 0; i < N; i++)
     {
         for (int j = 0; j < N; j++)
@@ -77,9 +77,9 @@ int main(void)
         }
     }
 
-    min_count = CountT(coins);
+    min_count = CountT();
 
-    Search(coins, 0);
+    Search(0);
 
     cout << min_count << '\n';
 
