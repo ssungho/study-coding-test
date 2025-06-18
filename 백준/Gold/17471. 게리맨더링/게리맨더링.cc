@@ -9,21 +9,25 @@ constexpr int max_diff{2001};
 constexpr int max_cities{10};
 int people[max_cities + 1]{};
 bool visited[max_cities + 1]{};
+bool in_left[max_cities + 1]{};
 int N;
 
-int DFS(vector<vector<int>> &adj_cities, int current, unordered_set<int> &cities)
+int DFS(vector<vector<int>> &adj_cities, int current, bool check_left)
 {
+    visited[current] = true;
     int count = people[current];
 
     for (int city : adj_cities[current])
     {
         if (visited[city])
             continue;
-        if (cities.end() == cities.find(city))
+        if (check_left && !in_left[city])
+            continue;
+        if (!check_left && in_left[city])
             continue;
 
         visited[city] = true;
-        count += DFS(adj_cities, city, cities);
+        count += DFS(adj_cities, city, check_left);
     }
 
     return count;
@@ -55,22 +59,18 @@ int main(void)
     }
 
     int min_count = max_diff;
-
     int max_bit = (1 << N);
 
-    unordered_set<int> left_cities, right_cities;
     for (int i = 0; i < max_bit; i++)
     {
         memset(visited, 0, max_cities + 1);
+        memset(in_left, 0, max_cities + 1);
+
         for (int j = 0; j < N; j++)
         {
             if (i & (1 << j))
             {
-                left_cities.insert(j + 1);
-            }
-            else
-            {
-                right_cities.insert(j + 1);
+                in_left[j + 1] = true;
             }
         }
 
@@ -79,21 +79,22 @@ int main(void)
 
         for (int j = 1; j <= N; j++)
         {
-            if (count > 2) 
-                continue;
-
             if (!visited[j])
             {
-                visited[j] = true;
                 if (count == 0)
                 {
-                    left = DFS(adj_cities, j, left_cities);
+                    left = DFS(adj_cities, j, true);
                 }
                 else if (count == 1)
                 {
-                    right = DFS(adj_cities, j, right_cities);
+                    right = DFS(adj_cities, j, false);
                 }
                 count++;
+            }
+
+            if (count > 2)
+            {
+                break;
             }
         }
 
@@ -101,13 +102,12 @@ int main(void)
         {
             min_count = min(min_count, abs(left - right));
         }
-
-        left_cities.clear();
-        right_cities.clear();
     }
 
-    if (min_count == max_diff) 
+    if (min_count == max_diff)
+    {
         min_count = -1;
+    }
 
     cout << min_count << '\n';
 
