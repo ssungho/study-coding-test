@@ -7,6 +7,10 @@ constexpr int max_n{10001};
 
 int main(void)
 {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+
     int n;
     cin >> n;
 
