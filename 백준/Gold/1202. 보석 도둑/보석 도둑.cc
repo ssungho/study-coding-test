@@ -6,7 +6,6 @@ using namespace std;
 
 int main(void) 
 {
-    using ll = long long;
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
@@ -14,8 +13,8 @@ int main(void)
     int N, K;
     cin >> N >> K;
 
-    vector<pair<ll, ll>> infos(N);
-    vector<ll> bags(K);
+    vector<pair<int, int>> infos(N);
+    vector<int> bags(K);
     
     for (int i = 0; i < N; i++)
     {
@@ -30,8 +29,8 @@ int main(void)
     sort(infos.begin(), infos.end());
     sort(bags.begin(), bags.end());
 
-    priority_queue<ll> pq;
-    ll result = 0;
+    priority_queue<int> pq;
+    long long result = 0;
     int info_index = 0;
 
     for (int i = 0; i < K; i++)
