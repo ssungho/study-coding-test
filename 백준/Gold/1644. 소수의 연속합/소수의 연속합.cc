@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <cmath>
 
 using namespace std;
 
@@ -9,54 +8,48 @@ int main(void)
     int N;
     cin >> N;
 
-    vector<bool> v(N + 1, true);
-    v[0] = v[1] = false;
-
+    vector<bool> is_prime(N + 1, true);
     vector<int> primes;
 
+    is_prime[0] = is_prime[1] = false;
     for (int i = 2; i <= N; i++)
     {
-        if (v[i])
+        if (is_prime[i])
         {
             primes.push_back(i);
 
             for (int j = i; j <= N; j += i)
             {
-                if (j != i)
-                {
-                    v[j] = false;
-                }
+                is_prime[j] = false;
             }
         }
     }
 
-    int primes_count = primes.size();
-    vector<int> sums(primes_count + 1, 0);
-
-    for (int i = 1; i <= primes_count; i++)
-    {
-        // primes는 인덱스 0부터 넣어뒀음.
-        sums[i] = sums[i - 1] + primes[i - 1]; 
-    }
-
-    int start = 0;
-    int end = 0;
     int count = 0;
-
-    while (end <= primes_count)
+    int prime_count = (int)primes.size();
+    for (int i = 0; i < prime_count; i++)
     {
-        while (sums[end] - sums[start] >= N && start < end)
+        int j = i;
+        int acc = 0;
+        while (j >= 0)
         {
-            if (sums[end] - sums[start] == N)
+            acc += primes[j];
+
+            if (acc == N)
             {
                 count++;
+                break;
             }
-            start++;
+            else if (acc > N)
+            {
+                break;
+            }
+
+            j--;
         }
-        end++;
     }
 
-    cout << count;
+    cout << count << '\n';
 
     return 0;
 }
