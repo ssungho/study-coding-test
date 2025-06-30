@@ -21,26 +21,17 @@ int main(void)
     int count = 0;
     int check_point = 0;
 
-    for (auto& p : v)
+    for (const auto& p : v)
     {
-        int start = p.first;
-        int end = p.second;
+        if (check_point < p.second) {
+            check_point = max(p.first, check_point);
+            int distance = p.second - check_point;
+            int val = (distance / L);
+            if ((distance % L) > 0) 
+                val++;
 
-        while (start < check_point && start < end)
-            start++;
-
-        if (start >= end)
-            continue;
-
-        while (start < end)
-        {
-            ++count;
-            int copy_start = start;
-            for (int i = 0; i < L; i++)
-            {
-                start++;
-                check_point = start;
-            }
+            count += val;
+            check_point += val * L;
         }
     }
 
