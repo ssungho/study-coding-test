@@ -1,4 +1,4 @@
-#include <iostream>
+#include <cstdio>
 #include <vector>
 #include <algorithm>
 
@@ -7,13 +7,13 @@ using namespace std;
 int main(void) 
 {
     int N, L;
-    cin >> N >> L;
+    scanf("%d %d", &N, &L);
 
     vector<pair<int, int>> v(N);
 
     for (int i = 0; i < N; i++) 
     {
-        cin >> v[i].first >> v[i].second;
+         scanf("%d %d", &v[i].first, &v[i].second);
     }
 
     sort(v.begin(), v.end());
@@ -35,7 +35,7 @@ int main(void)
         }
     }
 
-    cout << count << '\n';
+    printf("%d", count);
 
     return 0;
 }
