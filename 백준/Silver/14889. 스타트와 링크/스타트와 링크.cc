@@ -1,80 +1,72 @@
 #include <iostream>
 #include <vector>
-#include <climits>
-
+#include <limits>
+#include <cmath>
 using namespace std;
 
+constexpr int max_n{20};
+int arr[max_n + 1][max_n + 1]{};
+bool visited[max_n + 1];
+int min_diff{numeric_limits<int>::max()};
 int N;
-int min_diff = INT_MAX;
-vector<vector<int>> abilities;
-vector<bool> picked;
+vector<int> team1, team2;
 
-int GetSumScores(vector<int> &team)
+int Count(vector<int> &team)
 {
-    int sum = 0;
-
-    for (int i = 0; i < team.size(); i++)
+    int count = 0;
+    int size = (int)team.size();
+    for (int i = 0; i < size; i++)
     {
-        for (int j = 0; j < team.size(); j++)
+        for (int j = 0; j < size; j++)
         {
-            sum += abilities[team[i]][team[j]];
+            count += arr[team[i]][team[j]];
         }
     }
-
-    return sum;
+    return count;
 }
 
-void Backtracing(int index, vector<int> &team_start)
+void DFS(int index, int count)
 {
-    if (team_start.size() == N / 2)
+    if (count == N / 2)
     {
-        vector<int> team_link;
-        for (int i = 1; i <= N; i++)
+        team1.clear();
+        team2.clear();
+
+        for (int i = 0; i < N; i++)
         {
-            if (!picked[i])
-            {
-                team_link.push_back(i);
-            }
+            if (visited[i]) team1.push_back(i);
+            else team2.push_back(i);
         }
 
-        min_diff = min(min_diff, abs(GetSumScores(team_start) - GetSumScores(team_link)));
+        min_diff = min(abs(Count(team1) - Count(team2)), min_diff);
+        return;
     }
 
-    for (int i = index; i <= N; i++)
+    for (int i = index; i < N; i++)
     {
-        if (picked[i])
+         if (visited[i])
             continue;
 
-        picked[i] = true;
-        team_start.push_back(i);
-
-        Backtracing(i + 1, team_start);
-
-        picked[i] = false;
-        team_start.pop_back();
+        visited[i] = true;
+        DFS(i + 1, count + 1);
+        visited[i] = false;
     }
 }
 
 int main(void)
 {
     cin >> N;
-
-    abilities.resize(N + 1, vector<int>(N + 1));
-    picked.resize(N + 1);
-
-    for (int i = 1; i <= N; i++)
+    for (int i = 0; i < N; i++)
     {
-        for (int j = 1; j <= N; j++)
+        for (int j = 0; j < N; j++)
         {
-            cin >> abilities[i][j];
+            cin >> arr[i][j];
         }
     }
 
-    vector<int> team_start;
+    DFS(0, 0);
 
-    Backtracing(1, team_start);
-
-    cout << min_diff;
+    cout << min_diff << '\n';
 
     return 0;
 }
