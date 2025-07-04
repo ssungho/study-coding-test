@@ -20,13 +20,7 @@ string solution(vector<int> numbers) {
         answer += number;
     }
     
-    while (answer.size() > 0 && answer[0] == '0') {
-        answer = string(answer.begin() + 1, answer.end());
-    }
-    
-    if (answer.size() == 0) {
-        answer = "0";
-    }
+    answer = answer[0] == '0' ? "0" : answer;
     
     return answer;
 }
