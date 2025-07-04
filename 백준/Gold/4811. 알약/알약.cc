@@ -9,15 +9,17 @@ unsigned long long Search(int w, int h)
     if (w == 0 && h == 0)
         return 1;
 
-    if (dp[w][h])
-        return dp[w][h];
+    unsigned long long& get = dp[w][h];
+
+    if (get)
+        return get;
 
     if (w > 0)
-        dp[w][h] = dp[w][h] + Search(w - 1, h + 1);
+        get += Search(w - 1, h + 1);
     if (h > 0)
-        dp[w][h] = dp[w][h] + Search(w, h - 1);
+        get += Search(w, h - 1);
 
-    return dp[w][h];
+    return get;
 }
 
 int main(void)
