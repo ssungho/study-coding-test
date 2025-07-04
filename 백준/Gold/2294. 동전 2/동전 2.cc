@@ -9,30 +9,27 @@ int main(void)
     int n, k;
     cin >> n >> k;
 
-    vector<int> dp(k + 1, INT_MAX);
-    dp[0] = 0;
-    vector<int> coins;
-
+    vector<int> coins(n, 0);
     for (int i = 0; i < n; i++)
     {
-        int coin;
-        cin >> coin;
-        coins.push_back(coin);
+        cin >> coins[i];
     }
 
+    vector<int> dp(k + 1, INT_MAX);
+    dp[0] = 0;
+    
     for (int coin : coins)
     {
-        for (int j = coin; j <= k; j++)
+        for (int i = coin; i <= k; i++)
         {
-            if (dp[j - coin] != INT_MAX) 
+            if (dp[i - coin] != INT_MAX) 
             {
-                dp[j] = min(dp[j], dp[j - coin] + 1);
+                dp[i] = min(dp[i], dp[i - coin] + 1);
             }
         }
     }
 
-    int answer = dp[k] == INT_MAX ? -1 : dp[k];
-    cout << answer;
+    cout << (dp[k] == INT_MAX ? -1 : dp[k]) << '\n';
 
     return 0;
 }
