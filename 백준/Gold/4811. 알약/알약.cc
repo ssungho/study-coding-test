@@ -24,6 +24,10 @@ unsigned long long Search(int w, int h)
 
 int main(void)
 {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    
     int T;
     while (cin >> T && T != 0)
     {
