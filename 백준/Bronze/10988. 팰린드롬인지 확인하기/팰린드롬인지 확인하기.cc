@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -8,19 +9,10 @@ int main(void)
     string str;
     cin >> str;
 
-    int size = (int)str.size();
-    bool is_palindrome = true;
+    string strReverse(str);
+    reverse(strReverse.begin(), strReverse.end());
 
-    for (int i = 0; i < size / 2; i++)
-    {
-        if (str[i] != str[size - i - 1])
-        {
-            is_palindrome = false;
-            break;
-        }
-    }
-
-    cout << is_palindrome << '\n';
+    cout << (str == strReverse) << '\n';
 
     return 0;
 }
