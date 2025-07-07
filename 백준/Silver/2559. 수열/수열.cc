@@ -1,34 +1,34 @@
 #include <iostream>
-#include <vector>
 #include <climits>
 
 using namespace std;
 
-int main()
+int N, K;
+int A[100001]{};
+int S[100001]{};
+
+int main(void)
 {
-    int N, K;
     cin >> N >> K;
-
-    vector<int> v;
-    for (int i = 0; i < N; i++)
+    
+    for (int i = 1; i <= N; i++)
     {
-        int temp;
-        cin >> temp;
-        v.push_back(temp);
+        cin >> A[i];
+    }
+    
+    for (int i = 1; i <= N; i++)
+    {
+        S[i] = S[i - 1] + A[i];
     }
 
-    int max = INT_MIN;
-    for (int i = 0; i <= N - K; i++)
+    int maxSum = -INT_MAX;
+    for (int i = 1; i <= N - K + 1; i++)
     {
-        int sum = 0;
-        for (int j = 0; j < K; j++)
-        {
-            sum += v[i + j];
-        }
-        max = std::max(sum, max);
+        int partSum = S[i + K - 1] - S[i - 1];
+        maxSum = max(partSum, maxSum);
     }
 
-    cout << max;
+    cout << maxSum << '\n';
 
     return 0;
 }
