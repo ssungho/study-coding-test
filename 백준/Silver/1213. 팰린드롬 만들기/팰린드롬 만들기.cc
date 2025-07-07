@@ -1,59 +1,67 @@
 #include <iostream>
 #include <string>
-#include <map>
 
 using namespace std;
 
 int main(void)
 {
+    string name;
+    cin >> name;
 
-    string en_name;
-    cin >> en_name;
-
-    map<char, int> m;
-
-    int length = (int)en_name.length();
-
-    for (int i = 0; i < length; i++)
+    int alphabet[26]{};
+    for (char ch : name)
     {
-        auto iter = m.find(en_name[i]);
-        if (iter != m.end())
+        alphabet[ch - 'A']++;
+    }
+
+    int cntOdd = 0;
+    for (int i = 0; i < 26; i++)
+    {
+        if (alphabet[i] % 2 == 1)
         {
-            iter->second++;
-        }
-        else
-        {
-            m.insert({en_name[i], 1});
+            cntOdd++;
         }
     }
 
-    string front = "";
-    string back = "";
-    string mid = "";
-
-    int count = 0;
-    for (auto iter = m.begin(); iter != m.end(); iter++)
+    string temp = "";
+    if (cntOdd == 0)
     {
-        if (iter->second % 2 == 1)
+        for (int i = 0; i < 26; i++)
         {
-            count++;
-            mid = iter->first;
+            int cnt = alphabet[i];
+            for (int j = 0; j < cnt / 2; j++)
+            {
+                temp.push_back(i + 'A');
+            }
         }
-        
-        if (count > 1)
-            break;
 
-        for (int i = 0; i < iter->second / 2; i++)
-        {
-            front += iter->first;
-            back = iter->first + back;
-        }
+        temp.append(temp.rbegin(), temp.rend());
+        cout << temp << '\n';
     }
+    else if (cntOdd == 1)
+    {
+        char center;
+        for (int i = 0; i < 26; i++)
+        {
+            int cnt = alphabet[i];
+            if (cnt % 2 == 1)
+                center = i + 'A';
 
-    if (count > 1)
-        cout << "I'm Sorry Hansoo";
+            for (int j = 0; j < cnt / 2; j++)
+            {
+                temp.push_back(i + 'A');
+            }
+        }
+
+        string reverse(temp.rbegin(), temp.rend());
+        temp.push_back(center);
+        temp.append(reverse);
+        cout << temp << '\n';
+    }
     else
-        cout << front + mid + back;
+    {
+        cout << "I'm Sorry Hansoo\n";
+    }
 
     return 0;
 }
