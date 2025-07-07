@@ -1,38 +1,45 @@
 #include <iostream>
 #include <string>
-#include <vector>
 #include <map>
+
 using namespace std;
 
 int main(void)
 {
-    int T, N;
+    int T;
     cin >> T;
-    for (int t = 0; t < T; t++)
+
+    while (T--)
     {
-        map<string, int> map;
-        vector<string> kinds;
-        cin >> N;
-        for (int i = 0; i < N; i++)
+        int n;
+        cin >> n;
+        map<string, int> combinations;
+
+        for (int i = 0; i < n; i++)
         {
             string name, kind;
             cin >> name >> kind;
-            if (map.find(kind) == map.end())
+            
+            if (combinations.end() != combinations.find(kind))
             {
-                map.insert({kind, 1});
-                kinds.push_back(kind);
+                combinations[kind]++;
             }
             else
             {
-                map[kind]++;
+                combinations.insert({kind, 1});
             }
         }
-        int sum = 1;
-        for (int i = 0; i < kinds.size(); i++)
+
+        int comb = 1;
+
+        for (const auto &p : combinations)
         {
-            sum *= (map[kinds[i]] + 1);
+            // + 안고른다.
+            comb *= (p.second + 1);
         }
-        cout << sum - 1 << '\n';
+
+        // - 알몸.
+        cout << comb - 1 << '\n';
     }
 
     return 0;
