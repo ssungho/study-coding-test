@@ -1,41 +1,50 @@
-#include<iostream>
-#include<vector>
-#include<algorithm>
+#include <iostream>
+#include <algorithm>
+
 using namespace std;
+
+int numbers[15001]{};
 
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(NULL);
+    ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-	int N, M;
-	cin >> N >> M;
+    int N, M;
+    cin >> N >> M;
 
-	vector<int> v;
-	for (int i = 0; i < N; i++)
-	{
-		int temp;
-		cin >> temp;
-		v.push_back(temp);
-	}
-	sort(v.begin(), v.end());
+    for (int i = 0; i < N; i++)
+    {
+        cin >> numbers[i];
+    }
 
-	int start = 0;
-	int end = N - 1;
-	int cnt = 0;
-	while (start != end)
-	{
-		if (v[start] + v[end] == M)
-		{
-			cnt++;
-			end--;
-		}
-		else if (v[start] + v[end] > M)
-			end--;
+    sort(numbers, numbers + N);
 
-		else if (v[start] + v[end] < M)
-			start++;
-	}
-	cout << cnt;
-	return 0;
+    int left = 0;
+    int right = N - 1;
+    int count = 0;
+
+    while (left < right)
+    {
+        int sum = numbers[left] + numbers[right];
+        if (sum > M)
+        {
+            right--;
+        }
+        else if (sum < M)
+        {
+            left++;
+        }
+        else
+        {
+            count++;
+            left++;
+            right--;
+        }
+    }
+
+    cout << count << '\n';
+
+    return 0;
 }
