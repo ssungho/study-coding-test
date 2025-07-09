@@ -1,84 +1,69 @@
-#include<iostream>
-#include<vector>
-#include<queue>
+#include <iostream>
+#include <memory.h>
+
 using namespace std;
 
-bool field[51][51]{ false };
-bool visited[51][51]{ false };
+constexpr int dir_size{4};
+constexpr int dy[dir_size]{-1, 0, 1, 0};
+constexpr int dx[dir_size]{0, 1, 0, -1};
+constexpr int max_size{50};
+bool map[max_size][max_size]{};
+bool visited[max_size][max_size]{};
+int T, N, M, K;
 
-int dx[4]{0, 0, -1, 1};
-int dy[4]{-1, 1, 0, 0};
-
-void BFS(int x, int y)
+void dfs(int y, int x)
 {
-	visited[x][y] = true;
-	queue<pair<int,int>> q;
-	q.push({x, y});
-	
-	while (!q.empty())
-	{
-		int cur_x = q.front().first;
-		int cur_y = q.front().second;
-		q.pop();
+    visited[y][x] = true;
 
-		for (int i = 0; i < 4; i++)
-		{
-			int nx = cur_x + dx[i];
-			int ny = cur_y + dy[i];
-			if (nx > -1 && ny > -1 && nx < 51 && ny < 51)
-			{
-				if (!visited[nx][ny] && field[nx][ny])
-				{
-					visited[nx][ny] = true;
-					q.push({ nx, ny });
-				}
-			}
-		}	
-	}
-}
-void Reset()
-{
-	for(int i = 0; i < 51; i++)
-		for (int j = 0; j < 51; j++)
-		{
-			field[i][j] = false;
-			visited[i][j] = false;
-		}
+    for (int dir = 0; dir < dir_size; dir++)
+    {
+        int ny = dy[dir] + y;
+        int nx = dx[dir] + x;
+        if (0 <= ny && ny < N && 0 <= nx && nx < M &&
+            map[ny][nx] && !visited[ny][nx])
+        {
+            dfs(ny, nx);
+        }
+    }
 }
 
 int main(void)
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    
+    cin >> T;
 
-	int T, M, N, K;
-	cin >> T;
+    while (T--)
+    {
+        cin >> N >> M >> K;
 
-	for (int i = 0; i < T; i++)
-	{
-		cin >> M >> N >> K;
-		int x, y;
-		// 배추 입력
-		for (int j = 0; j < K; j++)
-		{
-			cin >> x >> y;
-			field[y][x] = true;
-		}
-		// 지렁이 수
-		int cnt = 0;
-		for (int j = 0; j < M; j++)
-			for (int k = 0; k < N; k++)
-				// 방문한적 없고, 배추가 있는 땅이면 BFS를 실행.
-				if (visited[k][j] == false && field[k][j] == true)
-				{
-					BFS(k, j);
-					cnt++;
-				}
-		// 전역변수 초기화
-		Reset();
-		cout << cnt << '\n';
-	}
+        memset(visited, 0, sizeof(visited));
+        memset(map, 0, sizeof(map));
 
-	return 0;
+        for (int i = 0; i < K; i++)
+        {
+            int y, x;
+            cin >> y >> x;
+            map[y][x] = true;
+        }
+
+        int count = 0;
+
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = 0; j < M; j++)
+            {
+                if (!visited[i][j] && map[i][j])
+                {
+                    dfs(i, j);
+                    count++;
+                }
+            }
+        }
+
+        cout << count << '\n';
+    }
+    return 0;
 }
