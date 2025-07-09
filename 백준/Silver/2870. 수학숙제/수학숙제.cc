@@ -26,19 +26,17 @@ int main(void)
         {
             if (IsNumber(str[j]))
             {
-                string str_num(1, str[j]);
-                for (int k = j + 1; k < str_size; k++)
+                string str_num = "";
+
+                while (IsNumber(str[j]))
                 {
-                    j = k;
-                    if (IsNumber(str[k]))
-                        str_num += str[k];
-                    else 
-                        break;
+                    str_num += str[j];
+                    j++;
                 }
 
                 while (str_num.size() > 1 && str_num.front() == '0')
                 {
-                    str_num = str_num.substr(1);
+                    str_num.erase(str_num.begin());
                 }
 
                 numbers.push_back(str_num);
