@@ -1,64 +1,52 @@
 #include <iostream>
-#include <map>
 #include <vector>
+#include <map>
 #include <algorithm>
 
 using namespace std;
 
-struct Code
-{
-    int number;
-    int frequency;
-    int first;
-};
-
-bool compare(Code &a, Code &b)
-{
-    if (a.frequency == b.frequency)
-        return a.first <= b.first;
-    return a.frequency > b.frequency;
-}
-
 int main(void)
 {
     int N, C;
-
     cin >> N >> C;
 
-    vector<Code> v;
     map<int, pair<int, int>> m;
-
     for (int i = 0; i < N; i++)
     {
-        int temp;
-        cin >> temp;
+        int number;
+        cin >> number;
 
-        if (m.end() != m.find(temp))
+        if (m.find(number) != m.end())
         {
-            m[temp].first++;
+            m[number].first++;
         }
         else
         {
-            m.insert({temp, {1, i}});
+            m.insert({number, {1, i}});
         }
     }
 
-    for (auto &iter : m)
+    vector<pair<int, pair<int, int>>> v(N);
+    int index = 0;
+    for (auto &ele : m)
     {
-        v.push_back({iter.first, iter.second.first, iter.second.second});
+        v[index++] = ele;
     }
 
-    sort(v.begin(), v.end(), compare);
-
-    for (int i = 0; i < C; i++)
+    sort(v.begin(), v.end(), [&](auto &left, auto &right) -> bool 
     {
-        if (v[i].frequency == 0)
-            break;
-        Code &temp = v[i];
-        for (int j = 0; j < temp.frequency; j++)
+        if (left.second.first == right.second.first) 
         {
-            cout << temp.number << " ";
+            return left.second.second < right.second.second;
         }
+
+        return left.second.first > right.second.first; 
+    });
+
+    for (auto &ele : v)
+    {
+        for (int i = 0; i < ele.second.first; i++)
+            cout << ele.first << " ";
     }
 
     return 0;
