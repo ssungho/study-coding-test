@@ -1,68 +1,68 @@
-#include<iostream>
-#include<string>
-#include<stack>
+#include <iostream>
+#include <string>
+#include <stack>
 
 using namespace std;
 
 int main(void)
 {
-	string answer;
-	while (true)
-	{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
 
-		string temp;
-		stack<char> s;
-		answer = "yes";
-		getline(cin, temp);
+    while (true)
+    {
+        stack<char> s;
+        string str;
+        
+        getline(cin, str);
+        if (str == ".")
+            break;
+        
+        int length = (int)str.length();
+        bool pass = true;
 
-		if (temp == ".") 
-		{
-			break;
-		}
+        for (int i = 0; i < length - 1; i++)
+        {
+            if (str[i] == '(' || str[i] == '[')
+            {
+                s.push(str[i]);
+            }
+            else if (str[i] == ')')
+            {
+                if (s.empty() || s.top() != '(')
+                {
+                    pass = false;
+                    break;
+                }
+                else
+                {
+                    s.pop();
+                }
+            }
+            else if (str[i] == ']')
+            {
+                if (s.empty() || s.top() != '[')
+                {
+                    pass = false;
+                    break;
+                }
+                else
+                {
+                    s.pop();
+                }
+            }
+        }
 
-		for (int i = 0; i < temp.length(); i++)
-		{
-			if (temp[i] == '[' || temp[i] == '(')
-				s.push(temp[i]);
-			else if (temp[i] == ']' && !s.empty())
-			{
-				if (s.top() == '[')
-					s.pop();
-				else
-				{
-					answer = "no";
-					break;
-				}
-			}
-			else if (temp[i] == ')' && !s.empty())
-			{
-				if (s.top() == '(')
-					s.pop();
-				else
-				{
-					answer = "no";
-					break;
-				}
-			}
-			else if (temp[i] == ']' && s.empty())
-			{
-				answer = "no";
-				break;
-			}
-			else if (temp[i] == ')' && s.empty())
-			{
-				answer = "no";
-				break;
-			}
-		}
+        if (s.empty() && pass)
+        {
+            cout << "yes\n";
+        }
+        else
+        {
+            cout << "no\n";
+        }
+    }
 
-		if (!s.empty())
-		{
-			answer = "no";
-		}
-
-		std::cout << answer << '\n';
-	}
-
-	return 0;
+    return 0;
 }
