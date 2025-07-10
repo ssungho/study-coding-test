@@ -1,48 +1,54 @@
-#include<iostream>
-#include<vector>
-#include<string>
+#include <iostream>
+#include <string>
+#include <stack>
 
 using namespace std;
 
 int main(void)
 {
-	int T;
-	cin >> T;
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    
+    int T;
+    cin >> T;
 
-	for (int i = 0; i < T; i++)
-	{
-		string ps;
-		cin >> ps;
+    while (T--)
+    {
+        stack<char> s;
+        string str;
+        cin >> str;
+        
+        bool pass = true;
+        for (int i = 0; i < (int)str.size(); i++)
+        {
+            if (str[i] == '(')
+            {
+                s.push(str[i]);
+            }
+            else
+            {
+                if (s.empty())
+                {
+                    pass = false;
+                    break;
+                }
+                if (s.top() == '(')
+                {
+                    s.pop();
+                }
+            }
+        }
 
-		vector<char> v;
-		bool result = true;
+        if (s.empty() && pass)
+        {
+            cout << "YES\n";
+        }
+        else
+        {
+            cout << "NO\n";
+        }
+    }
 
-		for (int j = 0; j < ps.length(); j++)
-		{
-			if (ps[j] == '(')
-				v.push_back(ps[j]);
-
-			if (ps[j] == ')')
-			{
-				if (v.empty() || v.back() != '(')
-				{
-					result = false;
-					break;
-				}
-
-				else if (v.back() == '(')
-					v.pop_back();
-			}
-		}
-
-		if (v.size() > 0)
-			result = false;
-
-		if (result == true)
-			cout << "YES" << '\n';
-		else
-			cout << "NO" << '\n';
-	}
-
-	return 0;
+    return 0;
 }
