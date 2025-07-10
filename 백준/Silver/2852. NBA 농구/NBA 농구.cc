@@ -3,21 +3,21 @@
 
 using namespace std;
 
-string MakeTime(int time)
+string MakeTimeToString(int time)
 {
-    string m = to_string(time / 60);
-    while (m.size() < 2)
-    {
-        m = '0' + m;
-    }
+    string m = "00" + to_string(time / 60);
+    string s = "00" + to_string(time % 60);
+    return m.substr(m.size() - 2, 2) + ':' + s.substr(s.size() - 2, 2);
+}
 
-    string s = to_string(time % 60);
-    while (s.size() < 2)
-    {
-        s = '0' + s;
-    }
+int StringToInt(string str)
+{
+    return atoi(str.substr(0, 2).c_str()) * 60 + atoi(str.substr(3, 2).c_str());
+}
 
-    return m + ':' + s;
+void Go(int& sum, string str, string prev)
+{
+    sum += StringToInt(str) - StringToInt(prev);
 }
 
 int main(void)
@@ -25,12 +25,9 @@ int main(void)
     int N;
     cin >> N;
 
-    int team1 = 0;
-    int team2 = 0;
-    int time1 = 0;
-    int time2 = 0;
-    string prev = "00:00";
-    bool flag = false;
+    int team1{}, team2{};
+    int team1_sum{}, team2_sum{};
+    string prev = "";
 
     for (int i = 0; i < N; i++)
     {
@@ -38,40 +35,22 @@ int main(void)
         string time;
         cin >> team >> time;
 
+        if (team1 > team2)
+            Go(team1_sum, time, prev);
+        else if (team1 < team2)
+            Go(team2_sum, time, prev);
+
         (team == 1) ? team1++ : team2++;
-
-        int m = ((time[0] - prev[0]) * 10 + (time[1] - prev[1])) * 60;
-        int s = m + (time[3] - prev[3]) * 10 + (time[4] - prev[4]);
-
-        if (team1 == team2 && team == 1)
-        {
-            time2 += s;
-            prev = time;
-            flag = false;
-        }
-        else if (team1 == team2 && team == 2)
-        {
-            time1 += s;
-            prev = time;
-            flag = false;
-        }
-        else if (team1 != team2 && !flag)
-        {
-            prev = time;
-            flag = true;
-        }
+        prev = time;
     }
 
-    int m = (('4' - prev[0]) * 10 + ('7' - prev[1])) * 60;
-    int s = m + ('6' - prev[3]) * 10 + ('0' - prev[4]);
-
     if (team1 > team2)
-        time1 += s;
-    if (team1 < team2)
-        time2 += s;
+        Go(team1_sum, "48:00", prev);
+    else if (team1 < team2)
+        Go(team2_sum, "48:00", prev);
 
-    cout << MakeTime(time1) << '\n';
-    cout << MakeTime(time2) << '\n';
+    cout << MakeTimeToString(team1_sum) << '\n';
+    cout << MakeTimeToString(team2_sum) << '\n';
 
     return 0;
 }
