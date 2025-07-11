@@ -1,48 +1,41 @@
 #include <iostream>
 #include <vector>
 #include <stack>
+
 using namespace std;
 
 int main(void)
 {
-    ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-    
-	int N;
-	cin >> N;
-	
-	vector<int> answer(N + 1); // 정답 배열
-	vector<int> v(N + 1); // 입력 받을 배열
-	stack<int> s; // 스택
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
 
-	for (int i = 1; i < N + 1; i++)
-	{
-		int temp;
-		cin >> temp;
-		v[i] = temp;
-	}
+    int n;
+    cin >> n;
 
-	for (int i = 1; i < N + 1; i++)
-	{
-		while (!s.empty() && s.top() < i && v[s.top()] < v[i])
-		{
-			answer[s.top()] = v[i];
-			s.pop();
-		}
-		s.push(i);
-	}
+    vector<int> a(n + 1, 0);
+    vector<int> result(n + 1, -1);
+    for (int i = 1; i <= n; i++)
+    {
+        cin >> a[i];
+    }
 
-	while (!s.empty())
-	{
-		answer[s.top()] = -1;
-		s.pop();
-	}
+    stack<int> s;
 
-	for (int i = 1; i < N + 1; i++)
-	{
-		cout << answer[i] << " ";
-	}
+    for (int i = 1; i <= n; i++)
+    {
+        while (!s.empty() && a[s.top()] < a[i])
+        {
+            result[s.top()] = a[i];
+            s.pop();
+        }
+        s.push(i);
+    }
 
-	return 0;
+    for (int i = 1; i <= n; i++)
+    {
+        cout << result[i] << " ";
+    }
+
+    return 0;
 }
