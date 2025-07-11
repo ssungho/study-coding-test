@@ -2,82 +2,74 @@
 #include <vector>
 #include <queue>
 #include <string>
+#include <memory.h>
 
 using namespace std;
 
-struct Node
-{
-    int dist{}, y{}, x{};
-};
+constexpr int arr_size {50};
+constexpr int dir_size {4};
+constexpr int dy[dir_size]{-1, 0, 1, 0};
+constexpr int dx[dir_size]{0, 1, 0, -1};
 
-constexpr int DIR_SIZE{4};
-int dy[DIR_SIZE]{-1, 1, 0, 0};
-int dx[DIR_SIZE]{0, 0, -1, 1};
-int H, W;
+char map [arr_size][arr_size] {};
+bool visited[arr_size][arr_size] {};
+int n, m;
 
-int BFS(vector<vector<char>> &map, int y, int x)
-{
-    int result = 0;
-    vector<vector<bool>> visited(H, vector<bool>(W, false));
-
-    queue<Node> q;
+int bfs(int y, int x) {
+    int max_count = 0;
+    queue<pair<int, pair<int, int>>> q;
+    q.push({0, {y, x}});
     visited[y][x] = true;
-    q.push({0, y, x});
 
-    while (!q.empty())
-    {
-        Node current = q.front();
-        result = max(current.dist, result);
+    while (!q.empty()) {
+        int current_count = q.front().first;
+        int current_y = q.front().second.first;
+        int current_x = q.front().second.second;
         q.pop();
 
-        for (int i = 0; i < DIR_SIZE; i++)
-        {
-            int ny = current.y + dy[i];
-            int nx = current.x + dx[i];
-            if (0 <= ny && ny < H && 0 <= nx && nx < W && map[ny][nx] == 'L' && !visited[ny][nx])
-            {
-                q.push({current.dist + 1, ny, nx});
+        max_count = max(max_count, current_count);
+
+        for (int dir = 0; dir < dir_size; dir++) {
+            int ny = dy[dir] + current_y;
+            int nx = dx[dir] + current_x;
+
+            if (0 <= ny && ny < n && 0 <= nx && nx < m && 
+                !visited[ny][nx] && map[ny][nx] == 'L') {
+                q.push({current_count + 1, {ny, nx}});
                 visited[ny][nx] = true;
             }
         }
     }
+    
+    memset(visited, 0, sizeof(visited));
 
-    return result;
+    return max_count;
 }
 
-int main(void)
-{
+int main(void) {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    cout.tie(nullptr);
 
-    cin >> H >> W;
-    vector<vector<char>> map(H, vector<char>(W, 'W'));
-
-    for (int i = 0; i < H; i++)
-    {
+    cin >> n >> m;
+    for (int i = 0; i < n; i++) {
         string row;
         cin >> row;
-        for (int j = 0; j < W; j++)
-        {
+        for (int j = 0; j < m; j++) {
             map[i][j] = row[j];
         }
     }
 
     int answer = 0;
 
-    for (int i = 0; i < H; i++)
-    {
-        for (int j = 0; j < W; j++)
-        {
-            if (map[i][j] == 'L')
-            {
-                answer = max(answer, BFS(map, i, j));
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (map[i][j] == 'L') {
+                answer = max(answer, bfs(i, j));
             }
         }
     }
 
-    cout << answer;
+    cout << answer << '\n';
 
     return 0;
 }
