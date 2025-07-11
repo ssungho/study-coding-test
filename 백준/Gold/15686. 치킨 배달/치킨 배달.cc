@@ -4,79 +4,66 @@
 
 using namespace std;
 
-int N, M, min_distance = INT_MAX;
+constexpr int max_n{50};
+constexpr int max_index{max_n + 1};
+int map[max_index][max_index] {};
+
 vector<pair<int, int>> chickens;
 vector<pair<int, int>> houses;
-vector<pair<int, int>> picks;
+vector<int> temp;
 
-int GetDistance()
-{
-    int total_distance = 0;
+int n, m;
+int min_distance { INT_MAX };
 
-    for (auto &house_pos : houses)
-    {
-        int min_dist = INT_MAX;
-        for (auto &pick_pos : picks)
-        {
-            int dist = abs(house_pos.first - pick_pos.first) + abs(house_pos.second - pick_pos.second);
-            min_dist = min(min_dist, dist);
+int GetDistance() {
+    int sum_distance = 0;
+    for (auto p : houses) {
+        int temp_distance = INT_MAX;
+        for (int i : temp) {
+            int current_distance = abs(p.first - chickens[i].first) + 
+                                   abs(p.second - chickens[i].second);
+            temp_distance = min(temp_distance, current_distance);
         }
-        total_distance += min_dist;
+        sum_distance += temp_distance;
     }
-
-    return total_distance;
+    return sum_distance;
 }
 
-void Backtracking(int index, int pick)
-{
-    if (pick == M)
-    {
+void Backtracking(int index, int count) {
+    if (count == m) {
         min_distance = min(min_distance, GetDistance());
         return;
     }
 
-    for (int i = index; i < chickens.size(); i++)
-    {
-        int row = chickens[i].first;
-        int col = chickens[i].second;
+    for (int i = index; i < (int)chickens.size(); i++) {
+        int y = chickens[i].first;
+        int x = chickens[i].second;
 
-        picks.push_back({row, col});
-
-        Backtracking(i + 1, pick + 1);
-
-        picks.pop_back();
+        temp.push_back(i);
+        Backtracking(i + 1, count + 1);
+        temp.pop_back();
     }
 }
 
-int main(void)
-{
+int main(void) {
     ios::sync_with_stdio(false);
-    cin.tie(0);
+    cin.tie(nullptr);
 
-    cin >> N >> M;
+    cin >> n >> m;
 
-    vector<vector<int>> map(N, vector<int>(N));
-
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < N; j++)
-        {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
             cin >> map[i][j];
 
-            if (map[i][j] == 2)
-            {
-                chickens.push_back({i, j});
-            }
-            else if (map[i][j] == 1)
-            {
+            if (map[i][j] == 1)
                 houses.push_back({i, j});
-            }
+            else if (map[i][j] == 2)
+                chickens.push_back({i, j});
         }
     }
 
     Backtracking(0, 0);
-
-    cout << min_distance;
+    cout << min_distance << '\n';
 
     return 0;
 }
