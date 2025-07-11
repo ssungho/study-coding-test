@@ -1,114 +1,102 @@
+//! 12 : 39 시작
+
 #include <iostream>
-#include <vector>
-#include <queue>
+#include <memory.h>
 
 using namespace std;
 
-constexpr int DIR_SIZE{4};
-int dy[DIR_SIZE]{-1, 1, 0, 0};
-int dx[DIR_SIZE]{0, 0, -1, 1};
+const int max_index{100};
+const int arr_size{max_index + 1};
+const int dir_size{4};
+const int dy[dir_size]{-1, 0, 1, 0};
+const int dx[dir_size]{0, 1, 0, -1};
+int n, m;
 
-int H, W;
+int graph[arr_size][arr_size] {};
+bool visited[arr_size][arr_size][2] {};
 
-void BFS(vector<vector<int>> &graph, vector<vector<bool>> &visited)
-{
-    queue<pair<int, int>> q;
+int CountCheese(int y, int x) {
+    int count = 1;
+    visited[y][x][0] = true;
+    for (int dir = 0; dir < dir_size; dir++) {
+        int ny = dy[dir] + y;
+        int nx = dx[dir] + x;
+        if (ny < 0 || ny >= n || nx < 0 || nx >= m) {
+            continue;
+        }
+        if (!visited[ny][nx][0] && graph[ny][nx] == 1) {
+            count += CountCheese(ny, nx);
+        }
+    }
+    return count;
+}
 
-    q.push({0, 0});
-    visited[0][0] = true;
-
-    while (!q.empty())
-    {
-        int current_y = q.front().first;
-        int current_x = q.front().second;
-        q.pop();
-
-        for (int dir = 0; dir < DIR_SIZE; dir++)
-        {
-            int ny = current_y + dy[dir];
-            int nx = current_x + dx[dir];
-
-            if (0 <= ny && ny < H && 0 <= nx && nx < W)
-            {
-                if (graph[current_y][current_x] == 0 && graph[ny][nx] == 1)
-                {
-                    visited[ny][nx] = true;
-                }
-                else if (graph[ny][nx] == 0 && !visited[ny][nx])
-                {
-                    q.push({ny, nx});
-                    visited[ny][nx] = true;
-                }
+void DFS(int y, int x) {
+    visited[y][x][1] = true;
+    for (int dir = 0; dir < dir_size; dir++) {
+        int ny = dy[dir] + y;
+        int nx = dx[dir] + x;
+        if (ny < 0 || ny >= n || nx < 0 || nx >= m) {
+            continue;
+        }
+        if (!visited[ny][nx][1]) {
+            if (graph[ny][nx] == 0) {
+                DFS(ny, nx);
+            }
+            if (graph[ny][nx] == 1) {
+                visited[ny][nx][1] = true;
             }
         }
     }
 }
 
-int main(void)
-{
+void Melt() {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (visited[i][j][1]) {
+                graph[i][j] = 0;
+            }
+        }
+    }
+}
+
+int main(void) {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
 
-    cin >> H >> W;
-    vector<vector<int>> graph(H, vector<int>(W, 0));
-
-    int count = 0;
-    int prev_result = 0;
-
-    for (int i = 0; i < H; i++)
-    {
-        for (int j = 0; j < W; j++)
-        {
+    cin >> n >> m;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
             cin >> graph[i][j];
-
-            if (graph[i][j] == 1) 
-            {
-                prev_result++;
-            }
         }
     }
 
-    vector<vector<bool>> visited(H, vector<bool>(W, false));
+    int prev_cheese_count = 0;
+    int time = 0;
 
-    while (true)
-    {
-        int sum = 0;
-
-        BFS(graph, visited);
-
-        for (int i = 0; i < H; i++)
-        {
-            for (int j = 0; j < W; j++)
-            {
-                if (graph[i][j] == 1)
-                {
-                    if (visited[i][j])
-                    {
-                        graph[i][j] = 0;
-                    }
-                    else
-                    {
-                        sum++;
-                    }
+    while (true) {
+        memset (visited, 0, sizeof(visited));
+        int cheese_count = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (graph[i][j] == 1 && !visited[i][j][0]) {
+                    cheese_count += CountCheese(i, j);
                 }
-
-                visited[i][j] = false;
             }
         }
-
-        count++;
-
-        if (sum == 0)
-        {
+        
+        if (cheese_count == 0) {
             break;
         }
 
-        prev_result = sum;
+        prev_cheese_count = cheese_count;
+        DFS(0, 0);
+        Melt();
+        time++;
     }
 
-    cout << count << '\n'
-         << prev_result;
+    cout << time << '\n' << prev_cheese_count << '\n';
 
     return 0;
 }
