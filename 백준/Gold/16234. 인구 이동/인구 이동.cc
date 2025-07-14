@@ -10,7 +10,6 @@ constexpr int dx[dir_size]{0, 1, 0, -1};
 constexpr int max_n{50};
 
 int map[max_n][max_n]{};
-int temp_map[max_n][max_n]{};
 bool visited[max_n][max_n]{};
 int n, l, r;
 
@@ -57,7 +56,7 @@ bool bfs(int y, int x) {
         int current_y = visited_q.front().first;
         int current_x = visited_q.front().second;
         visited_q.pop();
-        temp_map[current_y][current_x] = update;
+        map[current_y][current_x] = update;
     }
 
     return true;
@@ -76,7 +75,6 @@ int main(void) {
 
     while (true) {
         bool move = false;
-        memcpy(temp_map, map, sizeof(map));
 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -90,7 +88,6 @@ int main(void) {
         if (!move) break;
         day++;
 
-        memcpy(map, temp_map, sizeof(map));
         memset(visited, 0, sizeof(visited));
     }
 
