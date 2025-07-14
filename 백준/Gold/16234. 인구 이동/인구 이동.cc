@@ -1,109 +1,100 @@
 #include <iostream>
-#include <vector>
 #include <queue>
+#include <memory.h>
 
 using namespace std;
 
-constexpr int DIR_SIZE{4};
-int dy[DIR_SIZE]{1, -1, 0, 0};
-int dx[DIR_SIZE]{0, 0, -1, 1};
-int N, L, R;
+constexpr int dir_size{4};
+constexpr int dy[dir_size]{-1, 0, 1, 0};
+constexpr int dx[dir_size]{0, 1, 0, -1};
+constexpr int max_n{50};
 
-bool BFS(vector<vector<int>> &graph, vector<vector<bool>> &visited, int start_y, int start_x)
-{
-    queue<pair<int, int>> unions;
+int map[max_n][max_n]{};
+int temp_map[max_n][max_n]{};
+bool visited[max_n][max_n]{};
+int n, l, r;
+
+bool bfs(int y, int x) {
     queue<pair<int, int>> q;
+    queue<pair<int, int>> visited_q;
+    q.push({y, x});
+    visited[y][x] = true;
 
-    unions.push({start_y, start_x});
-    q.push({start_y, start_x});
-    visited[start_y][start_x] = true;
+    int people = 0;
+    int cities = 0;
 
-    int total = graph[start_y][start_x];
-
-    while (!q.empty())
-    {
-        auto [current_y, current_x] = q.front();
+    while (!q.empty()) {
+        int current_y = q.front().first;
+        int current_x = q.front().second;
         q.pop();
-
-        for (int i = 0; i < DIR_SIZE; i++)
-        {
-            int ny = dy[i] + current_y;
-            int nx = dx[i] + current_x;
-
-            if (ny >= 0 && ny < N && nx >= 0 && nx < N && !visited[ny][nx])
-            {
-                int diff = abs(graph[current_y][current_x] - graph[ny][nx]);
-                if (L <= diff && diff <= R)
-                {
-                    q.push({ny, nx});
-                    unions.push({ny, nx});
-                    total += graph[ny][nx];
-                    visited[ny][nx] = true;
-                }
+        
+        visited_q.push({current_y, current_x});
+        people += map[current_y][current_x];
+        cities += 1;
+        
+        for (int dir = 0; dir < dir_size; dir++) {
+            int ny = dy[dir] + current_y;
+            int nx = dx[dir] + current_x;
+        
+            if (ny < 0 || ny >= n || nx < 0 || nx >= n) 
+                continue;
+            if (visited[ny][nx])
+                continue;
+            
+            int diff = abs(map[current_y][current_x] - map[ny][nx]);
+            if (l <= diff && diff <= r) {
+                q.push({ny, nx});
+                visited[ny][nx] = true;
             }
         }
     }
 
-    if (unions.size() == 1)
-    {
-        return false;
-    }
+    if (cities <= 1) return false;
 
-    int average = total / (int)unions.size();
+    int update = people / cities;
 
-    while (!unions.empty())
-    {
-        auto [pos_y, pos_x] = unions.front();
-        unions.pop();
-        graph[pos_y][pos_x] = average;
+    while (!visited_q.empty()) {
+        int current_y = visited_q.front().first;
+        int current_x = visited_q.front().second;
+        visited_q.pop();
+        temp_map[current_y][current_x] = update;
     }
 
     return true;
 }
 
-int main(void)
-{
-    cin >> N >> L >> R;
+int main(void) {
+    cin >> n >> l >> r;
 
-    vector<vector<int>> graph(N, vector<int>(N, 0));
-
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < N; j++)
-        {
-            cin >> graph[i][j];
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cin >> map[i][j];
         }
     }
 
-    int cnt = 0;
-    while (true)
-    {
-        vector<vector<bool>> visited(N, vector<bool>(N, false));
-        bool change = false;
+    int day = 0;
 
-        for (int i = 0; i < N; i++)
-        {
-            for (int j = 0; j < N; j++)
-            {
-                if (!visited[i][j])
-                {
-                    if (BFS(graph, visited, i, j))
-                    {
-                        change = true;
-                    }
+    while (true) {
+        bool move = false;
+        memcpy(temp_map, map, sizeof(map));
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (!visited[i][j]) {
+                    bool result = bfs(i, j);
+                    if (!move) move = result;
                 }
             }
         }
+        
+        if (!move) break;
+        day++;
 
-        if (!change)
-        {
-            break;
-        }
-
-        cnt++;
+        memcpy(map, temp_map, sizeof(map));
+        memset(visited, 0, sizeof(visited));
     }
 
-    cout << cnt;
+    cout << day << '\n';
 
     return 0;
 }
