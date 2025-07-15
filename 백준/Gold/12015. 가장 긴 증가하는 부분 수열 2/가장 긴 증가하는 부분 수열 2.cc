@@ -35,6 +35,9 @@ int BinarySearch(int value)
 
 int main(void)
 {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
     cin >> n;
 
     vector<int> a(n + 1, 0);
