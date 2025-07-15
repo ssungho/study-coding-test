@@ -1,70 +1,54 @@
 #include <iostream>
 #include <queue>
-#include <stack>
 
 using namespace std;
-constexpr int max_pos{100000};
-pair<bool, int> visited[max_pos + 1]{};
 
-int N, K;
+constexpr int max_size{100001};
+int n, k;
+int min_count;
+pair<bool, int> visited[max_size] {};
 
-int Search()
-{
-    queue<int> q;
-    q.push(N);
-    visited[N] = {true, -1};
+int main(void) {
+    cin >> n >> k;
 
-    int time = 0;
+    queue<pair<int, int>> q;
+    q.push({n, 0});
+    visited[n] = {true, -1};
 
-    while (!q.empty())
-    {
-        size_t size = q.size();
-        for (size_t i = 0; i < size; i++)
-        {
-            int current_pos = q.front();
-            q.pop();
+    while (!q.empty()) {
+        int pos = q.front().first;
+        int cnt = q.front().second;
+        q.pop();
 
-            if (current_pos == K)
-            {
-                return time;
-            }
+        if (pos == k) {
+            min_count = cnt;
+            break;
+        }
 
-            for (auto next_pos : {current_pos - 1, current_pos + 1, current_pos * 2})
-            {
-                if (0 <= next_pos && next_pos <= max_pos && !visited[next_pos].first)
-                {
-                    visited[next_pos] = {true, current_pos};
-                    q.push(next_pos);
+        int next_cnt = cnt + 1;
+        for (int next_pos : { pos + 1, pos - 1, pos * 2}) {
+            if (0 <= next_pos && next_pos < max_size) {
+                if (!visited[next_pos].first) {
+                    q.push({next_pos, next_cnt});
+                    visited[next_pos] = { true, pos };
                 }
             }
         }
-
-        time++;
     }
 
-    return time;
-}
-
-int main(void)
-{
-    cin >> N >> K;
-
-    cout << Search() << '\n';
-
-    stack<int> s;
-
-    int path = K;
-
-    while (path != -1)
-    {
-        s.push(path);
+    int path = k;
+    vector<int> v;    
+    while (path != -1) {
+        v.push_back(path);
         path = visited[path].second;
     }
+    
+    cout << min_count << '\n';
 
-    while (!s.empty())
+    while (v.size())
     {
-        cout << s.top() << " ";
-        s.pop();
+        cout << v.back() << ' ';
+        v.pop_back();
     }
 
     return 0;
