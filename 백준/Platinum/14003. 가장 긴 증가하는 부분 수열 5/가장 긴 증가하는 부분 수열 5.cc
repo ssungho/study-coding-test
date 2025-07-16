@@ -1,86 +1,69 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
 vector<int> a;
-vector<int> lis_last;
-vector<int> last_prev;
+vector<int> last_index;
+vector<int> prev_index;
 int n;
 
-int BinarySearch(int value)
-{
-	int result = (int)lis_last.size();
-	int left_index = 0;
-	int right_index = result - 1;
+int BinarySearch(int value) {
+	int result = (int)last_index.size();
+	int left = 0;
+	int right = result - 1;
 
-	while (left_index <= right_index)
-	{
-		int mid = (left_index + right_index) / 2;
-
-		if (a[lis_last[mid]] >= value)
-		{
+	while (left <= right) {
+		int mid = (left + right) / 2;
+		if (a[last_index[mid]] >= value) {
 			result = mid;
-			right_index = mid - 1;
-		}
-		else
-		{
-			left_index = mid + 1;
+			right = mid - 1;
+		} else {
+			left = mid + 1;
 		}
 	}
 
 	return result;
 }
 
-int main(void)
-{
+int main(void) {
 	ios::sync_with_stdio(false);
 	cin.tie(nullptr);
 
 	cin >> n;
+	
+	a.resize(n);
+	prev_index.resize(n, -1);
 
-	a.resize(n + 1, 0);
-	last_prev.resize(n + 1, -1);
-	for (int i = 1; i <= n; i++)
-	{
+	for (int i = 0; i < n; i++) {
 		cin >> a[i];
 	}
+	
+	for (int i = 0; i < n; i++) {
+		int index = BinarySearch(a[i]);
 
-	for (int i = 1; i <= n; i++)
-	{
-		int index = 0;
-
-		if (lis_last.empty() || a[lis_last.back()] < a[i])
-		{
-			lis_last.push_back(i);
-			index = lis_last.size() - 1;
-		}
-		else
-		{
-			index = BinarySearch(a[i]);
-			lis_last[index] = i;
+		if (last_index.empty() || a[last_index.back()] < a[i]) {
+			last_index.push_back(i);
+			index = last_index.size() - 1;
+		} else {
+			last_index[index] = i;
 		}
 
-		if (index > 0)
-		{
-			last_prev[i] = lis_last[index - 1];
+		if (index > 0) {
+			prev_index[i] = last_index[index - 1];
 		}
 	}
 
-	int size = (int)lis_last.size();
-	vector<int> lis(size);
-	int index = lis_last.back();
-
-	for (int i = size - 1; i >= 0; i--)
-	{
-		lis[i] = a[index];
-		index = last_prev[index];
+	vector<int> lis(last_index.size());
+	int index = last_index.back();
+	for (auto r_iter = lis.rbegin(); r_iter != lis.rend(); r_iter++) {
+		*r_iter = a[index];
+		index = prev_index[index];
 	}
 
-	cout << size << '\n';
-
-	for (auto i : lis)
-	{
+	cout << lis.size() << '\n';
+	for (int i : lis) {
 		cout << i << ' ';
 	}
 
