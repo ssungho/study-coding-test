@@ -3,35 +3,34 @@
 
 using namespace std;
 
-int main(void)
-{
-    string str, explode_target;
-    cin >> str >> explode_target;
+int main(void) {
+    string str, explode;
+    cin >> str >> explode;
 
-    int str_length = (int)str.length();
-    int target_length = (int)explode_target.length();
-
+    size_t str_size = str.size();
+    size_t ex_size = explode.size();
     string result = "";
-    for (int i = 0; i < str_length; i++)
-    {
+    result.reserve(str_size);
+
+    for (size_t i = 0; i < str_size; i++) {
         result.push_back(str[i]);
-        if (result.size() >= target_length)
-        {
-            if (result.substr(result.size() - target_length) == explode_target)
-            {
-                result.resize(result.size() - target_length);
+        if (result.size() >= ex_size) {
+            bool matched = true;
+            for (int j = 0; j < ex_size; j++) {
+                if (result[result.size() - ex_size + j] != explode[j]) {
+                    matched = false;
+                    break;
+                }
+            }
+            if (matched) {
+                for (int j = 0; j < ex_size; j++) {
+                    result.pop_back();
+                }
             }
         }
     }
 
-    if (result.empty())
-    {
-        cout << "FRULA" << '\n';
-    }
-    else
-    {
-        cout << result << '\n';
-    }
+    cout << (result.size() ? result : "FRULA") << '\n';
 
     return 0;
 }
