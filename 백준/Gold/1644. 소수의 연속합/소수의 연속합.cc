@@ -1,55 +1,53 @@
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
-int main(void)
-{
-    int N;
-    cin >> N;
+int main(void) {
+	int n;
+	cin >> n;
 
-    vector<bool> is_prime(N + 1, true);
-    vector<int> primes;
+	vector<bool> temp(n + 1, true);
 
-    is_prime[0] = is_prime[1] = false;
-    for (int i = 2; i <= N; i++)
-    {
-        if (is_prime[i])
-        {
-            primes.push_back(i);
+	for (int i = 2; i * i <= n; i++) {
+		if (temp[i]) {
+			for (int j = i * i; j <= n; j += i) {
+				temp[j] = false;
+			}
+		}
+	}
 
-            for (int j = i; j <= N; j += i)
-            {
-                is_prime[j] = false;
-            }
-        }
-    }
+	vector<int> primes;
 
-    int count = 0;
-    int prime_count = (int)primes.size();
-    for (int i = 0; i < prime_count; i++)
-    {
-        int j = i;
-        int acc = 0;
-        while (j >= 0)
-        {
-            acc += primes[j];
+	for (int i = 2; i <= n; i++) {
+		if (temp[i]) {
+			primes.push_back(i);
+		}
+	}
 
-            if (acc == N)
-            {
-                count++;
-                break;
-            }
-            else if (acc > N)
-            {
-                break;
-            }
+	int size = (int)primes.size();
+	int left = 0;
+	int right = 0;
+	int sum = 0;
+	int result = 0;
 
-            j--;
-        }
-    }
+	while (left < size) {
 
-    cout << count << '\n';
+		while (right < size && sum < n) {
+			sum += primes[right];
+			right++;
+		}
 
-    return 0;
+		if (sum == n) {
+			result++;
+		}
+
+		sum -= primes[left];
+		left++;
+	}
+
+	cout << result << '\n';
+
+	return 0;
 }
