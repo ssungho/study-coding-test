@@ -1,54 +1,59 @@
 #include <iostream>
-#include <algorithm>
+#include <vector>
 #include <queue>
+#include <algorithm>
 
 using namespace std;
 
-int main(void) 
-{
+//! 훔칠 수 있는 보석의 최대 가격, 보석은 한 가방에 한개, 무게 제한 있음.
+//todo 무게 기준으로 정렬, 가격 기준으로 정렬.
+//todo 큐에 현재 가격을 기준으로 넣자.
+//todo 큐에 넣으려면 현재 무게까지. 무게는 오름차순이니까 넣을 수 있을것임.
+
+int main(void) {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    cout.tie(nullptr);
 
-    int N, K;
-    cin >> N >> K;
-
-    vector<pair<int, int>> infos(N);
-    vector<int> bags(K);
+    int n, k;
+    cin >> n >> k;
     
-    for (int i = 0; i < N; i++)
-    {
-        cin >> infos[i].first >> infos[i].second;
+    vector<pair<int, int>> v(n);
+    vector<int> w(k);
+
+    for (int i = 0; i < n; i++) {
+        cin >> v[i].first >> v[i].second;
+    }
+    for (int i = 0; i < k; i++) {
+        cin >> w[i];
     }
 
-    for (int i = 0; i < K; i++)
-    {
-        cin >> bags[i];
-    }
+    sort(v.begin(), v.end(), [&](auto a, auto b)->bool {
+        if (a.first == b.first) {
+            return a.second > b.second;
+        }
+        return a.first < b.first;
+    });
 
-    sort(infos.begin(), infos.end());
-    sort(bags.begin(), bags.end());
+    sort(w.begin(), w.end());
+
+    long long sum = 0;
+    int index = 0;
 
     priority_queue<int> pq;
-    long long result = 0;
-    int info_index = 0;
 
-    for (int i = 0; i < K; i++)
-    {
-        while (info_index < N && infos[info_index].first <= bags[i])
-        {
-            pq.push(infos[info_index].second);
-            ++info_index;
+    for (int i = 0; i < k; i++) {
+        while (index < v.size() && v[index].first <= w[i]) {
+            pq.push(v[index].second);
+            index++;
         }
 
-        if (!pq.empty()) 
-        {
-            result += pq.top();
+        if (pq.empty() == false) {
+            sum += pq.top();
             pq.pop();
         }
     }
 
-    cout << result << '\n';
+    cout << sum << '\n';
 
     return 0;
 }
