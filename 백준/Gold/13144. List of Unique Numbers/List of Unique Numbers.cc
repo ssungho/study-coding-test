@@ -1,45 +1,39 @@
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
 constexpr int max_n{100001};
-bool check[max_n]{};
+bool isin[max_n]{};
 
-int main(void)
-{
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
+int main(void) {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
 
-    int N;
-    cin >> N;
+	int n;
+	cin >> n;
 
-    vector<int> v(N, 0);
-    for (int i = 0; i < N; i++)
-    {
-        cin >> v[i];
-    }
+	vector<int> v(n);
+	for (int i = 0; i < n; i++) {
+		cin >> v[i];
+	}
 
-    long count = 0;
-    int left = 0;
-    int right = 0;
+	int left = 0;
+	int right = 0;
+	long result = 0;
 
-    while (left < N && right < N)
-    {
-        if (!check[v[right]])
-        {
-            check[v[right]] = true;
-            count += right + 1 - left;
-            right++;
-        }
-        else
-        {
-            check[v[left]] = false;
-            left++;
-        }
-    }
+	while (left < n && right < n) {
+		if (isin[v[right]] == false) {
+			isin[v[right]] = true;
+			result += right - left + 1;
+			right++;
+		} else {
+			isin[v[left]] = false;
+			left++;
+		}
+	}
 
-    cout << count << '\n';
+	cout << result << '\n';
 
-    return 0;
+	return 0;
 }
