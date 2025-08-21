@@ -1,53 +1,67 @@
-#include<iostream>
-#include<vector>
-#include<algorithm>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
 using namespace std;
 
-int main(void)
+int main(void) 
 {
-	ios::sync_with_stdio(false);
-	cin.tie(0);
+    int n;
+    cin >> n;
+    
+    vector<int> arr(n, 0);
+    for (int i = 0; i < n; i++) 
+    {
+        cin >> arr[i];
+    }
 
-	int N;
-	cin >> N;
-	vector<long> nums;
+    sort(arr.begin(), arr.end());
+    
+    int result = 0;
+    for (int i = 0; i < n; i++)
+    {
+        int target = arr[i];
+        int left = 0;
+        int right = n - 1;
 
-	for (int i = 0; i < N; i++)
-	{
-		long num;
-		cin >> num;
-		nums.push_back(num);
-	}
-	sort(nums.begin(), nums.end());
+        while (true) 
+        {
+            if (left >= right)
+            {
+                break;
+            }
 
-	int cnt = 0;
-	for (int i = 0; i < N; i++)
-	{
-		long target = nums[i];
-		int start = 0;
-		int end = N - 1;
+            int sum = arr[left] + arr[right];
 
-		while (start < end)
-		{
-			if (nums[start] + nums[end] == target)
-			{
-				if (start != i && end != i)
-				{
-					cnt++;
-					break;
-				}
-				else if (start == i)
-					start++;
-				else if (end == i)
-					end--;
-			}
-			else if (nums[start] + nums[end] < target)
-				start++;
-			else if (nums[start] + nums[end] > target)
-				end--;
-		}
-	}
-	cout << cnt;
+            if (sum > target) 
+            {
+                --right;
+            }
+            else if (sum < target)
+            {
+                ++left;
+            }
+            else 
+            {
+                if (left == i) 
+                {
+                    ++left;
+                    continue;
+                }
+                
+                if (right == i) 
+                {
+                    --right;
+                    continue;
+                }
 
-	return 0;
+                ++result;
+                break;
+            }
+        }
+    }
+
+    cout << result << '\n';
+
+    return 0;
 }
