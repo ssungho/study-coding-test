@@ -31,6 +31,10 @@ int Search(vector<int>& v, int target)
 
 int main(void)
 {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
+
 	int t;
 	cin >> t;
 
@@ -54,12 +58,10 @@ int main(void)
 		sort(arr_b.begin(), arr_b.end());
 
 		int count = 0;
-        
 		for (int i = 0; i < a; i++)
 		{
 			int size_a = arr_a[i];
 			int index = Search(arr_b, size_a);
-            
 			if (-1 != index)
 			{
 				count += (index + 1);
