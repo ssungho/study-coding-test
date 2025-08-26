@@ -55,6 +55,10 @@ bool Check(ll target)
 
 int main(void)
 {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
+
 	cin >> n >> atk;
 
 	v.resize(n);
