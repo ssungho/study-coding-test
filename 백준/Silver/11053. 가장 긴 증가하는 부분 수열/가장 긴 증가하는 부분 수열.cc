@@ -6,33 +6,29 @@ using namespace std;
 
 int main(void)
 {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
+	int n;
+	cin >> n;
 
-    int A[1001]{};
+	vector<int> v(n + 1, 0);
+	vector<int> dp(n + 1, 1);
 
-    int N;
-    cin >> N;
+	for (int i = 1; i <= n; i++)
+	{
+		cin >> v[i];
+	}
 
-    for (int i = 1; i <= N; i++)
-    {
-        cin >> A[i];
-    }
+	for (int i = 1; i <= n; i++)
+	{
+		for (int j = 1; j < i; j++)
+		{
+			if (v[i] > v[j])
+			{
+				dp[i] = max(dp[j] + 1, dp[i]);
+			}
+		}
+	}
 
-    vector<int> memo(N + 1, 1);
+	cout << *max_element(dp.begin(), dp.end()) << '\n';
 
-    for (int i = 2; i <= N; i++)
-    {
-        for (int j = 1; j < i; j++)
-        {
-            if (A[i] > A[j])
-            {
-                memo[i] = max(memo[i],  memo[j] + 1);
-            }
-        }
-    }
-
-    cout << *max_element(memo.begin(), memo.end());
-
-    return 0;
+	return 0;
 }
