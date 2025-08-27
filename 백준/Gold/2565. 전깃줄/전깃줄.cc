@@ -6,34 +6,34 @@ using namespace std;
 
 int main(void)
 {
-    int N;
-    cin >> N;
+	int n;
+	cin >> n;
 
-    vector<pair<int, int>> graph;
+	vector<pair<int, int>> v;
 
-    for (int i = 0; i < N; i++)
-    {
-        int A, B;
-        cin >> A >> B;
-        graph.push_back({A, B});
-    }
+	for (int i = 0; i < n; i++)
+	{
+		pair<int, int> p;
+		cin >> p.first >> p.second;
+		v.push_back(p);
+	}
 
-    sort(graph.begin(), graph.end());
+	sort(v.begin(), v.end());
 
-    vector<int> dp(N, 1);
+	vector<int> dp(n, 1);
 
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < i; j++)
-        {
-            if (graph[j].second < graph[i].second)
-            {
-                dp[i] = max(dp[i], dp[j] + 1);
-            }
-        }
-    }
+	for (int i = 1; i < n; i++)
+	{
+		for (int j = 0; j < i; j++)
+		{
+			if (v[i].second > v[j].second)
+			{
+				dp[i] = max(dp[i], dp[j] + 1);
+			}
+		}
+	}
 
-    cout << N - *max_element(dp.begin(), dp.end());
+	cout << n - *max_element(dp.begin(), dp.end()) << '\n';
 
-    return 0;
+	return 0;
 }
