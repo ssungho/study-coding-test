@@ -9,26 +9,26 @@ int main(void)
 	int n;
 	cin >> n;
 
-	vector<int> v(n + 1, 0);
-	vector<int> dp(n + 1, 1);
+	vector<int> lis;
 
-	for (int i = 1; i <= n; i++)
+	for (int i = 0; i < n; i++)
 	{
-		cin >> v[i];
-	}
+		int num;
+		cin >> num;
 
-	for (int i = 1; i <= n; i++)
-	{
-		for (int j = 1; j < i; j++)
+		auto iter = lower_bound(lis.begin(), lis.end(), num);
+		
+		if (iter == lis.end())
 		{
-			if (v[i] > v[j])
-			{
-				dp[i] = max(dp[j] + 1, dp[i]);
-			}
+			lis.push_back(num);
+		}
+		else
+		{
+			*iter = num;
 		}
 	}
 
-	cout << *max_element(dp.begin(), dp.end()) << '\n';
+	cout << lis.size() << '\n';
 
 	return 0;
 }
