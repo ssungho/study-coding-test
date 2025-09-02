@@ -1,67 +1,67 @@
 #include <iostream>
 #include <vector>
-#include <queue>
 
 using namespace std;
 
-bool exist = false;
+int n, m;
+vector<vector<int>> graph;
+vector<bool> visited;
 
-void Backtracking(vector<vector<int>> &graph, vector<bool> &visited, int count, int person)
+bool DFS(int current, int count)
 {
-    if (exist)
-    {
-        return;
-    }
+	if (count == 5)
+	{
+		return true;
+	}
 
-    if (count >= 5)
-    {
-        exist = true;
-        return;
-    }
+	bool result = false;
 
-    vector<int> &friends = graph[person];
-    int size = friends.size();
-    for (int i = 0; i < size; i++)
-    {
-        if (!visited[friends[i]])
-        {
-            visited[friends[i]] = true;
+	for (int node : graph[current])
+	{
+		if (!visited[node])
+		{
+			visited[node] = true;
+			result = DFS(node, count + 1);
+			if (result)
+			{
+				break;
+			}
+			visited[node] = false;
+		}
+	}
 
-            Backtracking(graph, visited, count + 1, friends[i]);
-
-            visited[friends[i]] = false;
-        }
-    }
+	return result;
 }
 
 int main(void)
 {
-    int N, M;
-    cin >> N >> M;
+	cin >> n >> m;
+	graph.resize(n);
+	visited.resize(n);
 
-    vector<vector<int>> graph(N);
-    vector<bool> visited(N);
+	for (int i = 0; i < m; i++)
+	{
+		int a, b;
+		cin >> a >> b;
+		graph[a].push_back(b);
+		graph[b].push_back(a);
+	}
 
-    for (int i = 0; i < M; i++)
-    {
-        int person1, person2;
-        cin >> person1 >> person2;
-        graph[person1].push_back(person2);
-        graph[person2].push_back(person1);
-    }
+	int result = 0;
+	for (int i = 0; i < n; i++)
+	{
+		visited.clear();
+		visited.resize(n);
+        
+		visited[i] = true;
+		if (DFS(i, 1))
+		{
+			result = 1;
+			break;
+		}
+	}
 
-    for (int i = 0; i < N; i++)
-    {
-        Backtracking(graph, visited, 0, i);
+	cout << result << '\n';
 
-        if (exist)
-        {
-            cout << 1;
-            return 0;
-        }
-    }
-
-    cout << 0;
-
-    return 0;
+	return 0;
 }
