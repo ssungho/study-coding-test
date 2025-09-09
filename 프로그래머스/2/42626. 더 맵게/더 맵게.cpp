@@ -8,16 +8,11 @@ int solution(vector<int> scoville, int K)
 {
     int answer = -1;
     
-    priority_queue<int, vector<int>, greater<int>> pq;
-    
-    for (int i : scoville) 
-    {
-        pq.push(i);
-    }
+    priority_queue<int, vector<int>, greater<int>> pq(scoville.begin(), scoville.end());
     
     int mix_count = 0;
     
-    while (!pq.empty()) 
+    while (pq.size() >= 2) 
     {
         int first = pq.top();
         pq.pop();
@@ -25,10 +20,6 @@ int solution(vector<int> scoville, int K)
         if (first >= K)
         {
             answer = mix_count;
-            break;
-        }
-        else if (pq.empty()) 
-        {
             break;
         }
         
@@ -39,6 +30,10 @@ int solution(vector<int> scoville, int K)
         pq.push(mix);
         
         mix_count++;
+    }
+    
+    if (pq.size() == 1 && pq.top() >= K) {
+        answer = mix_count;
     }
     
     return answer;
