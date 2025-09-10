@@ -3,11 +3,10 @@
 using namespace std;
 
 int graph[9][9]{};
-bool visited[9][9]{};
 vector<pair<int, int>> empty_pos;
 bool fin;
 
-bool check(int y, int x, int target)
+bool Check(int y, int x, int target)
 {
 
 	bool row_visited[10]{};
@@ -47,7 +46,7 @@ bool check(int y, int x, int target)
 	return !row_visited[target] && !col_visited[target] && !area_visited[target];
 }
 
-void backtracking(int index)
+void Backtracking(int index)
 {
 	if (index == (int)empty_pos.size())
 	{
@@ -59,7 +58,7 @@ void backtracking(int index)
 			}
 			cout << '\n';
 		}
-		
+
 		fin = true;
 		return;
 	}
@@ -69,19 +68,17 @@ void backtracking(int index)
 
 	for (int i = 1; i <= 9; i++)
 	{
-		if (!visited[y][x] && check(y, x, i))
+		if (Check(y, x, i))
 		{
-			visited[y][x] = true;
 			graph[y][x] = i;
-
-			backtracking(index + 1);
+			Backtracking(index + 1);
 			graph[y][x] = 0;
-
-			visited[y][x] = false;
 		}
 
-		if (fin)
+		if (fin) 
+		{
 			return;
+		}
 	}
 }
 
@@ -92,6 +89,7 @@ int main(void)
 		for (int j = 0; j < 9; j++)
 		{
 			cin >> graph[i][j];
+
 			if (graph[i][j] == 0)
 			{
 				empty_pos.push_back({i, j});
@@ -99,7 +97,7 @@ int main(void)
 		}
 	}
 
-	backtracking(0);
+	Backtracking(0);
 
 	return 0;
 }
