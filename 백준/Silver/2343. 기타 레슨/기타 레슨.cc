@@ -1,37 +1,22 @@
-#include <iostream>
-#include <vector>
-#include <climits>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int n, m, sum;
+int n, m, low, high;
 
-bool Check(vector<int>& v, int mid)
+bool Check(vector<int> &v, int mid)
 {
-	for (int i = 0; i < n; i++) 
-	{
-		if (v[i] > mid) 
-		{
-			return false;
-		}
-	}
-
-	int temp = mid;
-	int cnt = 0;
+	int sum = 0;
+	int cnt = 1;
 
 	for (int i = 0; i < n; i++)
 	{
-		if (mid - v[i] < 0)
+		sum += v[i];
+		if (sum > mid)
 		{
-			mid = temp;
 			cnt++;
+			sum = v[i];
 		}
-		mid -= v[i];
-	}
-
-	if (mid != temp)
-	{
-		cnt++;
 	}
 
 	return cnt <= m;
@@ -39,37 +24,39 @@ bool Check(vector<int>& v, int mid)
 
 int main(void)
 {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
+
 	cin >> n >> m;
-	
-	vector<int> v(n, 0);
-	
+	vector<int> a(n, 0);
+
 	for (int i = 0; i < n; i++)
 	{
-		cin >> v[i];
-		sum += v[i];
+		cin >> a[i];
+		low = max(low, a[i]);
+		high += a[i];
 	}
 
-	int left = 0;
-	int right = sum;
-	int result = 0;
+	int left = low;
+	int right = high;
+	int answer = high;
 
 	while (left <= right)
 	{
 		int mid = (left + right) / 2;
-		
-		if (Check(v, mid))
+		if (Check(a, mid))
 		{
 			right = mid - 1;
-			result = mid;
+			answer = min(answer, mid);
 		}
 		else
 		{
 			left = mid + 1;
 		}
-		
 	}
 
-	cout << result << '\n';
+	cout << answer << '\n';
 
 	return 0;
 }
