@@ -1,40 +1,60 @@
-#include<iostream>
-#include<vector>
-#include<algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main()
+int n, m, a[100000], target;
+
+int BinarySearch(int x)
 {
-    int n, m;
+	int result = 0;
+	int left = 0;
+	int right = n - 1;
 
-    cin >> n;
+	while (left <= right)
+	{
+		int mid = (left + right) / 2;
 
-    vector<long> vn;
-    for (int i = 0; i < n; i++)
-    {
-        long temp;
-        cin >> temp;
-        vn.push_back(temp);
-    }
+		if (a[mid] == target)
+		{
+			result = 1;
+			break;
+		}
 
-    sort(vn.begin(), vn.end());
+		if (a[mid] < target)
+		{
+			left = mid + 1;
+		}
+		else
+		{
+			right = mid - 1;
+		}
+	}
 
-    cin >> m;
+	return result;
+}
 
-    vector<long> vm;
-    for (int i = 0; i < m; i++)
-    {
-        long temp;
-        cin >> temp;
-        vm.push_back(temp);
-    }
+int main(void)
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-    for (int i = 0; i < vm.size(); i++)
-    {
-        bool have = binary_search(vn.begin(), vn.end(), vm[i]);
+	cin >> n;
 
-        cout << have << '\n';
-    }
+	for (int i = 0; i < n; i++)
+	{
+		cin >> a[i];
+	}
 
-    return 0;
+	sort(a, a + n);
+	
+	cin >> m;
+
+	for (int i = 0; i < m; i++)
+	{
+		cin >> target;
+		cout << BinarySearch(target) << '\n';
+	}
+
+	return 0;
 }
