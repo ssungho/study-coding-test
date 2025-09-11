@@ -1,38 +1,33 @@
-#include<iostream>
-#include<vector>
+#include <bits/stdc++.h>
 
 using namespace std;
 
 int main(void)
 {
 	ios::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-	int N, M;
-	cin >> N >> M;
+	int n, m;
+	cin >> n >> m;
 
-	// 2차원 벡터 A와 2차원 벡터 D선언 (D = 합배열)
-	vector<vector<int>> A(N + 1, vector<int>(N + 1, 0));
-	vector<vector<int>> D(N + 1, vector<int>(N + 1, 0));
+	vector<vector<int>> arr(n + 1, vector<int>(n + 1, 0));
+	vector<vector<int>> sum(n + 1, vector<int>(n + 1, 0));
 
-	// A, D 채우기
-	for (int i = 1; i < N + 1; i++)
+	for (int i = 1; i <= n; i++)
 	{
-		for (int j = 1; j < N + 1; j++) 
+		for (int j = 1; j <= n; j++)
 		{
-			cin >> A[i][j];
-			D[i][j] = D[i][j - 1] + D[i - 1][j] - D[i - 1][j - 1] + A[i][j];
+			cin >> arr[i][j];
+			sum[i][j] = sum[i - 1][j] + sum[i][j - 1] - sum[i - 1][j - 1] + arr[i][j];
 		}
 	}
 
-	int x1, y1, x2, y2;
-
-	// 출력
-	for (int i = 0; i < M; i++)
+	int x1, x2, y1, y2;
+	for (int i = 0; i < m; i++)
 	{
 		cin >> x1 >> y1 >> x2 >> y2;
-		cout << D[x2][y2] - D[x1 - 1][y2] - D[x2][y1 - 1] + D[x1 - 1][y1 - 1] << '\n';
+		cout << sum[x2][y2] - sum[x1 - 1][y2] - sum[x2][y1 - 1] + sum[x1 - 1][y1 - 1] << '\n';
 	}
 
 	return 0;
