@@ -1,65 +1,62 @@
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
 
 using namespace std;
 using ll = long long;
 
-int n, m;
+ll n, m, arr[100001], low, mid, high, result;
 
-bool Check(vector<ll> &v, int mid)
+bool Check(ll mid)
 {
-	int cnt = 0;
-	ll sum = 0;
+    int cnt = 0;
+    int money = 0;
 
-	for (int i = 0; i < n; i++)
-	{
-		if (sum < v[i]) 
-		{
-			cnt++;
-			sum = mid;
-		}
+    for (int i = 1; i <= n; i++)
+    {
+        if (money < arr[i])
+        {
+            money = mid;
+            cnt++;
+        }
+        
+        money -= arr[i];
+    }
 
-		sum -= v[i];
-	}
-
-	return cnt <= m;
+    return cnt <= m;
 }
 
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(nullptr);
-	cout.tie(nullptr);
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
 
-	cin >> n >> m;
+    cin >> n >> m;
 
-	vector<ll> v(n, 0);
-	ll left = 0, mid, right = 100000 * 10000;
+    for (int i = 1; i <= n; i++)
+    {
+        cin >> arr[i];
+        low = max(low, arr[i]);
+    }
 
-	for (int i = 0; i < n; i++)
-	{
-		cin >> v[i];
-		left = max(left, v[i]);
-	}
+    high = 100000 * 10000;
+    result = high;
 
-	ll result = right;
+    while (low <= high)
+    {
+        mid = (low + high) / 2;
 
-	while (left <= right)
-	{
-		mid = (left + right) / 2;
+        if (true == Check(mid))
+        {
+            result = min(result, mid);
+            high = mid - 1;
+        }
+        else
+        {
+            low = mid + 1;
+        }
+    }
 
-		if (Check(v, mid))
-		{
-			right = mid - 1;
-			result = min(mid, result);
-		}
-		else
-		{
-			left = mid + 1;
-		}
-	}
+    cout << result << '\n';
 
-	cout << result << '\n';
-
-	return 0;
+    return 0;
 }
