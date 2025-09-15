@@ -3,32 +3,27 @@
 #include <algorithm>
 
 using namespace std;
+using ll = long long;
 
 long long solution(int n, vector<int> times) {
-    long long answer = 0;
-    
     sort(times.begin(), times.end());
+    ll low = 1, mid, high = (ll)times.back() * n;
     
-    long long maxTime = (long long)times[times.size() - 1] * n;
-    long long minTime = 1;
-    
-    while (minTime < maxTime) {
-        long long middle = (maxTime + minTime) / 2;
-        long long sum = 0;
-
-        for (long long time : times) {
-            sum += middle / time;
+    while (low <= high) {
+        mid = (low + high) / 2;
+        ll cnt = 0;
+        
+        for (auto time : times) {
+            cnt += (mid / time);
         }
         
-        if (sum >= n) {
-            maxTime = middle;
-        } 
+        if (cnt >= n) {
+            high = mid - 1;
+        }
         else {
-            minTime = middle + 1;
+            low = mid + 1;
         }
     }
     
-    answer = maxTime;
-    
-    return maxTime;
+    return low;
 }
