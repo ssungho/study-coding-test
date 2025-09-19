@@ -1,65 +1,62 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <climits>
+#include <bits/stdc++.h>
 
 using namespace std;
+using pii = pair<int, int>;
+
+int n, m, from, to, cost, start_pos, end_pos;
+
+vector<vector<pii>> graph;
+vector<int> costs;
 
 int main(void)
 {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-    int N, M;
-    cin >> N >> M;
+	cin >> n >> m;
 
-    vector<vector<pair<int, int>>> graph(N + 1);
+	graph.resize(n + 1);
+	costs.resize(n + 1, INT_MAX);
 
-    for (int i = 0; i < M; i++)
-    {
-        int start, dest, cost;
-        cin >> start >> dest >> cost;
-        graph[start].push_back({dest, cost});
-    }
+	for (int i = 0; i < m; i++)
+	{
+		cin >> from >> to >> cost;
+		graph[from].push_back({cost, to});
+	}
 
-    int start, dest;
-    cin >> start >> dest;
+	cin >> start_pos >> end_pos;
 
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+	priority_queue<pii, vector<pii>, greater<pii>> pq;
+	pq.push({0, start_pos});
+	costs[start_pos] = 0;
 
-    vector<int> costs(N + 1, INT_MAX);
+	while (!pq.empty())
+	{
+		int cur_cost = pq.top().first;
+		int cur_node = pq.top().second;
+		pq.pop();
 
-    costs[start] = 0;
-    pq.push({0, start});
+		if (cur_cost > costs[cur_node])
+		{
+			continue;
+		}
 
-    while (!pq.empty())
-    {
-        pair<int, int> top = pq.top();
-        
-        int cost = top.first;
-        int village = top.second;
+		for (auto &next : graph[cur_node])
+		{
+			int next_cost = next.first;
+			int next_node = next.second;
+			int sum_cost = min(INT_MAX, cur_cost + next_cost);
 
-        pq.pop();
+			if (sum_cost < costs[next_node])
+			{
+				costs[next_node] = sum_cost;
+				pq.push({sum_cost, next_node});
+			}
+		}
+	}
 
-        vector<pair<int, int>> &villages = graph[village];
+	cout << costs[end_pos] << '\n';
 
-        if (cost > costs[village]) 
-            continue;
-
-        for (auto &next : villages)
-        {
-            int next_village = next.first;
-            int next_cost = next.second;
-
-            if (costs[next_village] > next_cost + cost)
-            {
-                costs[next_village] = next_cost + cost;
-                pq.push({costs[next_village], next_village});
-            }
-        }
-    }
-
-    cout << costs[dest];
-
-    return 0;
+	return 0;
 }
