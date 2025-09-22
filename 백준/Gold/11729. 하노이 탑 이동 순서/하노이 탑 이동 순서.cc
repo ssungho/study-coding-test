@@ -1,28 +1,38 @@
-#include <iostream>
-#include <cmath>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-void moveHanoi(int cnt, int start, int middle, int end)
+int n;
+vector<pair<int, int>> v;
+
+void hanoi(int num, int from, int mid, int to)
 {
-    if (cnt == 1)
-    {
-        cout << start << " " << end << '\n';
-    }
-    else
-    {
-        moveHanoi(cnt - 1, start, end, middle);
-        cout << start << " " << end << '\n';
-        moveHanoi(cnt - 1, middle, start, end);
-    }
+	if (num == 0) 
+	{
+		return;
+	}
+
+	hanoi(num - 1, from, to, mid);
+	v.push_back({from, to});
+	hanoi(num - 1, mid, from, to);
 }
 
 int main(void)
 {
-    int n;
-    cin >> n;
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-    cout << (int)pow(2, n) - 1 << '\n';
-    moveHanoi(n, 1, 2, 3);
+	cin >> n;
 
-    return 0;
+	hanoi(n, 1, 2, 3);
+
+	cout << v.size() << '\n';
+
+	for (auto p : v)
+	{
+		cout << p.first << " " << p.second << '\n';
+	}
+
+	return 0;
 }
