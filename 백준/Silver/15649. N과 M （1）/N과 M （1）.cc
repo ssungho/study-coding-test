@@ -1,32 +1,31 @@
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int N, M;
+vector<int> v;
+bool visited[9];
+int n, m;
 
-void Backtracking(vector<int> &vec, vector<bool> &visited)
+void go(int cur, int cnt)
 {
-    if (vec.size() == M)
+    if (cnt == m)
     {
-        for (auto num : vec)
+        for (int i : v)
         {
-            cout << num << " ";
+            cout << i << " ";
         }
-
         cout << '\n';
-
         return;
     }
 
-    for (int i = 1; i <= N; i++)
+    for (int i = 1; i <= n; i++)
     {
         if (!visited[i])
         {
             visited[i] = true;
-            vec.push_back(i);
-            Backtracking(vec, visited);
-            vec.pop_back();
+            v.push_back(i);
+            go(i + 1, cnt + 1);
+            v.pop_back();
             visited[i] = false;
         }
     }
@@ -34,12 +33,9 @@ void Backtracking(vector<int> &vec, vector<bool> &visited)
 
 int main(void)
 {
-    cin >> N >> M;
+    cin >> n >> m;
 
-    vector<int> v;
-    vector<bool> visitied(N + 1, false);
-
-    Backtracking(v, visitied);
+    go(1, 0);
 
     return 0;
 }
