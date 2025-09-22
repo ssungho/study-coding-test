@@ -1,48 +1,31 @@
-#include <iostream>
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-int N, count;
+int n, col[15], rowcol_up[31], rowcol_down[31], answer;
 
-void Backtracking(int row, vector<bool> &cols, vector<bool> &right_ups, vector<bool> &right_downs)
+void go(int y)
 {
-    if (row == N)
-    {
-        count++;
-        return;
-    }
+	if (y == n)
+	{
+		answer++;
+		return;
+	}
 
-    for (int col = 0; col < N; col++)
-    {
-        if (cols[col] || right_ups[row + col] || right_downs[row - col + (N - 1)])
-        {
-            continue;
-        }
-
-        cols[col] = true;
-        right_ups[row + col] = true;
-        right_downs[row - col + (N - 1)] = true;
-
-        Backtracking(row + 1, cols, right_ups, right_downs);
-
-        cols[col] = false;
-        right_ups[row + col] = false;
-        right_downs[row - col + (N - 1)] = false;
-    }
+	for (int i = 0; i < n; i++)
+	{
+		if (!col[i] && !rowcol_up[i + y] && !rowcol_down[i - y + (n - 1)])
+		{
+			col[i] = rowcol_up[i + y] = rowcol_down[i - y + (n - 1)] = 1;
+			go(y + 1);
+			col[i] = rowcol_up[i + y] = rowcol_down[i - y + (n - 1)] = 0;
+		}
+	}
 }
 
 int main(void)
 {
-    cin >> N;
-
-    vector<bool> cols(N);
-    vector<bool> right_ups(2 * N - 1);
-    vector<bool> right_downs(2 * N - 1);
-
-    Backtracking(0, cols, right_ups, right_downs);
-
-    cout << count;
-
-    return 0;
+	cin >> n;
+	go(0);
+	cout << answer << '\n';
+	return 0;
 }
