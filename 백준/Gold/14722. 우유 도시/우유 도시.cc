@@ -42,6 +42,8 @@ int go(int y, int x, int k)
 int main(void)
 {
 	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
 	cin >> n;
 	for (int i = 1; i <= n; i++)
 	{
