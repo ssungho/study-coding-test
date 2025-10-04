@@ -4,27 +4,19 @@ using namespace std;
 
 const int dy[4]{-1, 0, 1, 0}, dx[4]{0, 1, 0, -1};
 const int max_row = 12, max_col = 6;
-string kind = ".RGBPY";
 char field[max_row][max_col], after_field[max_row][max_col];
 bool visited[max_row][max_col];
 int ret;
 
-struct Node {
-	int y, x, cnt;
-};
-
 void order_field() {
 	for (int col = 0; col < max_col; col++) {
 		int cursor = max_row - 1;
-		bool reserved = false;
 		for (int row = max_row - 1; row >= 0; row--) {
-			if (field[row][col] == '.' && reserved == false) {
-				cursor = row;
-				reserved = true;
-			}
-			else if (field[row][col] != '.' && reserved == true) {
+			if (field[row][col] != '.') {
 				field[cursor][col] = field[row][col];
-				field[row][col] = '.';
+				if (cursor != row) {
+					field[row][col] = '.';
+				}
 				cursor--;
 			}
 		}
@@ -33,23 +25,23 @@ void order_field() {
 
 bool bfs_field(int y, int x, char color) {
 	queue<pair<int, int>> pos;
-	queue<Node> q;
-	q.push({y, x, 1});
+	queue<pair<int, int>> q;
+	q.push({y, x});
 	pos.push({y, x});
 	visited[y][x] = true;
 
 	while (!q.empty()) {
-		Node cur = q.front();
+		pair<int, int> cur = q.front();
 		q.pop();
 
 		for (int i = 0; i < 4; i++) {
-			int ny = dy[i] + cur.y;
-			int nx = dx[i] + cur.x;
+			int ny = dy[i] + cur.first;
+			int nx = dx[i] + cur.second;
 			if (ny < 0 || ny >= max_row || nx < 0 || nx >= max_col) {
 				continue;
 			}
 			if (field[ny][nx] == color && visited[ny][nx] == false) {
-				q.push({ny, nx, cur.cnt + 1});
+				q.push({ny, nx});
 				visited[ny][nx] = true;
 				pos.push({ny, nx});
 			}
