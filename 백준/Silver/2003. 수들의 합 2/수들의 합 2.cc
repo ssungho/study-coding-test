@@ -1,10 +1,13 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int n, m, result, a[10001], s[10001];
+int n, m, l, r, result, a[10001], s[10001];
 
 int main(void)
 {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+
 	cin >> n >> m;
 	for (int i = 1; i <= n; i++)
 	{
@@ -12,13 +15,21 @@ int main(void)
 		s[i] = a[i] + s[i - 1];
 	}
 
-	for (int i = 1; i <= n; i++)
+	r = 1;
+	while (r <= n)
 	{
-		for (int j = i - 1; j >= 0; j--)
+		int sum = s[r] - s[l];
+		if (sum <= m)
 		{
-			int perfix_sum = s[i] - s[j];
-			if (perfix_sum == m)
+			r++;
+			if (sum == m)
+			{
 				result++;
+			}
+		}
+		else if (sum > m)
+		{
+			l++;
 		}
 	}
 
