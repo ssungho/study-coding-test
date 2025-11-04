@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
-#include <deque>
+#include <list>
+#include <algorithm>
 
 using namespace std;
 
@@ -9,7 +10,7 @@ constexpr int miss = 5;
 
 int solution(int cacheSize, vector<string> cities) {
     int answer = 0;
-    deque<string> caches;
+    list<string> caches;
     
     for (const string& city : cities) {
         
@@ -23,20 +24,9 @@ int solution(int cacheSize, vector<string> cities) {
             answer += miss;
         }
         else {
-            int size = caches.size();
-            int pos = -1;
-            for (int i = 0; i < size; i++) {
-                if (caches[i] == target) {
-                    pos = i;
-                    break;
-                }
-            }
-            
-            if (pos != -1) {
-                for(int i = pos; i < size - 1; i++) {
-                    caches[i] = caches[i + 1];
-                }
-                caches.pop_back();
+            auto iter = find(caches.begin(), caches.end(), target);
+            if (iter != caches.end()) {
+                caches.erase(iter);
                 caches.push_back(target);
                 answer += hit;
             }
