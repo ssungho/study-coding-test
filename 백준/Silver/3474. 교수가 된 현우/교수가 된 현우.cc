@@ -1,31 +1,27 @@
-#include <iostream>
-
+#include <bits/stdc++.h>
 using namespace std;
-using ll = long long;
 
-int main(void) 
+long long t, n, answer;
+
+int main(void)
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    
-    int T;
-    cin >> T;
 
-    while (T--) 
+    cin >> t;
+    while (t--)
     {
-        ll N;
-        cin >> N;
+        cin >> n;
+        answer = 0;
 
-        int answer = 0;
-        
-        for (ll i = 5; i <= N; i *= 5) 
+        for (int i = 5; i <= n; i *= 5)
         {
-            answer += N/i;
+            answer += n / i;
         }
-
+        
         cout << answer << '\n';
     }
-    
+
     return 0;
 }
