@@ -1,66 +1,76 @@
-#include <iostream>
-#include <memory.h>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-int map[101][101]{};
-bool visited[101][101]{};
-int dy[4]{1, -1, 0, 0};
-int dx[4]{0, 0, -1, 1};
-int N;
+const int dy[4]{-1, 0, 1, 0}, dx[4]{0, 1, 0, -1};
+int n, min_height, max_height, result, graph[100][100];
+bool visited[100][100];
 
-void DFS(int y, int x, int height)
+void dfs(int y, int x, int h)
 {
-    visited[y][x] = true;
+	visited[y][x] = true;
+	for (int i = 0; i < 4; i++)
+	{
+		int ny = y + dy[i];
+		int nx = x + dx[i];
 
-    for (int i = 0; i < 4; i++)
-    {
-        int ny = y + dy[i];
-        int nx = x + dx[i];
-        if (nx >= 1 && nx <= N && ny >= 1 && ny <= N &&
-            !visited[ny][nx] && map[y][x] > height)
-        {
-            DFS(ny, nx, height);
-        }
-    }
+		if (ny < 0 || ny >= n || nx < 0 || nx >= n)
+		{
+			continue;
+		}
+		if (graph[ny][nx] <= h || visited[ny][nx] == true)
+		{
+			continue;
+		}
+
+		dfs(ny, nx, h);
+	}
 }
 
 int main(void)
 {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-    cin >> N;
+	min_height = 100;
+	max_height = 0;
 
-    for (int i = 1; i <= N; i++)
-    {
-        for (int j = 1; j <= N; j++)
-        {
-            cin >> map[i][j];
-        }
-    }
+	cin >> n;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			cin >> graph[i][j];
+			min_height = min(min_height, graph[i][j]);
+			max_height = max(max_height, graph[i][j]);
+		}
+	}
 
-    int max_count = 0;
-    for (int i = 0; i <= 100; i++)
-    {
-        int count = 0;
-        for (int j = 1; j <= N; j++)
-        {
-            for (int k = 1; k <= N; k++)
-            {
-                if (!visited[j][k] && map[j][k] > i)
-                {
-                    DFS(j, k, i);
-                    count++;
-                }
-            }
-        }
+	for (int h = min_height; h <= max_height; h++)
+	{
+		int cur_cnt = 0;
+		memset(visited, 0, sizeof(visited));
 
-        max_count = max(max_count, count);
-        memset(visited, 0, sizeof(visited));
-    }
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				if (visited[i][j] == false && graph[i][j] > h)
+				{
+					dfs(i, j, h);
+					cur_cnt++;
+				}
+			}
+		}
 
-    cout << max_count;
+		result = max(result, cur_cnt);
+	}
 
-    return 0;
+	if (min_height == max_height) 
+	{
+		result = 1;
+	}
+	cout << result << '\n';
+
+	return 0;
 }
