@@ -1,76 +1,76 @@
-#include <iostream>
-#include <string>
-#include <set>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-set<char> s{'a', 'e', 'i', 'o', 'u'};
+string password;
 
-bool test(const string &password)
+bool is_vowel(char ch)
 {
-    int size = (int)password.size();
-    bool condition1 = false;
-    bool condition2 = true;
-    bool condition3 = true;
-
-    for (int i = 0; i < size; i++)
-    {
-        if (s.find(password[i]) != s.end())
-            condition1 = true;
-
-        if (i + 1 < size && password[i] == password[i + 1])
-        {
-            if (!(password[i] == 'e' || password[i] == 'o'))
-            {
-                condition2 = false;
-            }
-        }
-
-        int count = 0;
-        bool check = true;
-
-        for (int j = 0; j <= 2; j++)
-        {
-            if (i + j >= size)
-            {
-                check = false;
-                break;
-            }
-
-            if (s.find(password[i + j]) != s.end())
-            {
-                count++;
-            }
-        }
-
-        if ((count == 0 || count == 3) && check)
-        {
-            condition3 = false;
-        }
-    }
-
-    return condition1 && condition2 && condition3;
+	return (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u');
 }
 
 int main(void)
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-    while (true)
-    {
-        string password;
-        cin >> password;
+	while (true)
+	{
+		cin >> password;
 
-        if (password == "end")
-            break;
+		if (password == "end")
+		{
+			break;
+		}
 
-        if (test(password))
-            cout << '<' << password << "> is acceptable.\n";
-        else
-            cout << '<' << password << "> is not acceptable.\n";
-    }
+		int seq_v = 0;
+		int seq_c = 0;
+		bool can = true;
+		bool contain = false;
+		char prev = ' ';
 
-    return 0;
+		for (int i = 0; i < (int)password.length(); i++)
+		{
+			if (is_vowel(password[i]))
+			{
+				seq_v++;
+				seq_c = 0;
+				contain = true;
+
+				if (seq_v > 1 && prev == password[i])
+				{
+					if (!(prev == 'e' || prev == 'o'))
+					{
+						can = false;
+						break;
+					}
+				}
+			}
+			else
+			{
+				seq_c++;
+				seq_v = 0;
+				if (prev == password[i])
+				{
+					can = false;
+					break;
+				}
+			}
+
+			if (seq_v >= 3 || seq_c >= 3)
+			{
+				can = false;
+				break;
+			}
+
+			prev = password[i];
+		}
+
+		if (can && contain)
+			cout << "<" << password << "> " << "is acceptable.\n";
+		else
+			cout << "<" << password << "> " << "is not acceptable.\n";
+	}
+
+	return 0;
 }
