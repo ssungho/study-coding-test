@@ -1,41 +1,33 @@
-#include <iostream>
-#include <vector>
-#include <stack>
-
+#include <bits/stdc++.h>
 using namespace std;
 
+int n, a[1000001], answer[1000001];
 int main(void)
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-    int n;
-    cin >> n;
+	stack<int> s;
+	memset(answer, -1, sizeof(answer));
 
-    vector<int> a(n + 1, 0);
-    vector<int> result(n + 1, -1);
-    for (int i = 1; i <= n; i++)
-    {
-        cin >> a[i];
-    }
+	cin >> n;
+	for (int i = 1; i <= n; i++)
+	{
+		cin >> a[i];
+		while (s.size() && a[s.top()] < a[i])
+		{
+			answer[s.top()] = a[i];
+			s.pop();
+		}
+		s.push(i);
+	}
 
-    stack<int> s;
+	for (int i = 1; i <= n; i++)
+	{
+		cout << answer[i] << ' ';
+	}
+	cout << '\n';
 
-    for (int i = 1; i <= n; i++)
-    {
-        while (!s.empty() && a[s.top()] < a[i])
-        {
-            result[s.top()] = a[i];
-            s.pop();
-        }
-        s.push(i);
-    }
-
-    for (int i = 1; i <= n; i++)
-    {
-        cout << result[i] << " ";
-    }
-
-    return 0;
+	return 0;
 }
