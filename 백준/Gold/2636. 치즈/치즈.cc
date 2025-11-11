@@ -1,102 +1,87 @@
-//! 12 : 39 시작
-
-#include <iostream>
-#include <memory.h>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-const int max_index{100};
-const int arr_size{max_index + 1};
-const int dir_size{4};
-const int dy[dir_size]{-1, 0, 1, 0};
-const int dx[dir_size]{0, 1, 0, -1};
-int n, m;
+const int dy[4]{-1, 0, 1, 0}, dx[4]{0, 1, 0, -1};
+int n, m, result, prev_melt, a[101][101];
+bool visited[101][101];
 
-int graph[arr_size][arr_size] {};
-bool visited[arr_size][arr_size][2] {};
+void dfs(int y, int x, bool from_cheese)
+{
+	visited[y][x] = true;
 
-int CountCheese(int y, int x) {
-    int count = 1;
-    visited[y][x][0] = true;
-    for (int dir = 0; dir < dir_size; dir++) {
-        int ny = dy[dir] + y;
-        int nx = dx[dir] + x;
-        if (ny < 0 || ny >= n || nx < 0 || nx >= m) {
-            continue;
-        }
-        if (!visited[ny][nx][0] && graph[ny][nx] == 1) {
-            count += CountCheese(ny, nx);
-        }
-    }
-    return count;
+	if (from_cheese)
+	{
+		return;
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		int ny = dy[i] + y;
+		int nx = dx[i] + x;
+
+		if (ny < 0 || ny >= n || nx < 0 || nx >= m)
+		{
+			continue;
+		}
+		if (visited[ny][nx] == true)
+		{
+			continue;
+		}
+
+		dfs(ny, nx, a[ny][nx]);
+	}
 }
 
-void DFS(int y, int x) {
-    visited[y][x][1] = true;
-    for (int dir = 0; dir < dir_size; dir++) {
-        int ny = dy[dir] + y;
-        int nx = dx[dir] + x;
-        if (ny < 0 || ny >= n || nx < 0 || nx >= m) {
-            continue;
-        }
-        if (!visited[ny][nx][1]) {
-            if (graph[ny][nx] == 0) {
-                DFS(ny, nx);
-            }
-            if (graph[ny][nx] == 1) {
-                visited[ny][nx][1] = true;
-            }
-        }
-    }
+int melt()
+{
+	int melt_cnt = 0;
+	
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			if (visited[i][j] == true && a[i][j] == 1)
+			{
+				a[i][j] = 0;
+				melt_cnt++;
+			}
+		}
+	}
+
+	return melt_cnt;
 }
 
-void Melt() {
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            if (visited[i][j][1]) {
-                graph[i][j] = 0;
-            }
-        }
-    }
-}
+int main(void)
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-int main(void) {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
+	cin >> n >> m;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			cin >> a[i][j];
+		}
+	}
 
-    cin >> n >> m;
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            cin >> graph[i][j];
-        }
-    }
+	while (true)
+	{
+		memset(visited, 0, sizeof(visited));
+		dfs(0, 0, a[0][0]);
+		int melt_cnt = melt();
 
-    int prev_cheese_count = 0;
-    int time = 0;
+		if (melt_cnt == 0)
+		{
+			cout << result << '\n'
+				 << prev_melt << '\n';
+			break;
+		}
+		
+		prev_melt = melt_cnt;
+		result++;
+	}
 
-    while (true) {
-        memset (visited, 0, sizeof(visited));
-        int cheese_count = 0;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (graph[i][j] == 1 && !visited[i][j][0]) {
-                    cheese_count += CountCheese(i, j);
-                }
-            }
-        }
-        
-        if (cheese_count == 0) {
-            break;
-        }
-
-        prev_cheese_count = cheese_count;
-        DFS(0, 0);
-        Melt();
-        time++;
-    }
-
-    cout << time << '\n' << prev_cheese_count << '\n';
-
-    return 0;
+	return 0;
 }
