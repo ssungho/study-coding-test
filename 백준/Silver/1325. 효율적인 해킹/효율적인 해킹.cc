@@ -1,53 +1,66 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <memory.h>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-bool visited[10001]{};
-vector<int> answer;
-int max_count = 0;
+int n, m, a, b, max_cnt;
+vector<int> result;
+vector<vector<int>> graph;
+bool visited[10001];
 
-int dfs(vector<vector<int>>& graph, int computer) {
-    int count = 1;
-    visited[computer] = true;
-    auto& trust = graph[computer];
-    for (auto next : trust) {
-        if (!visited[next]) count += dfs(graph, next);
-    }
-    return count;
+int dfs(int node)
+{
+	visited[node] = true;
+	
+	int cnt = 1;
+	for (int i : graph[node])
+	{
+		if (visited[i])
+		{
+			continue;
+		}
+		cnt += dfs(i);
+	}
+
+	return cnt;
 }
 
-int main(void) {
-    int n, m;
-    cin >> n >> m;
-    vector<vector<int>> graph(n + 1);
-    
-    for (int i = 0 ; i < m; i++) {
-        int a, b;
-        cin >> a >> b;
-        graph[b].push_back(a);
-    }
+int main(void)
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-    for (int i = 1; i <= n; i++) {
-        memset(visited, 0, sizeof(visited));
-        int count = dfs(graph, i);
+	cin >> n >> m;
+	graph.resize(n + 1);
+	for (int i = 0; i < m; i++)
+	{
+		cin >> a >> b;
+		graph[b].push_back(a);
+	}
 
-        if (count > max_count) {
-            max_count = count;
-            answer.clear();
-            answer.push_back(i);
-        }
+	for (int i = 1; i <= n; i++)
+	{
+		memset(visited, 0, sizeof(visited));
+		
+		int cnt = dfs(i);
+		if (max_cnt < cnt)
+		{
+			result.clear();
+			result.push_back(i);
+			max_cnt = cnt;
+		}
+		else if (max_cnt == cnt)
+		{
+			result.push_back(i);
+		}
+	}
 
-        else if (count == max_count) {
-            answer.push_back(i);
-        }
-    }
+	sort(result.begin(), result.end());
 
-    for (auto com : answer) {
-        cout << com << " ";
-    }
+	for (int i : result)
+	{
+		cout << i << ' ';
+	}
+	cout << '\n';
 
-    return 0;
+	return 0;
 }
