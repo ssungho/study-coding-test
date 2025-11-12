@@ -1,102 +1,106 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <queue>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-constexpr int dir_size{4};
-constexpr int dy[dir_size]{-1, 1, 0, 0};
-constexpr int dx[dir_size]{0, 0, -1, 1};
-
-struct Node
+struct node
 {
-    int y{};
-    int x{};
-    int count{};
-    bool is_fire{};
+	int y, x, is_fire, cnt;
 };
+
+const char FIRE = 'F', WALL = '#', EMPTY = '.', INIT = 'J';
+const int dy[4]{-1, 0, 1, 0}, dx[4]{0, 1, 0, -1};
+int r, c, move_cnt = -1;
+char a[1001][1001];
+bool visited[1001][1001][2];
+pair<int, int> start_pos;
+queue<node> q;
+queue<pair<int, int>> fire_pos;
 
 int main(void)
 {
-    int R, C;
-    cin >> R >> C;
+	cin >> r >> c;
+	for (int i = 0; i < r; i++)
+	{
+		for (int j = 0; j < c; j++)
+		{
+			cin >> a[i][j];
+			if (a[i][j] == FIRE)
+			{
+				fire_pos.push({i, j});
+			}
+			else if (a[i][j] == INIT)
+			{
+				start_pos = {i, j};
+				a[i][j] = EMPTY;
+			}
+		}
+	}
 
-    pair<int, int> start_pos{};
-    queue<pair<int, int>> fire_pos;
-    vector<vector<bool>> fire_visited(R, vector<bool>(C, false));
+	q.push({start_pos.first, start_pos.second, 0, 0});
+	visited[start_pos.first][start_pos.second][0] = true;
 
-    vector<vector<char>> graph(R, vector<char>(C));
-    for (int i = 0; i < R; i++)
-    {
-        string row;
-        cin >> row;
-        for (int j = 0; j < C; j++)
-        {
-            graph[i][j] = row[j];
+	while (!fire_pos.empty())
+	{
+		q.push({fire_pos.front().first, fire_pos.front().second, 1, 0});
+		visited[fire_pos.front().first][fire_pos.front().second][1] = true;
+		fire_pos.pop();
+	}
 
-            if (graph[i][j] == 'J')
-            {
-                start_pos = {i, j};
-            }
-            else if (graph[i][j] == 'F')
-            {
-                fire_pos.push({i, j});
-                fire_visited[i][j] = true;
-            }
-        }
-    }
+	while (!q.empty())
+	{
+		node cur = q.front();
+		q.pop();
 
-    queue<Node> q;
-    vector<vector<bool>> visited(R, vector<bool>(C, false));
-    q.push({start_pos.first, start_pos.second, 0, false});
-    visited[start_pos.first][start_pos.second] = true;
+		if (cur.is_fire == false && visited[cur.y][cur.x][1] == true)
+		{
+			continue;
+		}
 
-    while (!fire_pos.empty())
-    {
-        q.push({fire_pos.front().first, fire_pos.front().second, 0, true});
-        fire_pos.pop();
-    }
+		for (int i = 0; i < 4; i++)
+		{
+			int ny = dy[i] + cur.y;
+			int nx = dx[i] + cur.x;
 
-    while (!q.empty())
-    {
-        int pos_y = q.front().y;
-        int pos_x = q.front().x;
-        int count = q.front().count;
-        bool is_fire = q.front().is_fire;
-        q.pop();
+			if (cur.is_fire == false)
+			{
+				if (ny < 0 || ny >= r || nx < 0 || nx >= c)
+				{
+					move_cnt = cur.cnt + 1;
+					break;
+				}
+				if (a[ny][nx] == EMPTY && visited[ny][nx][0] == false && visited[ny][nx][1] == false)
+				{
+					q.push({ny, nx, cur.is_fire, cur.cnt + 1});
+					visited[ny][nx][cur.is_fire] = true;
+				}
+			}
+			else
+			{
+				if (ny < 0 || ny >= r || nx < 0 || nx >= c)
+				{
+					continue;
+				}
+				if (a[ny][nx] != WALL && visited[ny][nx][1] == false)
+				{
+					q.push({ny, nx, cur.is_fire, cur.cnt + 1});
+					visited[ny][nx][cur.is_fire] = true;
+				}
+			}
+		}
 
-        if (!is_fire && graph[pos_y][pos_x] == 'F')
-            continue;
+		if (move_cnt != -1)
+		{
+			break;
+		}
+	}
 
-        for (int dir = 0; dir < dir_size; dir++)
-        {
-            int ny = pos_y + dy[dir];
-            int nx = pos_x + dx[dir];
+	if (move_cnt == -1)
+	{
+		cout << "IMPOSSIBLE\n";
+	}
+	else
+	{
+		cout << move_cnt << '\n';
+	}
 
-            if ((ny < 0 || ny == R || nx < 0 || nx == C) && !is_fire)
-            {
-                cout << count + 1;
-                return 0;
-            }
-            else if (0 <= ny && ny < R && 0 <= nx && nx < C)
-            {
-                if (!is_fire && !visited[ny][nx] && graph[ny][nx] == '.')
-                {
-                    visited[ny][nx] = true;
-                    q.push({ny, nx, count + 1, is_fire});
-                }
-                else if (is_fire && !fire_visited[ny][nx] && graph[ny][nx] != '#')
-                {
-                    fire_visited[ny][nx] = true;
-                    q.push({ny, nx, 0, is_fire});
-                    graph[ny][nx] = 'F';
-                }
-            }
-        }
-    }
-
-    cout << "IMPOSSIBLE";
-
-    return 0;
+	return 0;
 }
