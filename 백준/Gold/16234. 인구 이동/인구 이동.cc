@@ -1,97 +1,98 @@
-#include <iostream>
-#include <queue>
-#include <memory.h>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-constexpr int dir_size{4};
-constexpr int dy[dir_size]{-1, 0, 1, 0};
-constexpr int dx[dir_size]{0, 1, 0, -1};
-constexpr int max_n{50};
+const int dy[4]{-1, 0, 1, 0}, dx[4]{0, 1, 0, -1};
+int n, l, r, result, a[101][101];
+bool visited[101][101];
+vector<pair<int, int>> unions;
 
-int map[max_n][max_n]{};
-bool visited[max_n][max_n]{};
-int n, l, r;
+int go(int y, int x, int &cnt)
+{
+	int sum = a[y][x];
+	visited[y][x] = true;
+	unions.push_back({y, x});
+	cnt++;
 
-bool bfs(int y, int x) {
-    queue<pair<int, int>> q;
-    queue<pair<int, int>> visited_q;
-    q.push({y, x});
-    visited[y][x] = true;
+	for (int i = 0; i < 4; i++)
+	{
+		int ny = y + dy[i];
+		int nx = x + dx[i];
 
-    int people = 0;
-    int cities = 0;
+		if (ny < 0 || ny >= n || nx < 0 || nx >= n)
+		{
+			continue;
+		}
+		if (visited[ny][nx] == true)
+		{
+			continue;
+		}
 
-    while (!q.empty()) {
-        int current_y = q.front().first;
-        int current_x = q.front().second;
-        q.pop();
-        
-        visited_q.push({current_y, current_x});
-        people += map[current_y][current_x];
-        cities += 1;
-        
-        for (int dir = 0; dir < dir_size; dir++) {
-            int ny = dy[dir] + current_y;
-            int nx = dx[dir] + current_x;
-        
-            if (ny < 0 || ny >= n || nx < 0 || nx >= n) 
-                continue;
-            if (visited[ny][nx])
-                continue;
-            
-            int diff = abs(map[current_y][current_x] - map[ny][nx]);
-            if (l <= diff && diff <= r) {
-                q.push({ny, nx});
-                visited[ny][nx] = true;
-            }
-        }
-    }
+		int diff = abs(a[ny][nx] - a[y][x]);
+		if (l <= diff && diff <= r)
+		{
+			sum += go(ny, nx, cnt);
+		}
+	}
 
-    if (cities <= 1) return false;
-
-    int update = people / cities;
-
-    while (!visited_q.empty()) {
-        int current_y = visited_q.front().first;
-        int current_x = visited_q.front().second;
-        visited_q.pop();
-        map[current_y][current_x] = update;
-    }
-
-    return true;
+	return sum;
 }
 
-int main(void) {
-    cin >> n >> l >> r;
+int main(void)
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            cin >> map[i][j];
-        }
-    }
+	cin >> n >> l >> r;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			cin >> a[i][j];
+		}
+	}
 
-    int day = 0;
+	while (true)
+	{
+		bool is_move = false;
+		memset(visited, 0, sizeof(visited));
 
-    while (true) {
-        bool move = false;
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				if (visited[i][j])
+				{
+					continue;
+				}
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (!visited[i][j]) {
-                    bool result = bfs(i, j);
-                    if (!move) move = result;
-                }
-            }
-        }
-        
-        if (!move) break;
-        day++;
+				int cnt = 0;
+				int sum = go(i, j, cnt);
+				int part = sum / cnt;
 
-        memset(visited, 0, sizeof(visited));
-    }
+				if (is_move == false)
+				{
+					is_move = (cnt > 1);
+				}
 
-    cout << day << '\n';
+				for (auto& p : unions)
+				{
+					a[p.first][p.second] = part;
+				}
 
-    return 0;
+				unions.clear();
+			}
+		}
+
+		if (is_move == false)
+		{
+			break;
+		}
+
+		result++;
+	}
+
+	cout << result << '\n';
+
+	return 0;
 }
