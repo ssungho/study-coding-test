@@ -1,55 +1,66 @@
-#include <iostream>
-#include <climits>
-#include <memory.h>
-
+#include <bits/stdc++.h>
 using namespace std;
-constexpr int max_n{3};
-constexpr int damage[6][max_n] {
-    { 9, 3, 1 },
-    { 9, 1, 3 },
-    { 1, 3, 9 },
-    { 1, 9, 3 },
-    { 3, 9, 1 },
-    { 3, 1, 9 },
-} ;
 
-int dp[61][61][61] {};
-int n;
+const int damages[6][3]
+{
+	{9, 3, 1},
+	{9, 1, 3},
+	{3, 9, 1},
+	{3, 1, 9},
+	{1, 3, 9},
+	{1, 9, 3},
+};
 
-int dfs(int hp1, int hp2, int hp3) {
-    hp1 = max(hp1, 0);
-    hp2 = max(hp2, 0);
-    hp3 = max(hp3, 0);
+int n, result, a[3];
+bool visited[61][61][61];
 
-    if (hp1 == 0 && hp2 == 0 && hp3 == 0) {
-        return 0;
-    }
+struct node
+{
+	int hp1, hp2, hp3, cnt;
+};
 
-    if (dp[hp1][hp2][hp3] != -1) {
-        return dp[hp1][hp2][hp3];
-    }
+int main(void)
+{
+	cin >> n;
+	for (int i = 0; i < n; i++)
+	{
+		cin >> a[i];
+	}
 
-    int& count = dp[hp1][hp2][hp3];
-    count = INT_MAX;
+	queue<node> q;
+	q.push({a[0], a[1], a[2]});
+	visited[a[0]][a[1]][a[2]] = true;
 
-    for (int i = 0; i < 6; i++) {
-        count = min(count, dfs(hp1 - damage[i][0], hp2 - damage[i][1], hp3 - damage[i][2]) + 1);
-    }
+	while (!q.empty())
+	{
+		node cur = q.front();
+		q.pop();
 
-    return count;
-}
+		if (cur.hp1 == 0 && cur.hp2 == 0 && cur.hp3 == 0)
+		{
+			result = cur.cnt;
+			break;
+		}
 
-int main(void) {
-    cin >> n;
-   
-    int hps[max_n] {};
-    for (int i = 0; i < n; i++) {
-        cin >> hps[i];
-    }
+		for (auto damage : damages)
+		{
+			node next
+			{
+				max(0, cur.hp1 - damage[0]),
+				max(0, cur.hp2 - damage[1]),
+				max(0, cur.hp3 - damage[2]),
+				cur.cnt + 1
+			};
 
-    memset(dp, -1, sizeof(dp));
+			if (visited[next.hp1][next.hp2][next.hp3] == false)
+			{
+				visited[next.hp1][next.hp2][next.hp3] = true;
+				q.push(next);
+			}
+		}
+	}
 
-    cout << dfs(hps[0], hps[1], hps[2]) << '\n';
+	cout << result << '\n';
 
-    return 0;
+	return 0;
 }
