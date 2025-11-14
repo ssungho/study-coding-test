@@ -1,68 +1,82 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <climits>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-void Backtracking(vector<char>& v, vector<int>& temp, vector<bool>& visited, long long& max_number, long long& min_number) {
-    if (temp.size() > v.size()) {
-        long long number = 0;
-        for (auto i : temp) {
-            number *= 10;
-            number += i;
-        }
-        max_number = max(max_number, number);
-        min_number = min(min_number, number);
-        return;
-    }
+using ull = unsigned long long;
 
-    for (int i = 0; i <= 9; i++) {
-        if (!visited[i]) {
-            char c = v[(int)temp.size() - 1];
-            if ((c == '<' && temp.back() < i) || (c == '>' && temp.back() > i)) {
-                visited[i] = true;
-                temp.push_back(i);
-                Backtracking(v, temp, visited, max_number, min_number);
-                temp.pop_back();
-                visited[i] = false;
-            }
-        }
-    }
+bool visited[10];
+int n;
+ull max_num, min_num;
+char ex[10];
+vector<ull> temp;
+
+void go(int here, int cnt)
+{
+	if (cnt == n)
+	{
+		ull num = 0;
+		for (int i : temp)
+		{
+			num *= 10;
+			num += i;
+		}
+		max_num = max(max_num, num);
+		min_num = min(min_num, num);
+		return;
+	}
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (visited[i])
+		{
+			continue;
+		}
+
+		int back = temp.back();
+		if ((ex[cnt] == '<' && back < i) || (ex[cnt] == '>' && back > i))
+		{
+			visited[i] = true;
+			temp.push_back(i);
+			go(i, cnt + 1);
+			temp.pop_back();
+			visited[i] = false;
+		}
+	}
 }
 
-int main(void) {
-    int k;
-    cin >> k;
+int main(void)
+{
+	cin >> n;
+	for (int i = 0; i < n; i++)
+	{
+		cin >> ex[i];
+	}
 
-    vector<char> v(k);
-    for (int i = 0; i < k; i++) {
-        cin >> v[i];
-    }
+	max_num = 0;
+	min_num = ULONG_LONG_MAX;
 
-    vector<bool> visited(10, false);
-    vector<int> temp;
-    long long max_number = 0, min_number = LLONG_MAX;
+	for (int i = 0; i < 10; i++)
+	{
+		temp.push_back(i);
+		visited[i] = true;
+		go(i, 0);
+		visited[i] = false;
+		temp.pop_back();
+	}
 
-    for (int i = 0; i <= 9; i++) {
-        visited[i] = true;
-        temp.push_back(i);
-        Backtracking(v, temp, visited, max_number, min_number);
-        temp.pop_back();
-        visited[i] = false;
-    }
+	string str_max_num = to_string(max_num);
+	while (str_max_num.size() < n + 1)
+	{
+		str_max_num = '0' + str_max_num;
+	}
 
-    string max_string = to_string(max_number);
-    string min_string = to_string(min_number);
+	string str_min_num = to_string(min_num);
+	while (str_min_num.size() < n + 1)
+	{
+		str_min_num = '0' + str_min_num;
+	}
 
-    while ((int)max_string.length() < k + 1) {
-        max_string = '0' + max_string;
-    }
-    while ((int)min_string.length() < k + 1) {
-        min_string = '0' + min_string;
-    }
+	cout << str_max_num << '\n';
+	cout << str_min_num << '\n';
 
-    cout << max_string << '\n' << min_string;
-
-    return 0;
+	return 0;
 }
