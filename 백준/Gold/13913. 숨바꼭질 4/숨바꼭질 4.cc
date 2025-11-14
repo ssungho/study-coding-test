@@ -1,55 +1,61 @@
-#include <iostream>
-#include <queue>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-constexpr int max_size{100001};
-int n, k;
-int min_count;
-pair<bool, int> visited[max_size] {};
+int n, k, a[100001], prev_pos[100001];
+bool visited[100001];
 
-int main(void) {
-    cin >> n >> k;
+void bfs()
+{
+	queue<int> q;
+	q.push(n);
+	visited[n] = true;
+	while (!q.empty())
+	{
+		int cur = q.front();
+		q.pop();
 
-    queue<pair<int, int>> q;
-    q.push({n, 0});
-    visited[n] = {true, -1};
+		if (cur == k)
+		{
+			break;
+		}
 
-    while (!q.empty()) {
-        int pos = q.front().first;
-        int cnt = q.front().second;
-        q.pop();
+		for (auto next : {cur - 1, cur + 1, cur * 2})
+		{
+			if (0 <= next && next <= 100000 && visited[next] == false)
+			{
+				q.push(next);
+				visited[next] = true;
+				prev_pos[next] = cur;
+			}
+		}
+	}
+}
 
-        if (pos == k) {
-            min_count = cnt;
-            break;
-        }
+int main(void)
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-        int next_cnt = cnt + 1;
-        for (int next_pos : { pos + 1, pos - 1, pos * 2}) {
-            if (0 <= next_pos && next_pos < max_size) {
-                if (!visited[next_pos].first) {
-                    q.push({next_pos, next_cnt});
-                    visited[next_pos] = { true, pos };
-                }
-            }
-        }
-    }
+	cin >> n >> k;
+	memset(prev_pos, -1, sizeof(prev_pos));
+	bfs();
 
-    int path = k;
-    vector<int> v;    
-    while (path != -1) {
-        v.push_back(path);
-        path = visited[path].second;
-    }
-    
-    cout << min_count << '\n';
+	stack<int> path;
+	int last = k;
+	while (last != -1)
+	{
+		path.push(last);
+		last = prev_pos[last];
+	}
 
-    while (v.size())
-    {
-        cout << v.back() << ' ';
-        v.pop_back();
-    }
+	cout << path.size() - 1 << '\n';
+	while (!path.empty())
+	{
+		cout << path.top() << ' ';
+		path.pop();
+	}
+	cout << '\n';
 
-    return 0;
+	return 0;
 }
