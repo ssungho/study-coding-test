@@ -1,133 +1,119 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-constexpr int dir_size{4};
-int dy[dir_size]{-1, 1, 0, 0};
-int dx[dir_size]{0, 0, -1, 1};
-int R, C;
+const int dy[4]{-1, 0, 1, 0}, dx[4]{0, 1, 0, -1};
+int r, c, result;
+string row;
+char a[1501][1501];
+pair<int, int> swan_pos;
+queue<pair<int, int>> water_q, next_water_q, swan_q, next_swan_q;
+bool water_visited[1501][1501], swan_visited[1501][1501];
 
-queue<pair<int, int>> swan_q, next_swan_q;
-queue<pair<int, int>> water_q, next_water_q;
-
-bool MoveSwan(vector<vector<char>>& lake, vector<vector<bool>>& visited)
+bool swan_bfs()
 {
-    while (!swan_q.empty())
-    {
-        int current_y = swan_q.front().first;
-        int current_x = swan_q.front().second;
-        swan_q.pop();
+	while (!swan_q.empty())
+	{
+		int cur_y = swan_q.front().first;
+		int cur_x = swan_q.front().second;
+		swan_q.pop();
 
-        for (int dir = 0; dir < dir_size; dir++)
-        {
-            int ny = dy[dir] + current_y;
-            int nx = dx[dir] + current_x;
+		for (int i = 0; i < 4; i++)
+		{
+			int ny = cur_y + dy[i];
+			int nx = cur_x + dx[i];
+			if (ny < 1 || ny > r || nx < 1 || nx > c || swan_visited[ny][nx])
+			{
+				continue;
+			}
 
-            if (0 <= ny && ny < R && 0 <= nx && nx < C && !visited[ny][nx])
-            {
-                visited[ny][nx] = true;
+			swan_visited[ny][nx] = true;
+			if (a[ny][nx] == 'X')
+			{
+				next_swan_q.push({ny, nx});
+			}
+			else if (a[ny][nx] == '.')
+			{
+				swan_q.push({ny, nx});
+			}
+			else if (a[ny][nx] == 'L')
+			{
+				return true;
+			}
+		}
+	}
 
-                if (lake[ny][nx] == 'X')
-                {
-                    next_swan_q.push({ny, nx});
-                }
-                else if (lake[ny][nx] == '.')
-                {
-                    swan_q.push({ny, nx});
-                }
-                else if (lake[ny][nx] == 'L')
-                {
-                    return true;
-                }
-            }
-        }
-    }
-
-    return false;
+	return false;
 }
 
-void Melt(vector<vector<char>>& lake, vector<vector<bool>>& visited)
+void water_bfs()
 {
-  while (!water_q.empty())
-    {
-        int current_y = water_q.front().first;
-        int current_x = water_q.front().second;
-        water_q.pop();
+	while (!water_q.empty())
+	{
+		int cur_y = water_q.front().first;
+		int cur_x = water_q.front().second;
+		water_q.pop();
 
-        for (int dir = 0; dir < dir_size; dir++)
-        {
-            int ny = dy[dir] + current_y;
-            int nx = dx[dir] + current_x;
+		for (int i = 0; i < 4; i++)
+		{
+			int ny = cur_y + dy[i];
+			int nx = cur_x + dx[i];
 
-            if (0 <= ny && ny < R && 0 <= nx && nx < C && !visited[ny][nx])
-            {
-                if (lake[ny][nx] == 'X')
-                {
-                    visited[ny][nx] = true;
-                    next_water_q.push({ny, nx});
-                    lake[ny][nx] = '.';
-                }
-            }
-        }
-    }
+			if (ny < 1 || ny > r || nx < 1 || nx > c || water_visited[ny][nx])
+			{
+				continue;
+			}
+			
+			if (a[ny][nx] == 'X')
+			{
+				water_visited[ny][nx] = true;
+				next_water_q.push({ny, nx});
+				a[ny][nx] = '.';
+			}
+		}
+	}
 }
 
 int main(void)
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-    cin >> R >> C;
-    vector<vector<char>> lake(R, vector<char>(C, '.'));
-    vector<vector<bool>> swan_visited(R, vector<bool>(C, false));
-    vector<vector<bool>> water_visited(R, vector<bool>(C, false));
-    int swan_y, swan_x;
+	cin >> r >> c;
+	for (int i = 1; i <= r; i++)
+	{
+		cin >> row;
+		for (int j = 1; j <= c; j++)
+		{
+			a[i][j] = row[j - 1];
+			if (a[i][j] == 'L')
+			{
+				swan_pos = {i, j};
+			}
+			if (a[i][j] == 'L' || a[i][j] == '.')
+			{
+				water_q.push({i, j});
+				water_visited[i][j] = true;
+			}
+		}
+	}
 
-    for (int i = 0; i < R; i++)
-    {
-        for (int j = 0; j < C; j++)
-        {
-            cin >> lake[i][j];
+	swan_q.push(swan_pos);
+	swan_visited[swan_pos.first][swan_pos.second] = true;
 
-            if (lake[i][j] == 'L')
-            {
-                swan_y = i;
-                swan_x = j;
-            }
-            
-            if (lake[i][j] == 'L' || lake[i][j] == '.')
-            {
-                water_q.push({i, j});
-                water_visited[i][j] = true;
-            }
-        }
-    }
+	while (!swan_bfs())
+	{
+		result++;
+		water_bfs();
 
-    int count = 0;
-    swan_q.push({swan_y, swan_x});
-    swan_visited[swan_y][swan_x] = true;
+		swan_q.swap(next_swan_q);
+		water_q.swap(next_water_q);
 
-    while(true) 
-    {
-        if (MoveSwan(lake, swan_visited)) 
-        {
-            break;
-        }
+		queue<pair<int, int>>().swap(next_swan_q);
+		queue<pair<int, int>>().swap(next_water_q);
+	}
 
-        Melt(lake, water_visited);
-        swan_q = next_swan_q;
-        water_q = next_water_q;
+	cout << result << '\n';
 
-        queue<pair<int, int>>().swap(next_swan_q);
-        queue<pair<int, int>>().swap(next_water_q);
-
-        count++;
-    }
-   
-    cout << count << '\n';
-
-    return 0;
+	return 0;
 }
