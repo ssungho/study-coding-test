@@ -1,89 +1,77 @@
-#include <iostream>
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-int Find(vector<int> &parent, int a)
+int n, m, city, parent[201], a[201][201];
+
+int Find(int x)
 {
-    if (parent[a] == a)
-        return a;
-    return parent[a] = Find(parent, parent[a]);
+	if (parent[x] == x)
+		return x;
+
+	return parent[x] = Find(parent[x]);
 }
 
-bool Union(vector<int> &parent, int a, int b)
+void Union(int a, int b)
 {
-    int root_a = Find(parent, a);
-    int root_b = Find(parent, b);
+	int parent_a = Find(a);
+	int parent_b = Find(b);
 
-    if (root_a == root_b)
-        return false;
-
-    if (root_a < root_b)
-        parent[root_b] = root_a;
-    else
-        parent[root_a] = root_b;
-
-    return true;
+	if (parent_a != parent_b)
+	{
+		if (parent_a < parent_b)
+		{
+			parent[parent_b] = parent_a;
+		}
+		else
+		{
+			parent[parent_a] = parent_b;
+		}
+	}
 }
 
 int main(void)
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-    int N, M;
-    cin >> N >> M;
-
-    vector<int> parent(N + 1, 0);
-    for (int i = 1; i <= N; i++)
-    {
-        parent[i] = i;
-    }
-
-    vector<vector<int>> graph(N + 1, vector<int>(N + 1, 0));
-
-    for (int i = 1; i <= N; i++)
-    {
-        for (int j = 1; j <= N; j++)
-        {
-            cin >> graph[i][j];
-        }
-    }
-
-    vector<int> path(M + 1, 0);
-    for (int i = 1; i <= M; i++)
-    {
-        cin >> path[i];
-    }
-
-    for (int i = 1; i <= N; i++)
-    {
-        for (int j = 1; j <= N; j++)
-        {
-            if (graph[i][j] == 1)
+	cin >> n >> m;
+	for (int i = 1; i <= n; i++)
+	{
+		parent[i] = i;
+	}
+	
+	for (int i = 1; i <= n; i++)
+	{
+		for (int j = 1; j <= n; j++)
+		{
+			cin >> a[i][j];
+            if (a[i][j])
             {
-                Union(parent, i, j);
+    			Union(i, j);
             }
-        }
-    }
+		}
+	}
 
-    bool result = true;
-    int root = Find(parent, path[1]);
+	int top = -1;
+	for (int i = 0; i < m; i++)
+	{
+		cin >> city;
+		if (top == -1)
+		{
+			top = Find(city);
+		}
+		else
+		{
+			if (top != Find(city))
+			{
+				cout << "NO\n";
+				return 0;
+			}
+		}
+	}
 
-    for (int i = 2; i <= M; i++)
-    {
-        if (Find(parent, path[i]) != root)
-        {
-            result = false;
-            break;
-        }
-    }
+	cout << "YES\n";
 
-    if (result)
-        cout << "YES";
-    else 
-        cout << "NO";
-
-    return 0;
+	return 0;
 }
