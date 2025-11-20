@@ -1,12 +1,9 @@
 #include <bits/stdc++.h>
-
 using namespace std;
-using pii = pair<int, int>;
 
-int n, m, from, to, cost, start_pos, end_pos;
-
-vector<vector<pii>> graph;
-vector<int> costs;
+using edge = pair<int, int>;
+int n, m, a, b, u, v, w;
+vector<vector<edge>> graph;
 
 int main(void)
 {
@@ -15,48 +12,47 @@ int main(void)
 	cout.tie(nullptr);
 
 	cin >> n >> m;
-
 	graph.resize(n + 1);
-	costs.resize(n + 1, INT_MAX);
+
+	vector<int> costs(n + 1, INT_MAX);
 
 	for (int i = 0; i < m; i++)
 	{
-		cin >> from >> to >> cost;
-		graph[from].push_back({cost, to});
+		cin >> u >> v >> w;
+		graph[u].push_back({v, w});
 	}
 
-	cin >> start_pos >> end_pos;
+	cin >> a >> b;
 
-	priority_queue<pii, vector<pii>, greater<pii>> pq;
-	pq.push({0, start_pos});
-	costs[start_pos] = 0;
+	priority_queue<edge, vector<edge>, greater<>> pq;
+	costs[a] = 0;
+	pq.push({0, a});
 
 	while (!pq.empty())
 	{
 		int cur_cost = pq.top().first;
-		int cur_node = pq.top().second;
+		int cur_v = pq.top().second;
 		pq.pop();
 
-		if (cur_cost > costs[cur_node])
+		if (cur_cost > costs[cur_v])
 		{
 			continue;
 		}
 
-		for (auto &next : graph[cur_node])
+		const auto& adj = graph[cur_v];
+		for (const auto& p : adj)
 		{
-			int next_cost = next.first;
-			int next_node = next.second;
-			int sum_cost = min(INT_MAX, cur_cost + next_cost);
-
-			if (sum_cost < costs[next_node])
+			int next_v = p.first;
+			int weight = p.second;
+			if (costs[next_v] > cur_cost + weight)
 			{
-				costs[next_node] = sum_cost;
-				pq.push({sum_cost, next_node});
+				costs[next_v] = cur_cost + weight;
+				pq.push({costs[next_v], next_v});
 			}
 		}
 	}
 
-	cout << costs[end_pos] << '\n';
+	cout << costs[b] << '\n';
 
 	return 0;
 }
