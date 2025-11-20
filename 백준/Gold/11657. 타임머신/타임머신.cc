@@ -1,10 +1,9 @@
-#include <iostream>
-#include <vector> 
-#include <climits>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-int n, m;
+using edge = pair<int, pair<int, int>>;
+int n, m, u, v, w;
+vector<edge> edge_list;
 
 int main(void)
 {
@@ -13,52 +12,67 @@ int main(void)
 	cout.tie(nullptr);
 
 	cin >> n >> m;
+	edge_list.resize(m);
+	vector<long> costs(n + 1, LONG_MAX);
+	costs[1] = 0;
 
-	vector<vector<int>> graph(n + 1);
-	vector<vector<int>> costs(n + 1, vector<int>(n + 1, INT_MAX));
-
-	for (int i = 0; i < m; i ++) 
+	for (int i = 0; i < m; i++)
 	{
-		int a, b, c;
-		cin >> a >> b >> c;
-
-		graph[a].push_back(b);
-		costs[a][b] = min(costs[a][b], c);
+		cin >> u >> v >> w;
+		edge_list[i] = {w, {u, v}};
 	}
 
-	for (int i = 1; i <= n; i++) 
+	for (int i = 1; i < n; i++)
 	{
-		costs[i][i] = 0;
-	}
-
-	for (int k = 1; k <= n; k++) 
-	{
-		for (int i = 1; i <= n; i++)
+		for (int j = 0; j < m; j++)
 		{
-			for (int j = 1; j <= n; j++)
-			{
-				if (costs[i][k] == INT_MAX || costs[k][j] == INT_MAX) 
-				{
-					continue;
-				}
+			int cost = edge_list[j].first;
+			int start_v = edge_list[j].second.first;
+			int end_v = edge_list[j].second.second;
 
-				costs[i][j] = min(costs[i][j], costs[i][k] + costs[k][j]);
+			if (costs[start_v] == LONG_MAX)
+			{
+				continue;
+			}
+
+			if (costs[end_v] > costs[start_v] + cost)
+			{
+				costs[end_v] = costs[start_v] + cost;
 			}
 		}
 	}
 
-	for (int i = 2; i <= n; i++)
+	bool has_cycle = false;
+	for (int i = 0; i < m; i++)
 	{
-		if (costs[1][i] != INT_MAX && costs[i][i] < 0)
+		int cost = edge_list[i].first;
+		int start_v = edge_list[i].second.first;
+		int end_v = edge_list[i].second.second;
+
+		if (costs[start_v] != LONG_MAX && costs[end_v] > costs[start_v] + cost)
 		{
-			cout << -1 << '\n';
-			return 0;
+			has_cycle = true;
+			break;
 		}
 	}
 
-	for (int i = 2; i <= n; i++)
+	if (has_cycle == false)
 	{
-		cout << (costs[1][i] == INT_MAX ? -1 : costs[1][i]) << '\n';
+		for (int i = 2; i <= n; i++)
+		{
+			if (costs[i] == LONG_MAX)
+			{
+				cout << -1 << '\n';
+			}
+			else
+			{
+				cout << costs[i] << '\n';
+			}
+		}
+	}
+	else
+	{
+		cout << "-1\n";
 	}
 
 	return 0;
