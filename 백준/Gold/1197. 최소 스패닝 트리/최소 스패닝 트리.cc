@@ -1,63 +1,72 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-
+#include <bits/stdc++.h>
 using namespace std;
+
+using edge = pair<int, pair<int, int>>;
+int v, e, a, b, c, result, parent[10001];
+
+int Find(int x)
+{
+	if (parent[x] == x)
+	{
+		return x;
+	}
+
+	return parent[x] = Find(parent[x]);
+}
+
+void Union(int l, int r)
+{
+	int parent_l = Find(l);
+	int parent_r = Find(r);
+	if (parent_l != parent_r)
+	{
+		if (parent_l < parent_r)
+		{
+			parent[parent_r] = parent_l;
+		}
+		else
+		{
+			parent[parent_l] = parent_r;
+		}
+	}
+}
 
 int main(void)
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-    int V, E;
-    cin >> V >> E;
+	cin >> v >> e;
+	for (int i = 1; i <= v; i++)
+	{
+		parent[i] = i;
+	}
 
-    vector<vector<pair<int, int>>> graph(V + 1);
-    vector<bool> visited(V + 1, false);
+	priority_queue<edge, vector<edge>, greater<>> pq;
+	for (int i = 0; i < e; i++)
+	{
+		cin >> a >> b >> c;
+		pq.push({c, {a, b}});
+	}
 
-    for (int i = 0; i < E; i++)
-    {
-        int v1, v2, cost;
-        cin >> v1 >> v2 >> cost;
-        graph[v1].push_back({v2, cost});
-        graph[v2].push_back({v1, cost});
-    }
+	while (!pq.empty())
+	{
+		edge cur = pq.top();
+		pq.pop();
 
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+		int start = cur.second.first;
+		int end = cur.second.second;
+		int weight = cur.first;
 
-    int start_node = 0;
-    while (graph[start_node].size() == 0)
-    {
-        start_node++;
-    }
+		if (Find(start) != Find(end))
+		{
+			Union(start, end);
+			result += weight;
+		}
+	}
 
-    int total = 0;
-    pq.push({0, start_node});
+	cout << result << '\n';
 
-    while (!pq.empty())
-    {
-        int current_cost = pq.top().first;
-        int current_node = pq.top().second;
-        pq.pop();
-
-        if (visited[current_node])
-            continue;
-
-        visited[current_node] = true;
-        total += current_cost;
-
-        for (auto &node : graph[current_node])
-        {
-            int next_cost = node.second;
-            int next_node = node.first;
-            if (!visited[next_node])
-            {
-                pq.push({next_cost, next_node});
-            }
-        }
-    }
-
-    cout << total;
-
-    return 0;
+	return 0;
 }
