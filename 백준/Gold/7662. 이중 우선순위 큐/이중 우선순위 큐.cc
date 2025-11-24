@@ -15,7 +15,7 @@ int main(void)
 	{
 		priority_queue<int, vector<int>, greater<int>> pq_asc;
 		priority_queue<int> pq_desc;
-		map<int, int> visited;
+		unordered_map<int, int> visited;
 
 		cin >> k;
 		while (k--)
