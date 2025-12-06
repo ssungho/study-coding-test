@@ -1,7 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int n, m, val, result = INT_MAX;
+// value, class, index
+using pi_pii = pair<int, pair<int, int>>;
+int n, m, max_value, result = INT_MAX;
 
 int main(void)
 {
@@ -19,33 +21,31 @@ int main(void)
 			cin >> v[i][j];
 		}
 		sort(v[i].begin(), v[i].end());
+		max_value = max(max_value, v[i][0]);
 	}
 
-	vector<int> cur_indices(n, 0);
+	priority_queue<pi_pii, vector<pi_pii>, greater<pi_pii>> pq;
+	for (int i = 0; i < n; i++)
+	{
+		pq.push({v[i][0], {i, 0}});
+	}
+
 	while (true)
 	{
-		int min_index = -1;
-		int min_value = INT_MAX;
-		int max_value = 0;
+		int cur_value = pq.top().first;
+		int cur_class = pq.top().second.first;
+		int cur_index = pq.top().second.second;
+		pq.pop();
 
-		for (int i = 0; i < n; i++)
-		{
-			int cur_value = v[i][cur_indices[i]];
-			if (cur_value < min_value)
-			{
-				min_value = cur_value;
-				min_index = i;
-			}
-			max_value = max(max_value, cur_value);
-		}
+		result = min(result, max_value - cur_value);
 
-		result = min(result, max_value - min_value);
-		cur_indices[min_index]++;
-
-		if (cur_indices[min_index] == m)
+		if (result == 0 || cur_index + 1 == m)
 		{
 			break;
 		}
+
+		pq.push({v[cur_class][cur_index + 1], {cur_class, cur_index + 1}});
+		max_value = max(max_value, v[cur_class][cur_index + 1]);
 	}
 
 	cout << result << '\n';
