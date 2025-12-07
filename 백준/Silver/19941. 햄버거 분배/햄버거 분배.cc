@@ -3,7 +3,6 @@ using namespace std;
 
 int n, k, result;
 string s;
-queue<int> p_pos, h_pos;
 
 int main(void)
 {
@@ -11,23 +10,17 @@ int main(void)
 
 	for (int i = 0; i < n; i++)
 	{
-		s[i] == 'P' ? p_pos.push(i) : h_pos.push(i);
-	}
-
-	while (!(p_pos.empty() || h_pos.empty()))
-	{
-		int p = p_pos.front();
-		p_pos.pop();
-
-		while (!h_pos.empty() && p - h_pos.front() > k)
+		if (s[i] == 'P')
 		{
-			h_pos.pop();
-		}
-
-		if (abs(h_pos.front() - p) <= k)
-		{
-			result++;
-			h_pos.pop();
+			for (int j = -k; j <= k; j++)
+			{
+				if (s[i + j] == 'H')
+				{
+					result++;
+					s[i + j] = 'X';
+					break;
+				}
+			}
 		}
 	}
 
