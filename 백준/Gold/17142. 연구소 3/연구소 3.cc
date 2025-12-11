@@ -3,21 +3,20 @@ using namespace std;
 
 const int dy[4]{-1, 0, 1, 0}, dx[4]{0, 1, 0, -1};
 int n, m, empty_cnt, result, a[51][51];
-bool bfs_visited[51][51];
+bool visited[51][51];
 vector<pair<int, int>> virus_pos;
 vector<int> active_pos;
-vector<bool> dfs_visited;
 
 int bfs()
 {
 	int time = 0;
 	int visited_cnt = 0;
-	memset(bfs_visited, 0, sizeof(bfs_visited));
+	memset(visited, 0, sizeof(visited));
 	queue<pair<pair<int, int>, int>> q;
 	for (int index : active_pos)
 	{
 		q.push({virus_pos[index], 0});
-		bfs_visited[virus_pos[index].first][virus_pos[index].second] = true;
+		visited[virus_pos[index].first][virus_pos[index].second] = true;
 	}
 
 	while (q.size())
@@ -41,13 +40,13 @@ int bfs()
 			{
 				continue;
 			}
-			if (bfs_visited[ny][nx] || a[ny][nx] == 1)
+			if (visited[ny][nx] || a[ny][nx] == 1)
 			{
 				continue;
 			}
 
 			q.push({{ny, nx}, cur_time + 1});
-			bfs_visited[ny][nx] = true;
+			visited[ny][nx] = true;
 
 			if (a[ny][nx] == 0)
 			{
@@ -75,15 +74,8 @@ void go(int here, int cnt)
 
 	for (int i = here; i < (int)virus_pos.size(); i++)
 	{
-		if (dfs_visited[i])
-		{
-			continue;
-		}
-
 		active_pos.push_back(i);
-		dfs_visited[i] = true;
 		go(i + 1, cnt + 1);
-		dfs_visited[i] = false;
 		active_pos.pop_back();
 	}
 }
@@ -111,7 +103,6 @@ int main(void)
 		}
 	}
 
-	dfs_visited.resize(virus_pos.size());
 	result = INT_MAX;
 
 	go(0, 0);
