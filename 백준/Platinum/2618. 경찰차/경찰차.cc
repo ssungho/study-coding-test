@@ -4,6 +4,22 @@ using namespace std;
 
 int n, w, pos[1001][2], dp[1001][1001], path[1001][1001];
 
+int dist(int car, int next, bool is_a)
+{
+	int y = pos[next][0];
+	int x = pos[next][1];
+
+	int prev_y = pos[car][0];
+	int prev_x = pos[car][1];
+
+	if (car == 0)
+	{
+		prev_y = prev_x = ((is_a) ? 1 : n);
+	}
+
+	return abs(y - prev_y) + abs(x - prev_x);
+}
+
 int go(int a, int b)
 {
 	int next = max(a, b) + 1;
@@ -17,28 +33,9 @@ int go(int a, int b)
 	{
 		return ret;
 	}
-
-	int cost_a;
-	if (a == 0)
-	{
-		cost_a = abs(1 - pos[next][0]) + abs(1 - pos[next][1]);
-	}
-	else
-	{
-		cost_a = abs(pos[a][0] - pos[next][0]) + abs(pos[a][1] - pos[next][1]);
-	}
-	cost_a += go(next, b);
-
-	int cost_b;
-	if (b == 0)
-	{
-		cost_b = abs(n - pos[next][0]) + abs(n - pos[next][1]);
-	}
-	else
-	{
-		cost_b = abs(pos[b][0] - pos[next][0]) + abs(pos[b][1] - pos[next][1]);
-	}
-	cost_b += go(a, next);
+	
+	int cost_a = dist(a, next, true) + go(next, b);
+	int cost_b = dist(b, next, false) + go(a, next);
 
 	if (cost_a < cost_b)
 	{
