@@ -1,63 +1,62 @@
-#include <iostream>
-#include <string>
-#include <queue>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-constexpr int dir_size{4};
-constexpr int max_index{100};
-constexpr int max_size{max_index + 1};
-constexpr int dy[dir_size]{-1, 0, 1, 0};
-constexpr int dx[dir_size]{0, 1, 0, -1};
-char maze[max_size][max_size]{};
-bool visited[max_size][max_size]{};
+const int dy[4]{-1, 0, 1, 0}, dx[4]{0, 1, 0, -1};
+int n, m, ret;
+char a[101][101];
+bool visited[101][101];
+string row;
 
 int main(void)
 {
-    int N, M;
-    cin >> N >> M;
+	cin >> n >> m;
+	for (int i = 1; i <= n; i++)
+	{
+		cin >> row;
+		for (int j = 1; j <= m; j++)
+		{
+			a[i][j] = row[j - 1];
+		}
+	}
 
-    for (int i = 1; i <= N; i++)
-    {
-        string row;
-        cin >> row;
+	queue<pair<int, pair<int, int>>> q;
+	q.push({1, {1, 1}});
+	visited[1][1] = true;
 
-        for (int j = 1; j <= M; j++)
-        {
-            maze[i][j] = row[j - 1];
-        }
-    }
+	while (!q.empty())
+	{
+		int cur_cnt = q.front().first;
+		int cur_y = q.front().second.first;
+		int cur_x = q.front().second.second;
+		q.pop();
 
-    queue<pair<int, pair<int, int>>> q;
-    q.push({1, {1, 1}});
-    visited[1][1] = true;
+		if (cur_y == n && cur_x == m)
+		{
+			ret = cur_cnt;
+			break;
+		}
 
-    while (!q.empty())
-    {
-        int current_count = q.front().first;
-        int current_y = q.front().second.first;
-        int current_x = q.front().second.second;
-        q.pop();
+		for (int dir = 0; dir < 4; dir++)
+		{
+			int ny = cur_y + dy[dir];
+			int nx = cur_x + dx[dir];
 
-        if (current_y == N && current_x == M)
-        {
-            cout << current_count << '\n';
-            break;
-        }
+			if (ny < 1 || ny > n || nx < 1 || nx > m)
+			{
+				continue;
+			}
+			if (a[ny][nx] == '0' || visited[ny][nx] == true)
+			{
+				continue;
+			}
 
-        for (int dir = 0; dir < dir_size; dir++)
-        {
-            int ny = dy[dir] + current_y;
-            int nx = dx[dir] + current_x;
+			q.push({cur_cnt + 1, {ny, nx}});
+			visited[ny][nx] = true;
+		}
+	}
 
-            if (0 < ny && ny <= N && 0 < nx && nx <= M &&
-                maze[ny][nx] == '1' && !visited[ny][nx])
-            {
-                visited[ny][nx] = true;
-                q.push({current_count + 1, {ny, nx}});
-            }
-        }
-    }
+	cout << ret << '\n';
 
-    return 0;
+	return 0;
 }
