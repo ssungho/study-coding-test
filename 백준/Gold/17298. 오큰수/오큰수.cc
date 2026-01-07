@@ -1,33 +1,35 @@
 #include <bits/stdc++.h>
+
 using namespace std;
 
-int n, a[1000001], answer[1000001];
+int n, x;
+stack<pair<int, int>> s;
+vector<int> v;
+
 int main(void)
 {
 	ios::sync_with_stdio(false);
 	cin.tie(nullptr);
 	cout.tie(nullptr);
 
-	stack<int> s;
-	memset(answer, -1, sizeof(answer));
-
 	cin >> n;
-	for (int i = 1; i <= n; i++)
+	v.resize(n, -1);
+
+	for (int i = 0; i < n; i++)
 	{
-		cin >> a[i];
-		while (s.size() && a[s.top()] < a[i])
+		cin >> x;
+		while (s.empty() == false && s.top().second < x)
 		{
-			answer[s.top()] = a[i];
+			v[s.top().first] = x;
 			s.pop();
 		}
-		s.push(i);
+		s.push({i, x});
 	}
 
-	for (int i = 1; i <= n; i++)
+	for (auto i : v)
 	{
-		cout << answer[i] << ' ';
+		cout << i << ' ';
 	}
-	cout << '\n';
 
 	return 0;
 }
