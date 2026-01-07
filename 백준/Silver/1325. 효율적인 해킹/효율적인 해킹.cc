@@ -1,23 +1,23 @@
 #include <bits/stdc++.h>
+
 using namespace std;
 
-int n, m, a, b, max_cnt;
-vector<int> result;
-vector<vector<int>> graph;
+int n, m, a, b, cnt, max_cnt;
 bool visited[10001];
+vector<vector<int>> graph;
+vector<int> answer;
 
-int dfs(int node)
+int go(int x)
 {
-	visited[node] = true;
-	
 	int cnt = 1;
-	for (int i : graph[node])
+	visited[x] = true;
+
+	for (int next : graph[x])
 	{
-		if (visited[i])
+		if (visited[next] == false)
 		{
-			continue;
+			cnt += go(next);
 		}
-		cnt += dfs(i);
 	}
 
 	return cnt;
@@ -31,6 +31,7 @@ int main(void)
 
 	cin >> n >> m;
 	graph.resize(n + 1);
+
 	for (int i = 0; i < m; i++)
 	{
 		cin >> a >> b;
@@ -40,27 +41,24 @@ int main(void)
 	for (int i = 1; i <= n; i++)
 	{
 		memset(visited, 0, sizeof(visited));
-		
-		int cnt = dfs(i);
-		if (max_cnt < cnt)
+		cnt = go(i);
+
+		if (cnt > max_cnt)
 		{
-			result.clear();
-			result.push_back(i);
 			max_cnt = cnt;
+			answer.clear();
+			answer.push_back(i);
 		}
-		else if (max_cnt == cnt)
+		else if (cnt == max_cnt)
 		{
-			result.push_back(i);
+			answer.push_back(i);
 		}
 	}
 
-	sort(result.begin(), result.end());
-
-	for (int i : result)
+	for (int i : answer)
 	{
 		cout << i << ' ';
 	}
-	cout << '\n';
 
 	return 0;
 }
