@@ -1,63 +1,58 @@
-#include<iostream>
-#include<string>
+#include <bits/stdc++.h>
 using namespace std;
+
+int m, x;
+string s;
+string command_list[6]
+{
+	"add", "remove", "check",
+	"toggle", "all", "empty"
+};
+bitset<21> bs;
 
 int main(void)
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
+	cin >> m;
 
-	int set[21] = { 0 };
-
-	int n;
-	cin >> n;
-
-	for (int i = 0; i < n; i++)
+	while (m--)
 	{
-		string temp;
-		cin >> temp;
+		cin >> s;
 
-		if (temp == "add")
+		if (s == command_list[0])
 		{
-			int num;
-			cin >> num;
-
-		    set[num] = 1;
+			cin >> x;
+			bs[x] = 1;
 		}
-		else if (temp == "remove")
+		else if (s == command_list[1])
 		{
-			int num;
-			cin >> num;
-
-		    set[num] = 0;
+			cin >> x;
+			bs[x] = 0;
 		}
-		else if (temp == "check")
+		else if (s == command_list[2])
 		{
-			int num;
-			cin >> num;
-
-			cout << set[num] << '\n';
+			cin >> x;
+			cout << bs[x] << '\n';
 		}
-		else if (temp == "toggle")
+		else if (s == command_list[3])
 		{
-			int num;
-			cin >> num;
-
-			if (set[num] == 1)
-				set[num] = 0;
-			else
-				set[num] = 1;
+			cin >> x;
+			bs[x].flip();
 		}
-		else if (temp == "all")
+		else if (s == command_list[4])
 		{
-			for (int j = 0; j < 21; j++)
-				set[j] = 1;
+			bs.set();
 		}
-		else if (temp == "empty")
+		else if (s == command_list[5])
 		{
-			for (int j = 0; j < 21; j++)
-				set[j] = 0;
+			bs.reset();
+		}
+		else
+		{
+			cout << "error" << '\n';
+			break;
 		}
 	}
 
