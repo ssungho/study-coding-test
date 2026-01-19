@@ -9,11 +9,11 @@ int calculate()
 	int sum[2]{};
 	for (int i = 0; i < n; i++)
 	{
-		for (int j = 0; j < n; j++)
+		for (int j = i; j < n; j++)
 		{
 			if (i != j && team[i] == team[j])
 			{
-				sum[team[i]] += s[i][j];
+				sum[team[i]] += s[i][j] + s[j][i];
 			}
 		}
 	}
@@ -22,7 +22,7 @@ int calculate()
 
 void go(int here, int cnt)
 {
-	if (cnt > 0)
+	if (cnt > 0 && cnt < n)
 	{
 		result = min(result, calculate());
 	}
@@ -47,7 +47,8 @@ int main(void)
 	}
 
 	result = INT_MAX;
-	go(0, 0);
+	team[0] = true;
+	go(1, 1);
 	cout << result << '\n';
 
 	return 0;
