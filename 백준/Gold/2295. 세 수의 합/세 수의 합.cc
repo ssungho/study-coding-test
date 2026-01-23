@@ -1,9 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-using ull = unsigned long long;
-ull n, target, result, a[1001];
-unordered_set<ull> s;
+int n, target, result = -1;
 
 int main(void)
 {
@@ -12,34 +10,44 @@ int main(void)
 	cout.tie(nullptr);
 
 	cin >> n;
-	for (int i = 1; i <= n; i++)
+
+	vector<int> nums, sums;
+	nums.resize(n);
+	sums.reserve(n * n);
+
+	for (int i = 0; i < n; i++)
 	{
-		cin >> a[i];
+		cin >> nums[i];
 	}
-	
-	for (int i = 1; i <= n; i++)
+	sort(nums.begin(), nums.end(), greater<>());
+
+	for (int i = 0; i < n; i++)
 	{
-		for (int j = i; j <= n; j++)
+		for (int j = i; j < n; j++)
 		{
-			s.emplace(a[i] + a[j]);
+			sums.push_back(nums[i] + nums[j]);
 		}
 	}
+	sort(sums.begin(), sums.end());
 
-	sort(a + 1, a + n + 1, less<>());
-
-	for (int i = 1; i <= n; i++)
+	for (int i = 0; i < n; i++)
 	{
-		for (int j = 1; j <= n; j++)
+		for (int j = i + 1; j < n; j++)
 		{
-			target = a[i] - a[j];
-			if (s.end() != s.find(target))
+			target = nums[i] - nums[j];
+			if (binary_search(sums.begin(), sums.end(), target))
 			{
-				result = max(result, a[i]);
+				result = nums[i];
+				break;
 			}
 		}
-	}
 
-	cout << result << '\n';
+		if (result != -1)
+		{
+			cout << result << '\n';
+			break;
+		}
+	}
 
 	return 0;
 }
