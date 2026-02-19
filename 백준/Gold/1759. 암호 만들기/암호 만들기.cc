@@ -1,81 +1,46 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <algorithm>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-int L, C;
-vector<char> v;
-vector<bool> visited;
+int l, c;
+char ch;
+string s, password = "";
 
-bool isVowel(char ch)
+void go(int here, int consonants, int vowels, int cnt)
 {
-    return (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u');
-}
+	if (cnt == l && consonants >= 2 && vowels >= 1)
+	{
+		cout << password << '\n';
+		return;
+	}
 
-void Backtracking(int index, vector<char> &vec)
-{
-    if (vec.size() == L)
-    {
-        string code;
-        int vowels = 0;
-        int consonants = 0;
+	for (int i = here; i < (int)s.size(); i++)
+	{
+		password.push_back(s[i]);
+		
+		if (s[i] == 'a' || s[i] == 'e' || s[i] == 'i' || s[i] == 'o' || s[i] == 'u')
+		{
+			go(i + 1, consonants, vowels + 1, cnt + 1);
+		}
+		else
+		{
+			go(i + 1, consonants + 1, vowels, cnt + 1);
+		}
 
-        for (auto ch : vec)
-        {
-            code += ch;
-
-            if (isVowel(ch))
-            {
-                vowels++;
-            }
-            else
-            {
-                consonants++;
-            }
-        }
-
-        if (vowels >= 1 && consonants >= 2)
-            cout << code << '\n';
-
-        return;
-    }
-
-    for (int i = index; i < C; i++)
-    {
-        if (visited[i] == true)
-            continue;
-
-        visited[i] = true;
-        vec.push_back(v[i]);
-
-        Backtracking(i + 1, vec);
-
-        visited[i] = false;
-        vec.pop_back();
-    }
+		password.pop_back();
+	}
 }
 
 int main(void)
 {
-    ios::sync_with_stdio(false);
-    cout.tie(0);
+	cin >> l >> c;
+	for (int i = 0; i < c; i++)
+	{
+		cin >> ch;
+		s.push_back(ch);
+	}
 
-    cin >> L >> C;
+	sort(s.begin(), s.end());
+	go(0, 0, 0, 0);
 
-    v.resize(C);
-    visited.resize(C);
-
-    for (int i = 0; i < C; i++)
-    {
-        cin >> v[i];
-    }
-
-    sort(v.begin(), v.end());
-
-    vector<char> temp;
-    Backtracking(0, temp);
-
-    return 0;
+	return 0;
 }
