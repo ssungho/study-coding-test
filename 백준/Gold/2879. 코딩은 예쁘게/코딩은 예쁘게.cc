@@ -31,8 +31,7 @@ int main(void)
 	}
 
 	int start = 1;
-	bool finish = false;
-
+	
 	while (true)
 	{
 		while (start <= n && gap[start].first == 0)
